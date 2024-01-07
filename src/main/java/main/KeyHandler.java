@@ -3,7 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
-    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, shotKeyPressed, spacePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed,
+            enterPressed, shotKeyPressed, spacePressed, burstKeyPressed;
     boolean showDebugText = false;
     GamePanel gp;
     public KeyHandler(GamePanel gp) {
@@ -111,7 +112,6 @@ public class KeyHandler implements KeyListener {
     }
     @Override
     public void keyReleased(KeyEvent e) {
-        // TODO Auto-generated method stub
         int code = e.getKeyCode();
 
         if (code == KeyEvent.VK_W) {
@@ -128,6 +128,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_F) {
             shotKeyPressed = false;
+        }
+        if (code == KeyEvent.VK_B) {
+            burstKeyPressed = false;
         }
         if (code == KeyEvent.VK_ENTER) {
             enterPressed = false;
@@ -228,6 +231,9 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_F) {
             shotKeyPressed = true;
         }
+        if (code == KeyEvent.VK_B) {
+            burstKeyPressed = true;
+        }
         if (code == KeyEvent.VK_ESCAPE) {
             gp.gameState = gp.optionsState;
         }
@@ -254,7 +260,6 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_C) {
             gp.gameState = gp.characterState;
         }
-
 
         // Debug Button
         if (code == KeyEvent.VK_T) {

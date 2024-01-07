@@ -54,9 +54,11 @@ public class Entity {
 
     // Counter
     public int spriteCounter = 0;
+    public int burstCounter = 0;
     public int actionLockCounter = 0;
     public int invincibleCounter = 0;
     public int shotAvailableCounter = 0;
+    public int burstAvailableCounter = 0;
     int dyingCounter = 0;
     int hpBarCounter = 0;
     int knockBackCounter = 0;
@@ -85,7 +87,9 @@ public class Entity {
     public Entity currentWeapon;
     public Entity currentShield;
     public Entity currentLight;
+
     public Projectile projectile;
+    public Projectile projectile2;
 
     // Item Attributes
     public ArrayList<Entity> inventory = new ArrayList<>();
@@ -121,9 +125,11 @@ public class Entity {
     }
     public void resetCounter() {
         spriteCounter = 0;
+        burstCounter = 0;
         actionLockCounter = 0;
         invincibleCounter = 0;
         shotAvailableCounter = 0;
+        burstAvailableCounter = 0;
         dyingCounter = 0;
         hpBarCounter = 0;
         knockBackCounter = 0;
@@ -177,10 +183,11 @@ public class Entity {
     public void attacking(){
         spriteCounter++;
 
-        if(spriteCounter <= motion1_duration){
+        if(spriteCounter <= motion1_duration || burstCounter <= motion1_duration){
             spriteNum = 1;
         }
-        if((spriteCounter > motion1_duration) && (spriteCounter <= motion2_duration)){
+        if((spriteCounter > motion1_duration || burstCounter <= motion1_duration)
+                && (spriteCounter <= motion2_duration || burstCounter <= motion2_duration)){
             spriteNum = 2;
             //Save the current worldX/Y and solidArea
             int currentWorldX = (int) worldX;
@@ -210,10 +217,12 @@ public class Entity {
                 int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
                 gp.player.damageProjectile(projectileIndex);
 
+                int projectile2Index = gp.cChecker.checkEntity(this, gp.projectile2);
+                gp.player.damageProjectile(projectile2Index);
+
                 int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
                 gp.player.damageInteractiveTile(iTileIndex);
             }
-
 
             //After checking collision, restore the original data
             worldX = currentWorldX;
@@ -224,6 +233,11 @@ public class Entity {
         if(spriteCounter > motion2_duration){
             spriteNum = 1;
             spriteCounter = 0;
+            attacking = false;
+        }
+        if(burstCounter > motion2_duration){
+            spriteNum = 1;
+            burstCounter = 0;
             attacking = false;
         }
     }
@@ -364,6 +378,16 @@ public class Entity {
                 }
                 spriteCounter = 0;
             }
+            burstCounter++;
+            if(burstCounter > 24){
+                if(spriteNum == 1){
+                    spriteNum = 2;
+                }
+                else if(spriteNum == 2){
+                    spriteNum = 1;
+                }
+                burstCounter = 0;
+            }
         }
 
         if(invincible){
@@ -376,6 +400,10 @@ public class Entity {
         // Can only shoot one fireball every 30 frames
         if(shotAvailableCounter < 30){
             shotAvailableCounter++;
+        }
+        // Can only shoot one burst every 30 frames
+        if(burstAvailableCounter < 30){
+            burstAvailableCounter++;
         }
         if (offBalance) {
             offBalanceCounter++;
@@ -433,6 +461,17 @@ public class Entity {
             }
             shotAvailableCounter = 0;
         }
+        /*else if(i == 0 && !projectile2.alive && burstAvailableCounter == shotInterval){
+            projectile2.set((int) worldX, (int) worldY, direction, true, this);
+            // Check Vacancy
+            for (int ii = 0; ii < gp.projectile2[1].length; ii++) {
+                if(gp.projectile2[gp.currentMap][ii] == null){
+                    gp.projectile2[gp.currentMap][ii] = projectile2;
+                    break;
+                }
+            }
+            burstAvailableCounter = 0;
+        }*/
     }
     public void checkStartChasingOrNot(Entity target, int distance, int rate) {
         if(getTileDistance(target) < distance) {

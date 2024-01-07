@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import monster.MON_GreenSlime;
 
 public class Projectile extends Entity{
     Entity user;
@@ -44,6 +45,8 @@ public class Projectile extends Entity{
         }
 
         spriteCounter = user.projectile.animate(spriteCounter);
+        burstCounter = user.projectile2.animate2(burstCounter);
+
 //        spriteCounter++;
 //        if(spriteCounter > 12){
 //            if(spriteNum == 1){
@@ -74,5 +77,19 @@ public class Projectile extends Entity{
         }
 
         return spriteCounter;
+    }
+    public int animate2 ( int burstCounter ) {
+        burstCounter++;
+        if(burstCounter > 12){
+            if(spriteNum == 1){
+                spriteNum = 2;
+            }
+            else if(spriteNum == 2){
+                spriteNum = 1;
+            }
+            burstCounter = 0;
+        }
+
+        return burstCounter;
     }
 }

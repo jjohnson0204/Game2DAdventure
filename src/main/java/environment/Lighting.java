@@ -134,8 +134,8 @@ public class Lighting {
             case dawn: situation = "Dawn"; break;
         }
         g2.setColor(Color.WHITE);
-        g2.setFont(g2.getFont().deriveFont(50f));
-        g2.drawString(situation, 1100, 700);
+        g2.setFont(g2.getFont().deriveFont(40f));
+        g2.drawString(situation, 1025, 700);
     }
 }
 

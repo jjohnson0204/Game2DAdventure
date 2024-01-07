@@ -63,7 +63,8 @@ public class Map extends TileManager{
         g2.drawImage(gp.player.down1, playerX, playerY, playerSize * 2, playerSize * 2, null);
 
         // Hint
-        g2.setFont(gp.ui.maruMonica.deriveFont(48f));
+        Font Monica = gp.ui.maruMonica;
+        g2.setFont((Monica.deriveFont(48f)));
         g2.setColor(Color.WHITE);
         g2.drawString("Press M to close", 900, 700);
     }

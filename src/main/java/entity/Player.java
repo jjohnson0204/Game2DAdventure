@@ -61,6 +61,7 @@ public class Player extends Entity {
         currentShield = new OBJ_Shield_Wood(gp);
         currentLight = null;
         projectile = new OBJ_Aura(gp);
+        projectile2 = new OBJ_AuraBall(gp);
         attack = getAttack();
         defense = getDefense();
 
@@ -242,6 +243,16 @@ public class Player extends Entity {
                 }
                 spriteCounter = 0;
             }
+            burstCounter++;
+            if(burstCounter > 10){
+                if(spriteNum == 1){
+                    spriteNum = 2;
+                }
+                else if(spriteNum == 2){
+                    spriteNum = 1;
+                }
+                burstCounter = 0;
+            }
             //Check tile collision
             collisionOn = false;
             gp.cChecker.checkTile(this);
@@ -278,6 +289,7 @@ public class Player extends Entity {
                 gp.playSE(7);
                 attacking = true;
                 spriteCounter = 0;
+                burstCounter = 0;
             }
 
             attackCanceled = false;
@@ -306,6 +318,27 @@ public class Player extends Entity {
             // SE for fireball
             gp.playSE(10);
         }
+        if(
+                gp.keyH.burstKeyPressed
+                        && !projectile2.alive
+                        && burstAvailableCounter == 30
+                        && projectile2.haveResource(this)
+        ){
+            // Set default coordinates, direction and user
+            projectile2.set((int) worldX, (int) worldY, direction, true, this);
+            // Subtract the cost to use projectile
+            projectile2.subtractResource(this);
+            // Check Vacancy
+            for (int i = 0; i < gp.projectile2[1].length; i++) {
+                if(gp.projectile2[gp.currentMap][i] == null){
+                    gp.projectile2[gp.currentMap][i] = projectile2;
+                    break;
+                }
+            }
+            burstAvailableCounter = 0;
+            // SE for fireball
+            gp.playSE(10);
+        }
         // Outside of key if statement
         if(invincible){
             invincibleCounter++;
@@ -318,6 +351,10 @@ public class Player extends Entity {
         // Can only shoot one fireball every 30 frames
         if(shotAvailableCounter < 30){
             shotAvailableCounter++;
+        }
+        // Can only shoot one burst every 30 frames
+        if(burstAvailableCounter < 30){
+            burstAvailableCounter++;
         }
         if(life > maxLife){
             life = maxLife;
@@ -381,6 +418,11 @@ public class Player extends Entity {
             Entity projectile = gp.projectile[gp.currentMap][i];
             projectile.alive = false;
             generateParticle(projectile, projectile);
+        }
+        if(i != 999){
+            Entity projectile2 = gp.projectile2[gp.currentMap][i];
+            projectile2.alive = false;
+            generateParticle(projectile2, projectile2);
         }
     }
     public void checkLevelUp(){

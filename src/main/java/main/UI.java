@@ -1,13 +1,12 @@
 package main;
 
 import entity.Entity;
-import object.OBJ_Coin_Bronze;
-import object.OBJ_Heart;
-import object.OBJ_Key;
-import object.OBJ_ManaCrystal;
+import object.*;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
+import java.awt.Font;
 import java.io.InputStream;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
@@ -21,7 +20,9 @@ public class UI {
     DecimalFormat dFormat = new DecimalFormat("#0.00");
     public Font maruMonica;
     Font purisaB;
-    BufferedImage heart_full, heart_half, heart_blank, crystal_full, crystal_blank, coin;
+    BufferedImage heart_full, heart_half, heart_blank,
+            crystal_full, crystal_blank, coin,
+            equipped_menu, weapon, ability1, ability2, ability3;
     BufferedImage keyImage;
 
     //Booleans
@@ -48,14 +49,27 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
-        String Monica = "src/resources/font/x12y16pxMaruMonica.ttf";
-        String Purisa = "src/resources/font/Purisa Bold.ttf";
-        try {
-            InputStream is;
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Monica);
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream(Purisa);
-            purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
-        } catch (FontFormatException | IOException e) {
+//        String Monica = "../../../../resources/font/x12y16pxMaruMonica.ttf";
+//        String Purisa = "src/resources/font/Purisa Bold.ttf";
+//        try {
+//            InputStream is;
+//            is = getClass().getResourceAsStream(Monica);
+//            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+//            is = getClass().getClassLoader().getResourceAsStream(Purisa);
+//            purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
+//        } catch (FontFormatException | IOException e) {
+//            e.printStackTrace();
+//        }
+
+        try{
+            // load a custom font in your project folder
+            maruMonica = Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/x12y16pxMaruMonica.ttf")).deriveFont(30f);
+            purisaB = Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/Purisa Bold.ttf")).deriveFont(30f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/x12y16pxMaruMonica.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/Purisa Bold.ttf")));
+        }
+        catch(IOException | FontFormatException e){
             e.printStackTrace();
         }
         //Key image
@@ -74,6 +88,13 @@ public class UI {
 
         Entity bronzeCoin = new OBJ_Coin_Bronze(gp);
         coin = bronzeCoin.down1;
+
+        Entity equippedMenu = new OBJ_Equipped_Menu(gp);
+        equipped_menu = equippedMenu.down1;
+        weapon =
+        ability1 = equippedMenu.image;
+        ability2 = equippedMenu.image2;
+        /*ability3 = equippedMenu.image3;*/
     }
     public void addMessage(String text){
         message.add(text);
@@ -95,6 +116,7 @@ public class UI {
         // Play State
         if(gp.gameState == gp.playState){
             drawPlayerLife();
+            drawPlayerEquippedAbilities();
             drawGameTimer();
             drawMessage();
 
@@ -182,6 +204,13 @@ public class UI {
             x += 35;
         }
     }
+    public void drawPlayerEquippedAbilities() {
+        int x = (int)(gp.tileSize * 17.5);
+        int y = (int)(gp.tileSize * 9.5);
+        g2.drawImage(equipped_menu, x + 10, y + 8, 64 * 2, 64 * 2,null);
+        g2.drawImage(ability1, 1142, 705, 24, 24, null);
+        g2.drawImage(ability2, 1157, 642, 24, 24, null);
+    }
     public void drawMessage(){
         int messageX = gp.tileSize;
         int messageY = gp.tileSize * 4;
@@ -214,10 +243,8 @@ public class UI {
         g2.setColor(Color.WHITE);
         g2.drawImage(keyImage, gp.tileSize / 5, gp.tileSize * 3, gp.tileSize, gp.tileSize, null);
         List<Entity> keys = gp.player.inventory;
-                keys = keys.stream().filter( entity -> {
-                    return entity.name == "Key";
-                }).collect(Collectors.toList());
-        g2.drawString("  x = " + String.valueOf(keys.size()), 64, 230);
+                keys = keys.stream().filter( entity -> entity.name == "Key").collect(Collectors.toList());
+        g2.drawString("  x = " + keys.size(), 64, 230);
         // Time
         playTime +=(double) 1/60;
         g2.drawString("Time: " + dFormat.format(playTime), gp.tileSize * 11, 65);
