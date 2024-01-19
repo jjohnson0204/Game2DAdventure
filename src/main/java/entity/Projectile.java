@@ -45,7 +45,8 @@ public class Projectile extends Entity{
         }
 
         spriteCounter = user.projectile.animate(spriteCounter);
-        burstCounter = user.projectile2.animate2(burstCounter);
+        skillCounter = user.projectile2.animate2(skillCounter);
+        burstCounter = user.projectile3.animate3(burstCounter);
 
 //        spriteCounter++;
 //        if(spriteCounter > 12){
@@ -78,7 +79,21 @@ public class Projectile extends Entity{
 
         return spriteCounter;
     }
-    public int animate2 ( int burstCounter ) {
+    public int animate2 ( int skillCounter ) {
+        skillCounter++;
+        if(skillCounter > 12){
+            if(spriteNum == 1){
+                spriteNum = 2;
+            }
+            else if(spriteNum == 2){
+                spriteNum = 1;
+            }
+            skillCounter = 0;
+        }
+
+        return skillCounter;
+    }
+    public int animate3 ( int burstCounter ) {
         burstCounter++;
         if(burstCounter > 12){
             if(spriteNum == 1){

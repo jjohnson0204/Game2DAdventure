@@ -46,20 +46,24 @@ public class SaveLoad {
             ds.mapObjectOpened = new boolean[gp.maxMap][gp.obj[1].length];
 
             for (int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
-                for (int i = 0; i < gp.obj[1].length; i++) {
-                    if (gp.obj[mapNum][i] == null) {
-                        ds.mapObjectNames[mapNum][i] = "NA";
-                    }
-                    else {
-                        ds.mapObjectNames[mapNum][i] = gp.obj[mapNum][i].name;
-                        ds.mapObjectWorldX[mapNum][i] = (int) gp.obj[mapNum][i].worldX;
-                        ds.mapObjectWorldY[mapNum][i] = (int) gp.obj[mapNum][i].worldY;
-                        if (gp.obj[mapNum][i].loot != null) {
-                            ds.mapObjectLootNames[mapNum][i] = gp.obj[mapNum][i].loot.name;
+                for (int layerNum = 0; layerNum > gp.numberOfLayers; layerNum++) {
+                    for (int i = 0; i < gp.obj[1].length; i++) {
+                        if (gp.obj[mapNum][layerNum][i] == null) {
+                            ds.mapObjectNames[mapNum][i] = "NA";
                         }
-                        ds.mapObjectOpened[mapNum][i] = gp.obj[mapNum][i].opened;
+                        else {
+                            ds.mapObjectNames[mapNum][i] = gp.obj[mapNum][layerNum][i].name;
+                            ds.mapObjectWorldX[mapNum][i] = (int) gp.obj[mapNum][layerNum][i].worldX;
+                            ds.mapObjectWorldY[mapNum][i] = (int) gp.obj[mapNum][layerNum][i].worldY;
+                            if (gp.obj[mapNum][layerNum][i].loot != null) {
+                                ds.mapObjectLootNames[mapNum][i] = gp.obj[mapNum][layerNum][i].loot.name;
+                            }
+                            ds.mapObjectOpened[mapNum][i] = gp.obj[mapNum][layerNum][i].opened;
+                        }
                     }
                 }
+
+
             }
 
             ///Write the DataStorage object
@@ -102,23 +106,26 @@ public class SaveLoad {
             gp.player.getAttackImage();
             //Objects on Map
             for (int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
-                for (int i = 0; i < gp.obj[1].length; i++) {
-                    if (ds.mapObjectNames[mapNum][i].equals("NA")) {
-                        gp.obj[mapNum][i] = null;
-                    }
-                    else {
-                        gp.obj[mapNum][i] = gp.eGenerator.getObject(ds.mapObjectNames[mapNum][i]);
-                        gp.obj[mapNum][i].worldX = ds.mapObjectWorldX[mapNum][i];
-                        gp.obj[mapNum][i].worldY = ds.mapObjectWorldY[mapNum][i];
-                        if (ds.mapObjectLootNames[mapNum][i] != null) {
-                             gp.obj[mapNum][i].loot = gp.eGenerator.getObject(ds.mapObjectLootNames[mapNum][i]);
+                for( int layerNum = 0; layerNum < gp.numberOfLayers; layerNum++) {
+                    for (int i = 0; i < gp.obj[layerNum].length; i++) {
+                        if (ds.mapObjectNames[mapNum][i].equals("NA")) {
+                            gp.obj[mapNum][layerNum][i] = null;
                         }
-                        gp.obj[mapNum][i].opened = ds.mapObjectOpened[mapNum][i];
-                        if (gp.obj[mapNum][i].opened) {
-                            gp.obj[mapNum][i].down1 = gp.obj[mapNum][i].image2;
+                        else {
+                            gp.obj[mapNum][layerNum][i] = gp.eGenerator.getObject(ds.mapObjectNames[mapNum][i]);
+                            gp.obj[mapNum][layerNum][i].worldX = ds.mapObjectWorldX[mapNum][i];
+                            gp.obj[mapNum][layerNum][i].worldY = ds.mapObjectWorldY[mapNum][i];
+                            if (ds.mapObjectLootNames[mapNum][i] != null) {
+                                gp.obj[mapNum][layerNum][i].loot = gp.eGenerator.getObject(ds.mapObjectLootNames[mapNum][i]);
+                            }
+                            gp.obj[mapNum][layerNum][i].opened = ds.mapObjectOpened[mapNum][i];
+                            if (gp.obj[mapNum][layerNum][i].opened) {
+                                gp.obj[mapNum][layerNum][i].down1 = gp.obj[mapNum][layerNum][i].image2;
+                            }
                         }
                     }
                 }
+
             }
         }
         catch (Exception e) {

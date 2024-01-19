@@ -6,15 +6,12 @@ import entity.Projectile;
 import entity.SpriteSheet;
 import main.GamePanel;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OBJ_AuraBall extends Projectile {
+public class OBJ_AuraNado extends Projectile {
     GamePanel gp;
     Boolean fireOn = true;
     Player user;
@@ -22,13 +19,13 @@ public class OBJ_AuraBall extends Projectile {
     public List<BufferedImage> leftSprites = new ArrayList<>();
     public List<BufferedImage> rightSprites = new ArrayList<>();
     public List<BufferedImage> upSprites = new ArrayList<>();
-    public static final String objName = "AuraBall";
-    public OBJ_AuraBall(GamePanel gp) {
+    public static final String objName = "AuraNado";
+    public OBJ_AuraNado(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
         name = objName;
-        speed = 2;
+        speed = 3;
         maxLife = 160;
         life = maxLife;
         attack = 5;
@@ -39,12 +36,12 @@ public class OBJ_AuraBall extends Projectile {
     }
 
     private void getImage() {
-        SpriteSheet sprite = new SpriteSheet("src/resources/projectile/AuraBall.png", 64,64,6,4);
-        for (int i = 0; i < 6; i++) {
+        SpriteSheet sprite = new SpriteSheet("src/resources/projectile/auranado.png", 48,96,7,1);
+        for (int i = 0; i < 7; i++) {
             downSprites.add(sprite.getSprite(i, 0));
-            leftSprites.add(sprite.getSprite(i, 1));
-            rightSprites.add(sprite.getSprite(i, 2));
-            upSprites.add(sprite.getSprite(i, 3));
+            leftSprites.add(sprite.getSprite(i, 0));
+            rightSprites.add(sprite.getSprite(i, 0));
+            upSprites.add(sprite.getSprite(i, 0));
         }
     }
 
@@ -97,28 +94,14 @@ public class OBJ_AuraBall extends Projectile {
         int maxLife = 20;
         return maxLife;
     }
-    public int animate2( int skillCounter ) {
+    public int animate3( int burstCounter ) {
         int numberOfFrames = 6;
-        skillCounter++;
-        if(skillCounter > 5){
-            spriteNum = ((spriteNum + 1) % numberOfFrames);
-            skillCounter = 0;
-        }
-        return skillCounter;
-    }
-
-   /* public int animate2( int burstCounter ) {
-        int numberOfFrames = 4;
         burstCounter++;
         if(burstCounter > 5){
             spriteNum = ((spriteNum + 1) % numberOfFrames);
             burstCounter = 0;
-            while(burstCounter < 5){
-                spriteNum = ((spriteNum + 1) % numberOfFrames);
-                burstCounter++;
-            }
         }
         return burstCounter;
-    }*/
+    }
 
 }

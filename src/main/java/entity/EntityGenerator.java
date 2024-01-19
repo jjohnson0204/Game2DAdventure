@@ -15,6 +15,7 @@ public class EntityGenerator {
         switch (itemName) {
             case OBJ_Aura.objName: obj = new OBJ_Aura(gp); break;
             case OBJ_AuraBall.objName: obj = new OBJ_AuraBall(gp); break;
+            case OBJ_AuraNado.objName: obj = new OBJ_AuraNado(gp); break;
             case OBJ_Axe.objName: obj = new OBJ_Axe(gp); break;
             case OBJ_Boots.objName: obj = new OBJ_Boots(gp); break;
             case OBJ_Chest.objName: obj = new OBJ_Chest(gp); break;

@@ -94,7 +94,7 @@ public class UI {
         weapon =
         ability1 = equippedMenu.image;
         ability2 = equippedMenu.image2;
-        /*ability3 = equippedMenu.image3;*/
+        ability3 = equippedMenu.image3;
     }
     public void addMessage(String text){
         message.add(text);
@@ -207,34 +207,41 @@ public class UI {
     public void drawPlayerEquippedAbilities() {
         int x = (int)(gp.tileSize * 17.5);
         int y = (int)(gp.tileSize * 9.5);
+
+        g2.setFont(g2.getFont().deriveFont(24f));
+        g2.drawString("Enter", 1235, 755);
         g2.drawImage(equipped_menu, x + 10, y + 8, 64 * 2, 64 * 2,null);
+        g2.drawString("F", 1170, 700);
         g2.drawImage(ability1, 1142, 705, 24, 24, null);
+        g2.drawString("B", 1190, 645);
         g2.drawImage(ability2, 1157, 642, 24, 24, null);
+        g2.drawString("V", 1245, 626);
+        g2.drawImage(ability3, 1220, 633, 24, 24, null);
     }
     public void drawMessage(){
         int messageX = gp.tileSize;
         int messageY = gp.tileSize * 4;
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
 
-        for (int i = 0; i < message.size(); i++) {
-            if (message.get(i) != null) {
-                // Black shadow border
-                g2.setColor(Color.BLACK);
-                g2.drawString(message.get(i), messageX + 2, messageY + 2);
-                // Text
-                g2.setColor(Color.WHITE);
-                g2.drawString(message.get(i), messageX, messageY);
-
-                int counter = messageCounter.get(i) + 1; // messageCounter++ for arraylist
-                messageCounter.set(i, counter); // set the counter to the array
-                messageY += 50;
-
-                if(messageCounter.get(i) > 180){
-                    message.remove(i);
-                    messageCounter.remove(i);
-                }
-            }
-        }
+//        for (int i = 0; i < message.size(); i++) {
+//            if (message.get(i) != null) {
+//                // Black shadow border
+//                g2.setColor(Color.BLACK);
+//                g2.drawString(message.get(i), messageX + 2, messageY + 2);
+//                // Text
+//                g2.setColor(Color.WHITE);
+//                g2.drawString(message.get(i), messageX, messageY);
+//
+//                int counter = messageCounter.get(i) + 1; // messageCounter++ for arraylist
+//                messageCounter.set(i, counter); // set the counter to the array
+//                messageY += 50;
+//
+//                if(messageCounter.get(i) > 180){
+//                    message.remove(i);
+//                    messageCounter.remove(i);
+//                }
+//            }
+//        }
 
     }
     public void drawGameTimer(){

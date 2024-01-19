@@ -27,6 +27,7 @@ public class MON_GreenSlime extends Entity {
         exp = 2;
         projectile = new OBJ_Rock(gp);
         projectile2 = new OBJ_Rock(gp);
+        projectile3 = new OBJ_Rock(gp);
 
         //Solid Area box
         solidArea.x = 3;
@@ -40,7 +41,7 @@ public class MON_GreenSlime extends Entity {
         getImage();
     }
     //Loading monster image
-    public void  getImage(){
+    public void getImage(){
         up1 = setup("/monster/greenslime_down_1");
         up2 = setup("/monster/greenslime_down_2");
         down1 = setup("/monster/greenslime_down_1");
@@ -49,7 +50,9 @@ public class MON_GreenSlime extends Entity {
         left2 = setup("/monster/greenslime_down_2");
         right1 = setup("/monster/greenslime_down_1");
         right2 = setup("/monster/greenslime_down_2");
+
     }
+
     //Setting monster movement
     public void setAction(){
         if(onPath){

@@ -4,7 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed,
-            enterPressed, shotKeyPressed, spacePressed, burstKeyPressed;
+            enterPressed, spacePressed,
+            shotKeyPressed, skillKeyPressed, burstKeyPressed;
     boolean showDebugText = false;
     GamePanel gp;
     public KeyHandler(GamePanel gp) {
@@ -130,6 +131,9 @@ public class KeyHandler implements KeyListener {
             shotKeyPressed = false;
         }
         if (code == KeyEvent.VK_B) {
+            skillKeyPressed = false;
+        }
+        if (code == KeyEvent.VK_V) {
             burstKeyPressed = false;
         }
         if (code == KeyEvent.VK_ENTER) {
@@ -232,6 +236,9 @@ public class KeyHandler implements KeyListener {
             shotKeyPressed = true;
         }
         if (code == KeyEvent.VK_B) {
+            skillKeyPressed = true;
+        }
+        if (code == KeyEvent.VK_V) {
             burstKeyPressed = true;
         }
         if (code == KeyEvent.VK_ESCAPE) {
@@ -303,12 +310,12 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             if(gp.ui.commandNum == 0){
                 gp.gameState = gp.playState;
-                gp.resetGame(false);
+                gp.setupGame();
                 gp.playMusic(0);
             }
             else if(gp.ui.commandNum == 1){
                 gp.gameState = gp.titleState;
-                gp.resetGame(true);
+                gp.setupGame();
             }
         }
     }

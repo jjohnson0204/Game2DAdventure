@@ -10,6 +10,7 @@ public class OBJ_Equipped_Menu extends Entity {
     Entity entity;
     BufferedImage ability1 = setup("/ui/auraability");
     BufferedImage ability2 = setup("/ui/auraballability");
+    BufferedImage ability3 = setup("/ui/auranadoability");
 
     public static final String objName = "Equipped Menu";
 
@@ -21,6 +22,6 @@ public class OBJ_Equipped_Menu extends Entity {
         down1 = setup("/ui/equipmenu");
         image = ability1;
         image2 = ability2;
-        /*image3 = setup("");*/
+        image3 = ability3;
     }
 }

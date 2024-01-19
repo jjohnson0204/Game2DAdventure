@@ -29,10 +29,12 @@ public class Map extends TileManager{
             int row = 0;
 
             while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
-                int tileNum = mapTileNum[i][col][row];
-                int x = gp.tileSize * col;
-                int y = gp.tileSize * row;
-                g2.drawImage(tile[tileNum].image, x , y, null);
+                for (int layer = 0; layer < mapTileNum[i].length; layer++) { // Loop over all layers
+                    int tileNum = mapTileNum[i][layer][col][row];
+                    int x = gp.tileSize * col;
+                    int y = gp.tileSize * row;
+                    g2.drawImage(tile[tileNum].image, x , y, null);
+                }
 
                 col++;
                 if (col == gp.maxWorldCol) {
@@ -43,6 +45,7 @@ public class Map extends TileManager{
             g2.dispose();
         }
     }
+
     public void drawFullMapScreen(Graphics2D g2) {
         // Background Color
         g2.setColor(Color.BLACK);

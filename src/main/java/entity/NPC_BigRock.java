@@ -118,12 +118,15 @@ public class NPC_BigRock extends Entity{
         
         //If all the rocks are on the plates, the iron door opens
         if(count == rockList.size()) {
-            for (int i = 0; i < gp.obj[i].length; i++) {
-                if (gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)) {
-                    gp.obj[gp.currentMap][i] = null;
-                    gp.playSE(21);
+            for (int currentLayer = 0; currentLayer < gp.numberOfLayers; currentLayer++){
+                for (int i = 0; i < gp.obj[gp.currentMap][currentLayer].length; i++) {
+                    if (gp.obj[gp.currentMap][currentLayer][i] != null && gp.obj[gp.currentMap][currentLayer][i].name.equals(OBJ_Door_Iron.objName)) {
+                        gp.obj[gp.currentMap][currentLayer][i] = null;
+                        gp.playSE(21);
+                    }
                 }
             }
+
         }
     }
 }

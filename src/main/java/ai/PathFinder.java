@@ -14,6 +14,7 @@ public class PathFinder {
     //Others
     boolean goalReached = false;
     int step = 0;
+
     public PathFinder(GamePanel gp){
         this.gp = gp;
         instantiateNodes();
@@ -69,12 +70,18 @@ public class PathFinder {
         int col = 0;
         int row = 0;
 
+        // Get the number of layers
+        int numberOfLayers = 5;
+
         while(col < gp.maxWorldCol && row < gp.maxWorldRow){
             //Set Solid Node
             //Check Tiles
-            int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
-            if(gp.tileM.tile[tileNum].collision){
-                node[col][row].solid = true;
+            for (int layer = 0; layer < numberOfLayers; layer++) { // Assuming numberOfLayers is the total number of layers
+                int tileNum = gp.tileM.mapTileNum[gp.currentMap][layer][col][row];
+                if(gp.tileM.tile[tileNum].collision){
+                    node[col][row].solid = true;
+                    break; // If a solid tile is found on any layer, no need to check other layers
+                }
             }
             //Check Interactive Tiles
             for(int i = 0; i < gp.iTile[1].length; i++){
@@ -94,6 +101,7 @@ public class PathFinder {
             }
         }
     }
+
     public void getCost(Node node){
         // Get G Cost (The distance from the start node)
         int xDistance = Math.abs(node.col - startNode.col);
