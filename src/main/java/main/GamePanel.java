@@ -44,8 +44,6 @@ public class GamePanel extends JPanel implements Runnable{
 
     //System
     public TileManager tileM = new TileManager(this);
-    public Map map = new Map(this);
-    public int numberOfLayers = tileM.numberOfLayers;
     public KeyHandler keyH = new KeyHandler(this);
     public EventHandler eHandler = new EventHandler(this);
     Sound music = new Sound();
@@ -56,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
     Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
+    Map map = new Map(this);
     SaveLoad saveLoad = new SaveLoad(this);
     public EntityGenerator eGenerator = new EntityGenerator(this);
     Thread gameThread;
@@ -65,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
 //    public Player player = new Player(this,keyH, 4);
     public Player player = new Player(this,keyH);
     PickUpObject pickUpObject = new PickUpObject(this);
-    public Entity[][][] obj = new Entity[maxMap][tileM.numberOfLayers][50];
+    public Entity[][] obj = new Entity[maxMap][50];
     public Entity[][] npc = new Entity[maxMap][20];
     public Entity[][] monster = new Entity[maxMap][20];
     public InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
@@ -105,14 +104,6 @@ public class GamePanel extends JPanel implements Runnable{
         this.setFocusable(true);
     }
 
-    public GamePanel(int numberOfLayers) throws FileNotFoundException {
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.black);
-        this.setDoubleBuffered(true);
-        this.addKeyListener(keyH);
-        this.setFocusable(true);
-        this.numberOfLayers = numberOfLayers;
-    }
     public void zoomInOut(int i) {
         int oldWorldWidth = tileSize * maxWorldCol;
         tileSize += i;
@@ -135,9 +126,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         // Set Entities and Objects in world
         player.setDefaultPositions();
-        aSetter.setObject(0,2);
-        aSetter.setObject(1,1);
-        aSetter.setObject(2,1);
+        aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
@@ -156,6 +145,7 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     public void resetGame(boolean restart){
+        currentArea = outside;
         player.setDefaultPositions();
         player.restoreStatus();
         player.resetCounter();
@@ -164,8 +154,7 @@ public class GamePanel extends JPanel implements Runnable{
 
         if(restart) {
             player.setDefaultValues();
-            aSetter.setObject(0,1);
-            aSetter.setObject(1,1);
+            aSetter.setObject();
             aSetter.setInteractiveTile();
             eManager.lighting.resetDay();
         }
@@ -331,15 +320,10 @@ public class GamePanel extends JPanel implements Runnable{
                     entityList.add(npc[currentMap][i]);
                 }
             }
-            for (int currentLayer = 0; currentLayer < numberOfLayers; currentLayer++) {
-                if(obj[currentMap][currentLayer] != null) {
-                    for (int i = 0; i < obj[currentMap][currentLayer].length; i++) {
-                        if ( obj[currentMap][currentLayer][i] != null) {
-                            entityList.add(obj[currentMap][currentLayer][i]);
-                        }
-                    }
+            for (int i = 0; i < obj[1].length; i++) {
+                if (obj[currentMap][i] != null){
+                    entityList.add(obj[currentMap][i]);
                 }
-
             }
             for (int i = 0; i < monster[1].length; i++) {
                 if (monster[currentMap][i] != null) {
@@ -404,11 +388,17 @@ public class GamePanel extends JPanel implements Runnable{
             y += lineHeight;
             g2.drawString("WorldY " + player.worldY, x, y);
             y += lineHeight;
-            g2.drawString("Col " + (player.worldX + player.solidArea.x) / tileSize, x, y);
-            g2.drawString("Row " + (player.worldY + player.solidArea.y) / tileSize, x, y);
+            g2.drawString("Col " + (player.worldX + player.solidArea.x) / tileSize, x, y += lineHeight);
+            g2.drawString("Row " + (player.worldY + player.solidArea.y) / tileSize, x, y+= lineHeight);
 
-            g2.drawString("Draw Time: " + passed, 10, 400);
-            System.out.println("Draw Time: " + passed);
+            g2.drawString("Draw Time: " + passed, 10, y += lineHeight);
+//            System.out.println("Draw Time: " + passed);
+
+            g2.drawString("God Mode:" + keyH.godModeOn, x, y += lineHeight);
+
+            //Get the tile location info
+            int playerTileNum = tileM.mapTileNum[currentMap][player.getCol()][player.getRow()];
+            g2.drawString("Player is on " + playerTileNum + " tile", x, y += lineHeight);
         }
     }
 

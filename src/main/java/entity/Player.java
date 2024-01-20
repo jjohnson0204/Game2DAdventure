@@ -3,7 +3,6 @@ package entity;
 import main.GamePanel;
 import main.KeyHandler;
 import object.*;
-import tile.Tile;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -27,8 +26,8 @@ public class Player extends Entity {
 
         //solidArea(x,y) solidAreaDefault(x,y) solidArea(w,h)
         solidArea = new Rectangle();
-        solidArea.x = 12;
-        solidArea.y = 18;
+        solidArea.x = 8;
+        solidArea.y = 16;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
@@ -74,6 +73,7 @@ public class Player extends Entity {
         setDialogue();
     }
     public void setDefaultPositions(){
+        gp.currentMap = 0;
         worldX = gp.tileSize * 16;
         worldY = gp.tileSize * 9;
         direction = "down";
@@ -99,9 +99,9 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
-        inventory.add(new OBJ_Key(gp));
+//        inventory.add(new OBJ_Key(gp));
+//        inventory.add(new OBJ_Key(gp));
+//        inventory.add(new OBJ_Key(gp));
     }
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
@@ -187,7 +187,7 @@ public class Player extends Entity {
     public void update() {
         if(knockBack){
             collisionOn = false;
-            gp.cChecker.checkTile(this,1);
+            gp.cChecker.checkTile(this);
             gp.cChecker.checkObject(this, true);
             gp.cChecker.checkEntity(this, gp.npc);
             gp.cChecker.checkEntity(this, gp.monster);
@@ -236,7 +236,7 @@ public class Player extends Entity {
                 direction = "";
             }
             spriteCounter++;
-            if(spriteCounter > 10){
+            if(spriteCounter > 20){
                 if(spriteNum == 1){
                     spriteNum = 2;
                 }
@@ -257,12 +257,12 @@ public class Player extends Entity {
             }
             //Check tile collision
             collisionOn = false;
-            gp.cChecker.checkTile(this,1);
+            gp.cChecker.checkTile(this);
 
             //Check object collision
             int objIndex = gp.cChecker.checkObject(this, true);
-            int playerLayer = getPlayerLayer();
-            pickUpObject(objIndex, playerLayer);
+            
+            pickUpObject(objIndex);
 
             //Check npc collision
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
@@ -386,12 +386,15 @@ public class Player extends Entity {
         if(mana > maxMana){
             mana = maxMana;
         }
-        if(life <= 0){
-            gp.gameState = gp.gameOverState;
-            gp.ui.commandNum = -1;
-            gp.stopMusic();
-            gp.playSE(12);
+        if (!keyH.godModeOn) {
+            if(life <= 0){
+                gp.gameState = gp.gameOverState;
+                gp.ui.commandNum = -1;
+                gp.stopMusic();
+                gp.playSE(12);
+            }
         }
+
         // Check if player's location matches the location of the PickUpObject
 //        if (this.worldX == myObject.worldX && this.worldY == myObject.worldY) {
 //            // If it does, call the pickUp() method of the PickUpObject
@@ -531,33 +534,33 @@ public class Player extends Entity {
             gp.npc[gp.currentMap][i].move(direction);
         }
     }
-    public void pickUpObject(int i, int layer){
+    public void pickUpObject(int i){
         //you have to change them all in the future to take a layer and pick up that. pickUpObject(int i, int layer)
         if(i != 999) {
             //Pickup Only Items
-            if(gp.obj[gp.currentMap][layer][i].type == type_pickupOnly){
-                gp.obj[gp.currentMap][layer][i].use(this);
-                gp.obj[gp.currentMap][layer][i] = null;
+            if(gp.obj[gp.currentMap][i].type == type_pickupOnly){
+                gp.obj[gp.currentMap][i].use(this);
+                gp.obj[gp.currentMap][i] = null;
             }
             // Obstacle
-            else if(gp.obj[gp.currentMap][layer][i].type == type_obstacle) {
+            else if(gp.obj[gp.currentMap][i].type == type_obstacle) {
                 if(keyH.enterPressed){
                     attackCanceled = true;
-                    gp.obj[gp.currentMap][layer][i].interact();
+                    gp.obj[gp.currentMap][i].interact();
                 }
             }
             // Inventory Items
             else {
                 String text;
-                if(canObtainItem(gp.obj[gp.currentMap][layer][i])){
+                if(canObtainItem(gp.obj[gp.currentMap][i])){
                     gp.playSE(1);
-                    text = "Got a " + gp.obj[gp.currentMap][layer][i].name + "!";
+                    text = "Got a " + gp.obj[gp.currentMap][i].name + "!";
                 }
                 else {
                     text = "You can not carry any more items!";
                 }
                 gp.ui.addMessage(text);
-                gp.obj[gp.currentMap][layer][i] = null;
+                gp.obj[gp.currentMap][i] = null;
             }
         }
     }
@@ -610,7 +613,7 @@ public class Player extends Entity {
                     if(spriteNum == 1) { image = up1;}
                     if(spriteNum == 2) { image = up2;}
                     if(spriteNum == 3) { image = up3;}
-                    if(spriteNum == 4) { image = up4;}
+//                    if(spriteNum == 4) { image = up4;}
                 }
                 if(attacking){
 //                    tempScreenY = screenY - gp.tileSize;
@@ -626,7 +629,7 @@ public class Player extends Entity {
                     if(spriteNum == 1) { image = down1;}
                     if(spriteNum == 2) { image = down2;}
                     if(spriteNum == 3) { image = down3;}
-                    if(spriteNum == 4) { image = down4;}
+//                    if(spriteNum == 4) { image = down4;}
                 }
                 if(attacking){
                     if(spriteNum == 1) { image = attackDown1;}
@@ -641,7 +644,7 @@ public class Player extends Entity {
                     if(spriteNum == 1) { image = right1;}
                     if(spriteNum == 2) { image = right2;}
                     if(spriteNum == 3) { image = right3;}
-                    if(spriteNum == 4) { image = right4;}
+//                    if(spriteNum == 4) { image = right4;}
                 }
                 if(attacking){
                     if(spriteNum == 1) { image = attackRight1;}
@@ -656,7 +659,7 @@ public class Player extends Entity {
                     if(spriteNum == 1) { image = left1;}
                     if(spriteNum == 2) { image = left2;}
                     if(spriteNum == 3) { image = left3;}
-                    if(spriteNum == 4) { image = left4;}
+//                    if(spriteNum == 4) { image = left4;}
                 }
                 if(attacking){
 //                    tempScreenX = screenX - gp.tileSize;
@@ -687,7 +690,7 @@ public class Player extends Entity {
         g2.drawString("Invincible: " + invincibleCounter, 10, 400);
     }
     public void getImage() {
-        SpriteSheet sprite = new SpriteSheet("src/resources/player/npc005.png", 32, 32, 3, 4);
+        SpriteSheet sprite = new SpriteSheet("src/resources/player/npc005.png", 32, 32, 3, 5);
         down1 = sprite.getSprite(0, 0);
         down2 = sprite.getSprite(1,0);
         down3 = sprite.getSprite(2, 0);
@@ -704,29 +707,6 @@ public class Player extends Entity {
         up2 = sprite.getSprite(1,3);
         up3 = sprite.getSprite(2, 3);
 
-    }
-    public int getPlayerLayer() {
-        int worldCol = (int) (worldX / gp.tileSize);
-        int worldRow = (int) (worldY / gp.tileSize);
-
-        int tileNum = gp.tileM.mapTileNum[gp.currentMap][0][worldCol][worldRow];
-
-        for (int i = 0; i < gp.numberOfLayers; i++) {
-            Tile tile = gp.tileM.tile[tileNum + i];
-            if (tile != null && tile.isSolid()) {
-                return i;
-            }
-        }
-
-        return -1;
-//        for (int i = 0; i < gp.tileM.mapTileNum[gp.currentMap][1].length; i++) {
-//            Tile tile = gp.tileM.mapTileNum[gp.currentMap][1][i].getTile(worldCol, worldRow);
-//            if (tile != null && tile.isSolid()) {
-//                return i;
-//            }
-//        }
-//
-//        return -1;
     }
     public void interactWithPickUpObject(PickUpObject obj) {
         // Call the pickUp method of the PickUpObject

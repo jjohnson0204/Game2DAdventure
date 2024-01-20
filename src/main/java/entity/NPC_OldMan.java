@@ -1,6 +1,7 @@
 package entity;
 
 import main.GamePanel;
+import main.UtilityTool;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NPC_OldMan extends Entity{
-
+    UtilityTool util;
     public NPC_OldMan(GamePanel gp){
         super(gp);
 
@@ -31,6 +32,7 @@ public class NPC_OldMan extends Entity{
         setDialogue();
     }
     public void getOldManImage(){
+        int i = 2;
         SpriteSheet sprite = new SpriteSheet("src/resources/npc/wiseman.png", 30,42,4,4);
         down1 = sprite.getSprite(0, 0);
         down2 = sprite.getSprite(1,0);

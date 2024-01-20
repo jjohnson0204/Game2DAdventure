@@ -73,15 +73,17 @@ public class EventHandler {
             else if(hit(0,28, 44, "up")){healingPool(gp.dialogueState);}
 
             //Teleports
-            else if(hit(0,9, 35, "any")){teleport(1,12, 13, gp.indoor);} // Enter Merchant
-            else if(hit(1,12, 13, "any")){teleport(0,9, 35, gp.outside);} // Leave Merchant
+            else if(hit(0,9, 35, "any")){teleport(1,7, 14, gp.indoor);} // Enter Merchant
+            else if(hit(1,6, 14, "any")){teleport(0,9, 35, gp.outside);} // Leave Merchant
+            else if(hit(1,7, 14, "any")){teleport(0,9, 35, gp.outside);}
+            else if(hit(1,8, 14, "any")){teleport(0,9, 35, gp.outside);}
             else if(hit(0,12, 9, "any")){teleport(2,9, 41, gp.dungeon);}  // Enter Dungeon
             else if(hit(2,9, 41, "any")){teleport(0,12, 9, gp.outside);}  // Exit Dungeon Outside
             else if(hit(2,8, 7, "any")){teleport(3,26, 41, gp.dungeon);}  // To B2
             else if(hit(3,26, 41, "any")){teleport(2,8, 7, gp.dungeon);}  // To B1
 
             //Speak
-            else if(hit(1, 12, 9, "up")){speak(gp.npc[1][0]);}
+            else if(hit(1, 9, 7, "up")){speak(gp.npc[1][0]);}
         }
     }
     private void damagePit(int gameState) {

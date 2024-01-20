@@ -1,9 +1,6 @@
 package ai;
-
 import main.GamePanel;
-
 import java.util.ArrayList;
-
 public class PathFinder {
     GamePanel gp;
     //Node
@@ -14,21 +11,18 @@ public class PathFinder {
     //Others
     boolean goalReached = false;
     int step = 0;
-
     public PathFinder(GamePanel gp){
         this.gp = gp;
         instantiateNodes();
     }
+
     public void instantiateNodes(){
         node = new Node[gp.maxWorldCol][gp.maxWorldRow];
-
         //Place Nodes
         int col = 0;
         int row = 0;
-
         while(col < gp.maxWorldCol && row < gp.maxWorldRow){
             node[col][row] = new Node(col, row);
-
             col++;
             if(col == gp.maxWorldCol){
                 col = 0;
@@ -40,12 +34,10 @@ public class PathFinder {
         //Place Nodes
         int col = 0;
         int row = 0;
-
         while(col < gp.maxWorldCol && row < gp.maxWorldRow){
             node[col][row].open = false;
             node[col][row].checked = false;
             node[col][row].solid = false;
-
             col++;
             if(col == gp.maxWorldCol){
                 col = 0;
@@ -60,40 +52,34 @@ public class PathFinder {
     }
     public void setNodes(int startCol, int startRow, int goalCol, int goalRow){
         resetNodes();
-
         //Set Start and Goal node
         startNode = node[startCol][startRow];
         currentNode = startNode;
         goalNode = node[goalCol][goalRow];
         openList.add(currentNode);
-
         int col = 0;
         int row = 0;
-
-        // Get the number of layers
-        int numberOfLayers = 5;
 
         while(col < gp.maxWorldCol && row < gp.maxWorldRow){
             //Set Solid Node
             //Check Tiles
-            for (int layer = 0; layer < numberOfLayers; layer++) { // Assuming numberOfLayers is the total number of layers
-                int tileNum = gp.tileM.mapTileNum[gp.currentMap][layer][col][row];
-                if(gp.tileM.tile[tileNum].collision){
-                    node[col][row].solid = true;
-                    break; // If a solid tile is found on any layer, no need to check other layers
-                }
+            int tileNum = gp.tileM.mapTileNum[gp.currentMap][col][row];
+
+            if(gp.tileM.tile[tileNum].collision){
+                node[col][row].solid = true;
             }
             //Check Interactive Tiles
             for(int i = 0; i < gp.iTile[1].length; i++){
-                if(gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible){
-                    int itCol = (int) (gp.iTile[gp.currentMap][i].worldX / gp.tileSize);
-                    int itRow = (int) (gp.iTile[gp.currentMap][i].worldY / gp.tileSize);
-                    node[itCol][itRow].solid = true;
-                }
-            }
-            //Set Cost
-            getCost(node[col][row]);
 
+
+                    if(gp.iTile[gp.currentMap][i] != null && gp.iTile[gp.currentMap][i].destructible){
+                        int itCol = (int) (gp.iTile[gp.currentMap][i].worldX / gp.tileSize);
+                        int itRow = (int) (gp.iTile[gp.currentMap][i].worldY / gp.tileSize);
+                        node[itCol][itRow].solid = true;
+                    }
+            }
+                //Set Cost
+            getCost(node[col][row]);
             col++;
             if(col == gp.maxWorldCol){
                 col = 0;
@@ -101,7 +87,6 @@ public class PathFinder {
             }
         }
     }
-
     public void getCost(Node node){
         // Get G Cost (The distance from the start node)
         int xDistance = Math.abs(node.col - startNode.col);
@@ -118,10 +103,8 @@ public class PathFinder {
         while(!goalReached && step < 500){
             int col = currentNode.col;
             int row = currentNode.row;
-
             currentNode.checked = true;
             openList.remove(currentNode);
-
             //Open the UP node
             if(row - 1 >= 0){
                 openNode(node[col][row - 1]);
@@ -138,11 +121,9 @@ public class PathFinder {
             if(col + 1 < gp.maxWorldCol){
                 openNode(node[col + 1][row]);
             }
-
             //Find the best node
             int bestNodeIndex = 0;
             int bestNodefCost = 999;
-
             for(int i = 0; i < openList.size(); i++){
                 //Check if this node's F cost is better
                 if(openList.get(i).fCost < bestNodefCost){
@@ -161,7 +142,6 @@ public class PathFinder {
             }
             //After the loop, we get the best node which is our next step
             currentNode = openList.get(bestNodeIndex);
-
             if(currentNode == goalNode){
                 goalReached = true;
                 trackThePath();
@@ -181,7 +161,6 @@ public class PathFinder {
     private void trackThePath(){
         //Backtrack and draw the best path
         Node current = goalNode;
-
         while(current != startNode){
             pathList.add(0, current);
             current = current.parent;

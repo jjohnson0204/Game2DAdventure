@@ -6,7 +6,9 @@ public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed,
             enterPressed, spacePressed,
             shotKeyPressed, skillKeyPressed, burstKeyPressed;
-    boolean showDebugText = false;
+    public boolean showDebugText = false;
+    public boolean godModeOn = false;
+
     GamePanel gp;
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -272,6 +274,19 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_T) {
             showDebugText = !showDebugText;
         }
+
+        // Load Level
+        if (code == KeyEvent.VK_R) {
+            switch (gp.currentMap) {
+                case 0: gp.tileM.loadMap("src/resources/maps/world11.txt", 0); break;
+                case 1: gp.tileM.loadMap("src/resources/maps/ShopInteriorNewTileMap.txt",1); break;
+            }
+        }
+
+        // GodMode Button
+        if (code == KeyEvent.VK_G) {
+            godModeOn = !godModeOn;
+        }
     }
     public void pauseState(int code){
         if (code == KeyEvent.VK_P) {
@@ -310,12 +325,12 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             if(gp.ui.commandNum == 0){
                 gp.gameState = gp.playState;
-                gp.setupGame();
+                gp.resetGame(false);
                 gp.playMusic(0);
             }
             else if(gp.ui.commandNum == 1){
                 gp.gameState = gp.titleState;
-                gp.setupGame();
+                gp.resetGame(true);
             }
         }
     }

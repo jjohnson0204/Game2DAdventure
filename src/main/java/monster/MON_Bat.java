@@ -1,6 +1,7 @@
 package monster;
 
 import entity.Entity;
+import entity.SpriteSheet;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
@@ -9,29 +10,26 @@ import object.OBJ_Rock;
 
 import java.util.Random;
 
-public class MON_GreenSlime extends Entity {
+public class MON_Bat extends Entity {
     GamePanel gp;
-    public MON_GreenSlime(GamePanel gp) {
+    public MON_Bat(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
         //Attributes
         type = type_monster;
-        name = "Green Slime";
-        defaultSpeed = 1;
+        name = "Bat";
+        defaultSpeed = 4;
         speed = defaultSpeed;
-        maxLife = 4;
+        maxLife = 7;
         life = maxLife;
-        attack = 5;
+        attack = 7;
         defense = 0;
         exp = 2;
-        projectile = new OBJ_Rock(gp);
-        projectile2 = new OBJ_Rock(gp);
-        projectile3 = new OBJ_Rock(gp);
 
         //Solid Area box
         solidArea.x = 3;
-        solidArea.y = 18;
+        solidArea.y = 15;
         solidArea.width = 42;
         solidArea.height = 30;
         solidAreaDefaultX = solidArea.x;
@@ -42,35 +40,47 @@ public class MON_GreenSlime extends Entity {
     }
     //Loading monster image
     public void getImage(){
-        up1 = setup("/monster/greenslime_down_1");
-        up2 = setup("/monster/greenslime_down_2");
-        down1 = setup("/monster/greenslime_down_1");
-        down2 = setup("/monster/greenslime_down_2");
-        left1 = setup("/monster/greenslime_down_1");
-        left2 = setup("/monster/greenslime_down_2");
-        right1 = setup("/monster/greenslime_down_1");
-        right2 = setup("/monster/greenslime_down_2");
+        SpriteSheet sprite = new SpriteSheet("src/resources/monster/batflying.png", 32, 32, 4, 4);
 
+        down1 = sprite.getSprite(0, 0);
+        down2 = sprite.getSprite(1,0);
+        down3 = sprite.getSprite(2, 0);
+        down4 = sprite.getSprite(3, 0);
+
+        left1 = sprite.getSprite(0, 1);
+        left2 = sprite.getSprite(1, 1);
+        left3 = sprite.getSprite(2, 1);
+        left4 = sprite.getSprite(3, 1);
+
+        right1 = sprite.getSprite(0, 2);
+        right2 = sprite.getSprite(1, 2);
+        right3 = sprite.getSprite(2, 2);
+        right4 = sprite.getSprite(3, 2);
+
+        up1 = sprite.getSprite(0, 3);
+        up2 = sprite.getSprite(1,3);
+        up3 = sprite.getSprite(2, 3);
+        up4 = sprite.getSprite(3,3);
     }
 
     //Setting monster movement
     public void setAction(){
         if(onPath){
-            //Check if it stops chasing
-            checkStopChasingOrNot(gp.player, 15, 100);
-
-            //Search the direction to go
-            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
-
-            //Check if it shoots a projectile
-            checkShootOrNot(200, 30);
+//            //Check if it stops chasing
+//            checkStopChasingOrNot(gp.player, 15, 100);
+//
+//            //Search the direction to go
+//            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
+//
+//            //Check if it shoots a projectile
+//            checkShootOrNot(200, 30);
         }
         else {
             //Check if it starts chasing
-            checkStartChasingOrNot(gp.player, 5, 100);
+//            checkStartChasingOrNot(gp.player, 5, 100);
 
             //Get a random direction
-            getRandomDirection(120);
+            getRandomDirection(10);
         }
     }
     public void damageReaction(){

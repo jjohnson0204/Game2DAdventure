@@ -23,18 +23,16 @@ public class Map extends TileManager{
 
         for (int i = 0; i < gp.maxMap; i++) {
             worldMap[i] = new BufferedImage(worldMapWidth, worldMapHeight, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2 = (Graphics2D) worldMap[i].createGraphics();
+            Graphics2D g2 = worldMap[i].createGraphics();
 
             int col = 0;
             int row = 0;
 
             while (col < gp.maxWorldCol && row < gp.maxWorldRow) {
-                for (int layer = 0; layer < mapTileNum[i].length; layer++) { // Loop over all layers
-                    int tileNum = mapTileNum[i][layer][col][row];
-                    int x = gp.tileSize * col;
-                    int y = gp.tileSize * row;
-                    g2.drawImage(tile[tileNum].image, x , y, null);
-                }
+                int tileNum = mapTileNum[i][col][row];
+                int x = gp.tileSize * col;
+                int y = gp.tileSize * row;
+                g2.drawImage(tile[tileNum].image, x , y, null);
 
                 col++;
                 if (col == gp.maxWorldCol) {

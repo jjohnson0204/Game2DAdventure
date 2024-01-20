@@ -1,19 +1,16 @@
 package entity;
-
 // The parent class for the Player, monster and NPC classes
 // Stores the variables that will be used
-
 import main.GamePanel;
 import main.UtilityTool;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
-
 public class Entity {
     GamePanel gp;
     public BufferedImage up1, up2, up3,up4,
@@ -51,6 +48,7 @@ public class Entity {
     public boolean offBalance = false;
     public Entity loot;
     public boolean opened = false;
+    public boolean inRage = false;
 
     // Counter
     public int spriteCounter = 0;
@@ -165,17 +163,31 @@ public class Entity {
     public void checkDrop(){}
     public void dropItem(Entity droppedItem){
         for (int i = 0; i < gp.obj[1].length; i++) {
-            if(gp.obj[gp.currentMap][gp.numberOfLayers][i] == null){
-                gp.obj[gp.currentMap][gp.numberOfLayers][i] = droppedItem;
-                gp.obj[gp.currentMap][gp.numberOfLayers][i].worldX = worldX;
-                gp.obj[gp.currentMap][gp.numberOfLayers][i].worldY = worldY;
+            if(gp.obj[gp.currentMap][i] == null) {
+                gp.obj[gp.currentMap][i] = droppedItem;
+                gp.obj[gp.currentMap][i].worldX = worldX;
+                gp.obj[gp.currentMap][i].worldY = worldY;
                 break;
             }
         }
     }
+    public void moveTowardPlayer(int interval) {
+        actionLockCounter++;
+        if (actionLockCounter > interval) {
+            //Which is longer distance
+            //If x distance longer move left or right
+            if (getXdistance(gp.player) > getYdistance(gp.player)) {
+                direction = gp.player.getCenterX() < getCenterX() ? "left" : "right";
+            }
+            //If y distance longer move up or down
+            else if (getXdistance(gp.player) < getYdistance(gp.player)) {
+                direction = gp.player.getCenterY() < getCenterY() ? "up" : "down";
+            }
+            actionLockCounter = 0;
+        }
+    }
     public String getOppositeDirection(String direction){
         String oppositeDirection = "";
-
         switch (direction){
             case "up": oppositeDirection = "down"; break;
             case "down": oppositeDirection = "up"; break;
@@ -335,7 +347,7 @@ public class Entity {
     }
     public void checkCollision(){
         collisionOn = false;
-        gp.cChecker.checkTile(this,1);
+        gp.cChecker.checkTile(this);
         gp.cChecker.checkObject(this, false);
         gp.cChecker.checkEntity(this, gp.npc);
         gp.cChecker.checkEntity(this, gp.monster);
@@ -431,10 +443,10 @@ public class Entity {
             }
         }
     }
-    public void getRandomDirection() {
+    public void getRandomDirection(int interval) {
         actionLockCounter++;
 
-        if(actionLockCounter == 120) {
+        if(actionLockCounter > interval) {
             Random random = new Random();
             int i = random.nextInt(100) + 1; // 1 to 100
             if(i <= 25){ direction = "up"; }
@@ -450,10 +462,10 @@ public class Entity {
         int yDis = getYdistance(gp.player);
 
         switch (direction){
-            case "up": if (gp.player.worldY < worldY && yDis < straight && xDis < horizontal){targetInRange = true; } break;
-            case "down": if (gp.player.worldY > worldY && yDis < straight && xDis < horizontal){targetInRange = true; } break;
-            case "left": if (gp.player.worldX < worldX && xDis < straight && yDis < horizontal){targetInRange = true; } break;
-            case "right": if (gp.player.worldX > worldX && xDis < straight && yDis < horizontal){targetInRange = true; } break;
+            case "up": if (gp.player.getCenterY() < getCenterY() && yDis < straight && xDis < horizontal){targetInRange = true; } break;
+            case "down": if (gp.player.getCenterY() > getCenterY() && yDis < straight && xDis < horizontal){targetInRange = true; } break;
+            case "left": if (gp.player.getCenterX() < getCenterX()  && xDis < straight && yDis < horizontal){targetInRange = true; } break;
+            case "right": if (gp.player.getCenterX()  > getCenterX()  && xDis < straight && yDis < horizontal){targetInRange = true; } break;
         }
         if (targetInRange) {
             //Check if it initiates an attack
@@ -513,9 +525,9 @@ public class Entity {
         double screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         // Boundaries
-        if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
+        if(worldX + gp.tileSize * 5> gp.player.worldX - gp.player.screenX
                 && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
-                && worldY + gp.tileSize > gp.player.worldY - gp.player.screenY
+                && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
                 && worldY - gp.tileSize< gp.player.worldY + gp.player.screenY) {
 
             int tempScreenX = (int) screenX;
@@ -530,7 +542,7 @@ public class Entity {
                         if(spriteNum == 4) { image = up4;}
                     }
                     if(attacking){
-//                    tempScreenY = screenY - gp.tileSize;
+                    tempScreenY = (int) (screenY - up1.getHeight());
                         if(spriteNum == 1) { image = attackUp1;}
                         if(spriteNum == 2) { image = attackUp2;}
                     }
@@ -567,7 +579,7 @@ public class Entity {
                         if(spriteNum == 4) { image = left4;}
                     }
                     if(attacking){
-//                    tempScreenX = screenX - gp.tileSize;
+                        tempScreenY = (int) (screenY - left1.getWidth());
                         if(spriteNum == 1) { image = attackLeft1;}
                         if(spriteNum == 2) { image = attackLeft2;}
                     }
@@ -723,7 +735,7 @@ public class Entity {
             }
         }
     }
-    public int getDetected(Entity user, Entity[][][] target, String targetName){
+    public int getDetected(Entity user, Entity[][] target, String targetName){
         int index = 999;
 
         // Check the surrounding object
@@ -739,14 +751,12 @@ public class Entity {
         int row = nextWorldY / gp.tileSize;
 
         for (int i = 0; i < target[1].length; i++) {
-            for(int currentLayer = 0; currentLayer < gp.numberOfLayers; currentLayer++ ) {
-                if (target[gp.currentMap][currentLayer][i] != null) {
-                    if (target[gp.currentMap][currentLayer][i].getCol() == col
-                            && target[gp.currentMap][currentLayer][i].getRow() == row
-                            && target[gp.currentMap][currentLayer][i].name.equals(targetName)) {
-                        index = i;
-                        break;
-                    }
+            if(target[gp.currentMap][i] != null){
+                if(target[gp.currentMap][i].getCol() == col
+                        && target[gp.currentMap][i].getRow() == row
+                        && target[gp.currentMap][i].name.equals(targetName)) {
+                    index = i;
+                    break;
                 }
             }
         }
@@ -770,11 +780,19 @@ public class Entity {
     public int getRow(){
         return (int) ((worldY + solidArea.y) / gp.tileSize);
     }
+    public int getCenterX() {
+        int centerX = (int) (worldX + left1.getWidth() / 2);
+        return centerX;
+    }
+    public int getCenterY() {
+        int centerY = (int) (worldY + up1.getHeight() / 2);
+        return centerY;
+    }
     public int getXdistance(Entity target){
-        return (int) Math.abs(worldX - target.worldX);
+        return (int) Math.abs(getCenterX() - target.getCenterX());
     }
     public int getYdistance(Entity target){
-        return (int) Math.abs(worldY - target.worldY);
+        return (int) Math.abs(getCenterY() - target.getCenterY());
     }
     public int getTileDistance(Entity target){
         return (getXdistance(target) + getYdistance(target)) / gp.tileSize;
