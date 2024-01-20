@@ -3,6 +3,7 @@ package entity;
 // Stores the variables that will be used
 import main.GamePanel;
 import main.UtilityTool;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

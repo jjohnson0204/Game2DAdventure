@@ -1,6 +1,10 @@
 package main;
 
 import entity.Entity;
+import object.OBJ_Coin_Bronze;
+import object.OBJ_Heart;
+import object.OBJ_Key;
+import object.OBJ_ManaCrystal;
 import object.*;
 
 import java.awt.*;
@@ -250,8 +254,10 @@ public class UI {
         g2.setColor(Color.WHITE);
         g2.drawImage(keyImage, gp.tileSize / 5, gp.tileSize * 3, gp.tileSize, gp.tileSize, null);
         List<Entity> keys = gp.player.inventory;
-                keys = keys.stream().filter( entity -> entity.name == "Key").collect(Collectors.toList());
-        g2.drawString("  x = " + keys.size(), 64, 230);
+        keys = keys.stream().filter( entity -> {
+            return entity.name == "Key";
+        }).collect(Collectors.toList());
+        g2.drawString("  x = " + String.valueOf(keys.size()), 64, 230);
         // Time
         playTime +=(double) 1/60;
         g2.drawString("Time: " + dFormat.format(playTime), gp.tileSize * 11, 65);

@@ -26,8 +26,8 @@ public class Player extends Entity {
 
         //solidArea(x,y) solidAreaDefault(x,y) solidArea(w,h)
         solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
+        solidArea.x = 12;
+        solidArea.y = 18;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
         solidArea.width = 32;
@@ -39,7 +39,7 @@ public class Player extends Entity {
         // player position on the map
         worldX = gp.tileSize * 16;
         worldY = gp.tileSize * 9;
-        defaultSpeed = 4;
+        defaultSpeed = 3;
         speed = defaultSpeed;
 //      speed = gp.worldWidth/700.5;
         direction = "down";
@@ -99,7 +99,7 @@ public class Player extends Entity {
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new OBJ_Axe(gp));
-//        inventory.add(new OBJ_Key(gp));
+        inventory.add(new OBJ_Key(gp));
 //        inventory.add(new OBJ_Key(gp));
 //        inventory.add(new OBJ_Key(gp));
     }

@@ -21,7 +21,6 @@ public class OBJ_Key extends Entity {
     }
     public void setDialogue(){
         dialogues[0][0] = "You used the " + name + " and opened the door!";
-
         dialogues[1][0] = "You can not do that.";
     }
     public boolean use(Entity entity){
