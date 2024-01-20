@@ -41,7 +41,7 @@ public class Entity {
     public boolean attacking = false;
     public boolean alive = true;
     public boolean dying = false;
-    boolean hpBarOn = false;
+    public boolean hpBarOn = false;
     public boolean onPath = false;
     public boolean knockBack = false;
     public boolean guarding = false;
@@ -60,7 +60,7 @@ public class Entity {
     public int shotAvailableCounter = 0;
     public int burstAvailableCounter = 0;
     int dyingCounter = 0;
-    int hpBarCounter = 0;
+    public int hpBarCounter = 0;
     int knockBackCounter = 0;
     public int guardCounter = 0;
     int offBalanceCounter = 0;
@@ -92,6 +92,7 @@ public class Entity {
     public Projectile projectile;
     public Projectile projectile2;
     public Projectile projectile3;
+    public boolean boss;
 
     // Item Attributes
     public ArrayList<Entity> inventory = new ArrayList<>();
@@ -520,19 +521,25 @@ public class Entity {
             }
         }
     }
-    public void draw(Graphics2D g2){
-        BufferedImage image = null;
-        double screenX = worldX - gp.player.worldX + gp.player.screenX;
-        double screenY = worldY - gp.player.worldY + gp.player.screenY;
+    public boolean inCamera () {
+        boolean inCamera = false;
 
-        // Boundaries
         if(worldX + gp.tileSize * 5> gp.player.worldX - gp.player.screenX
                 && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
                 && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
                 && worldY - gp.tileSize< gp.player.worldY + gp.player.screenY) {
+            inCamera = true;
+        }
+        return inCamera;
+    }
+    public void draw(Graphics2D g2){
+        BufferedImage image = null;
 
-            int tempScreenX = (int) screenX;
-            int tempScreenY = (int) screenY;
+        // Boundaries
+        if(inCamera() ) {
+
+            int tempScreenX = getScreenX();
+            int tempScreenY = getScreenY();
 
             switch (direction) {
                 case "up":
@@ -543,7 +550,7 @@ public class Entity {
                         if(spriteNum == 4) { image = up4;}
                     }
                     if(attacking){
-                    tempScreenY = (int) (screenY - up1.getHeight());
+                    tempScreenY = (getScreenY() - up1.getHeight());
                         if(spriteNum == 1) { image = attackUp1;}
                         if(spriteNum == 2) { image = attackUp2;}
                     }
@@ -580,33 +587,12 @@ public class Entity {
                         if(spriteNum == 4) { image = left4;}
                     }
                     if(attacking){
-                        tempScreenY = (int) (screenY - left1.getWidth());
+                        tempScreenX =  (getScreenX() - left1.getWidth());
                         if(spriteNum == 1) { image = attackLeft1;}
                         if(spriteNum == 2) { image = attackLeft2;}
                     }
                     break;
             }
-
-            //Monster HP Bar
-            if(type == type_monster && hpBarOn){
-                double oneScale = (double)gp.tileSize / maxLife;
-                double hpBarValue = oneScale * life;
-
-                //Outer Rect
-                g2.setColor(new Color(35, 35,35));
-                g2.fillRect((int) screenX-1, (int) screenY-16, gp.tileSize+2, 12);
-                //Inner Rect
-                g2.setColor(new Color(255, 0,30));
-                g2.fillRect((int) screenX, (int) (screenY -15), (int) hpBarValue, 10);
-
-                hpBarCounter++;
-
-                if(hpBarCounter > 600){
-                    hpBarCounter = 0;
-                    hpBarOn = false;
-                }
-            }
-
             if(invincible){
                 hpBarOn = true;
                 hpBarCounter = 0;
@@ -762,6 +748,14 @@ public class Entity {
             }
         }
         return index;
+    }
+    public int getScreenX() {
+        int screenX = (int) (worldX - gp.player.worldX + gp.player.screenX);
+        return screenX;
+    }
+    public int getScreenY() {
+        int screenY = (int) (worldY - gp.player.worldY + gp.player.screenY);
+        return screenY;
     }
     public int getLeftX(){
         return (int) (worldX + solidArea.x);
