@@ -1,12 +1,10 @@
 package main;
 
+import data.Progress;
 import entity.NPC_BigRock;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
-import monster.MON_Bat;
-import monster.MON_GreenSlime;
-import monster.MON_Orc;
-import monster.MON_SkeletonLord;
+import monster.*;
 import object.*;
 import tile.tile_interactive.IT_DestructibleWall;
 import tile.tile_interactive.IT_DryTree;
@@ -112,6 +110,22 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = 18 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 23 * gp.tileSize;
         i++;
+
+        mapNum = 3;
+        i++;
+        if (!Progress.skeletonLordDefeated) {
+            gp.obj[mapNum][i] = new OBJ_Door_Iron(gp);
+            gp.obj[mapNum][i].setLoot(new OBJ_Potion_Red(gp));
+            gp.obj[mapNum][i].worldX = 25 * gp.tileSize;
+            gp.obj[mapNum][i].worldY = 15 * gp.tileSize;
+            i++;
+        }
+        gp.obj[mapNum][i] = new OBJ_LegendaryChest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Potion_Red(gp));
+        gp.obj[mapNum][i].worldX = 27 * gp.tileSize;
+        gp.obj[mapNum][i].worldY = 15 * gp.tileSize;
+        i++;
+
     }
     public void setNPC(){
         int mapNum = 0;
@@ -163,14 +177,14 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldX = gp.tileSize * 44;
         gp.monster[mapNum][i].worldY = gp.tileSize * 28;
         i++;
-//        gp.monster[mapNum][i] = new MON_GreenSlime(gp);
-//        gp.monster[mapNum][i].worldX = gp.tileSize * 34;
-//        gp.monster[mapNum][i].worldY = gp.tileSize * 42;
-//        i++;
-//
-//        gp.monster[mapNum][i] = new MON_GreenSlime(gp);
-//        gp.monster[mapNum][i].worldX = gp.tileSize * 38;
-//        gp.monster[mapNum][i].worldY = gp.tileSize * 42;
+        gp.monster[mapNum][i] = new MON_FireSlime(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 42;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 44;
+        i++;
+
+        gp.monster[mapNum][i] = new MON_FireSlime(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize * 23;
+        gp.monster[mapNum][i].worldY = gp.tileSize * 37;
 
         mapNum = 2;
         i++;
@@ -201,6 +215,7 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldX = gp.tileSize * 23;
         gp.monster[mapNum][i].worldY = gp.tileSize * 16;
         i++;
+
     }
     public void setInteractiveTile(){
         int mapNum = 0;

@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
+    public boolean enterKeyProcessed = false;
+
     public boolean upPressed, downPressed, leftPressed, rightPressed,
             enterPressed, spacePressed,
             shotKeyPressed, skillKeyPressed, burstKeyPressed;
@@ -22,6 +24,11 @@ public class KeyHandler implements KeyListener {
 
         int code = e.getKeyCode();
 
+        if (code == KeyEvent.VK_ENTER && !enterKeyProcessed) {
+            enterPressed = true;
+            enterKeyProcessed = true; // Set the flag to true after the key is pressed
+        }
+
         //Title State
         if(gp.gameState == gp.titleState){
             titleState(code);
@@ -34,8 +41,9 @@ public class KeyHandler implements KeyListener {
         else if(gp.gameState == gp.pauseState){
             pauseState(code);
         }
-        // Dialogue State
-        else if(gp.gameState == gp.dialogueState){
+        // Dialogue State and Cutscene State
+        else if(gp.gameState == gp.dialogueState
+        || gp.gameState == gp.cutSceneState){
             dialogueState(code);
         }
         // Character State
@@ -140,7 +148,9 @@ public class KeyHandler implements KeyListener {
         }
         if (code == KeyEvent.VK_ENTER) {
             enterPressed = false;
+            enterKeyProcessed = false; // Reset the flag when the key is released
         }
+
         if (code == KeyEvent.VK_SPACE) {
             spacePressed = false;
         }

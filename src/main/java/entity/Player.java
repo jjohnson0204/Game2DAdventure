@@ -456,6 +456,11 @@ public class Player extends Entity {
             projectile2.alive = false;
             generateParticle(projectile2, projectile2);
         }
+        if(i != 999){
+            Entity projectile3 = gp.projectile3[gp.currentMap][i];
+            projectile3.alive = false;
+            generateParticle(projectile3, projectile3);
+        }
     }
     public void checkLevelUp(){
         if(exp >= nextLevelExp){
@@ -679,7 +684,10 @@ public class Player extends Entity {
         if(transparent){
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f)); // renders opacity to 60%
         }
-        g2.drawImage(image, tempScreenX, tempScreenY, gp.tileSize, gp.tileSize, null);
+        if (drawing) {
+            g2.drawImage(image, tempScreenX, tempScreenY, gp.tileSize, gp.tileSize, null);
+        }
+
 
         //Reset alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));

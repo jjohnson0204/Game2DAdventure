@@ -515,7 +515,7 @@ false
 store_6_9.png
 false
 store_7_0.png
-false
+true
 store_7_1.png
 false
 store_7_10.png

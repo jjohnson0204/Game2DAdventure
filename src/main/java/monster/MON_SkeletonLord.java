@@ -1,11 +1,11 @@
 package monster;
 
+import data.Progress;
 import entity.Entity;
 import main.GamePanel;
-import object.OBJ_Coin_Bronze;
-import object.OBJ_Heart;
-import object.OBJ_ManaCrystal;
+import object.*;
 
+import java.awt.*;
 import java.util.Random;
 
 public class MON_SkeletonLord extends Entity {
@@ -27,6 +27,7 @@ public class MON_SkeletonLord extends Entity {
         defense = 2;
         exp = 50;
         knockBackPower = 5;
+        sleep = true;
 
         //Solid Area box
         int size = gp.tileSize * 5;
@@ -44,6 +45,7 @@ public class MON_SkeletonLord extends Entity {
         //Monster Image
         getImage();
         getAttackImage();
+        setDialogue();
     }
     //Loading monster image
     public void  getImage(){
@@ -99,6 +101,17 @@ public class MON_SkeletonLord extends Entity {
         }
 
     }
+
+    public void setDialogue() {
+        dialogues[0][0] = "\"Ah...another adventurer....\nhave you come seeking the staff?\"";
+//        gp.playSE(23);
+        dialogues[0][1] = "\"How foolish";
+        dialogues[0][2] = "\"Look around....\nthe bones of those before you are scattered \nat your feet\"";
+        dialogues[0][3] = "\"Still you dare to challenge me?\" -laughs";
+//        gp.playSE(24);
+        dialogues[0][4] = "\"Come then! For this place shall be your tomb!\"";
+    }
+
     //Setting monster movement
     public void setAction(){
         if (!inRage && life < maxLife / 2) {
@@ -125,6 +138,21 @@ public class MON_SkeletonLord extends Entity {
         actionLockCounter = 0;
     }
     public void checkDrop(){
+        gp.bossBattleOn = false;
+        Progress.skeletonLordDefeated = true;
+        //Restore the previous music
+        gp.stopMusic();
+        gp.playMusic(19);
+
+        //Remove the iron doors
+        for (int i = 0; i < gp.obj[1].length; i++) {
+            if (gp.obj[gp.currentMap][i] != null
+                    && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)) {
+                gp.playSE(21);
+                gp.obj[gp.currentMap][i] = null;
+            }
+        }
+
         // Cast a die
         int i = new Random().nextInt(100) + 1;
         // Set the monster drop

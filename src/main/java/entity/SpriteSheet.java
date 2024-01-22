@@ -3,6 +3,7 @@ package entity;
 import main.GamePanel;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,4 +53,25 @@ public class SpriteSheet {
                 this.height
         );
     }
+
+    public BufferedImage getSprite2(int col, int row) {
+        return getSprite2(col, row, 2);
+    }
+    public BufferedImage getSprite2(int col, int row, int scale) {
+        BufferedImage sprite = img.getSubimage(
+                col * this.width,
+                row * this.height,
+                this.width,
+                this.height
+        );
+        Image tmp = sprite.getScaledInstance(this.width * scale, this.height * scale, Image.SCALE_SMOOTH);
+        BufferedImage scaledSprite = new BufferedImage(this.width * scale, this.height * scale, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = scaledSprite.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return scaledSprite;
+    }
+
 }

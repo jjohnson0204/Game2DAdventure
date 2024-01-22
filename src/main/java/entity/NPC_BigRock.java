@@ -23,8 +23,8 @@ public class NPC_BigRock extends Entity{
         solidArea.y = 14;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
-        solidArea.width = 60;
-        solidArea.height = 60;
+        solidArea.width = 40;
+        solidArea.height = 40;
 
         dialogueSet = -1;
 

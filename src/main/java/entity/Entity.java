@@ -28,6 +28,7 @@ public class Entity {
     public String[][] dialogues = new String[20][20];
     public Entity attacker;
     public Entity linkedEntity;
+    public boolean temp = false;
 
     // State
     public double worldX,worldY;
@@ -50,6 +51,8 @@ public class Entity {
     public Entity loot;
     public boolean opened = false;
     public boolean inRage = false;
+    public boolean sleep = false;
+    public boolean drawing = true;
 
     // Counter
     public int spriteCounter = 0;
@@ -123,6 +126,7 @@ public class Entity {
     public final int type_obstacle = 8;
     public final int type_light = 9;
     public final int type_pickaxe = 10;
+    public final int type_staff = 11;
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -362,88 +366,91 @@ public class Entity {
 
     }
     public void update(){
-        if(knockBack){
-            checkCollision();
-            if (!collisionOn) {
-                switch (knockBackDirection) {
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "right": worldX += speed; break;
-                    case "left": worldX -= speed; break;
+        if (!sleep) {
+            if(knockBack){
+                checkCollision();
+                if (!collisionOn) {
+                    switch (knockBackDirection) {
+                        case "up": worldY -= speed; break;
+                        case "down": worldY += speed; break;
+                        case "right": worldX += speed; break;
+                        case "left": worldX -= speed; break;
+                    }
+                } else {
+                    knockBackCounter = 0;
+                    knockBack = false;
+                    speed = defaultSpeed;
                 }
-            } else {
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
+                knockBackCounter++;
+                if(knockBackCounter == 10){
+                    knockBackCounter = 0;
+                    knockBack = false;
+                    speed = defaultSpeed;
+                }
             }
-            knockBackCounter++;
-            if(knockBackCounter == 10){
-                knockBackCounter = 0;
-                knockBack = false;
-                speed = defaultSpeed;
+            else if (attacking) {
+                attacking();
             }
-        }
-        else if (attacking) {
-            attacking();
-        }
-        else {
-            setAction();
-            checkCollision();
+            else {
+                setAction();
+                checkCollision();
 
-            //If collision is false, can move
-            if (!collisionOn) {
-                switch (direction) {
-                    case "up": worldY -= speed; break;
-                    case "down": worldY += speed; break;
-                    case "right": worldX += speed; break;
-                    case "left": worldX -= speed; break;
+                //If collision is false, can move
+                if (!collisionOn) {
+                    switch (direction) {
+                        case "up": worldY -= speed; break;
+                        case "down": worldY += speed; break;
+                        case "right": worldX += speed; break;
+                        case "left": worldX -= speed; break;
+                    }
+                }
+
+                spriteCounter++;
+                if(spriteCounter > 24){
+                    if(spriteNum == 1){
+                        spriteNum = 2;
+                    }
+                    else if(spriteNum == 2){
+                        spriteNum = 1;
+                    }
+                    spriteCounter = 0;
+                }
+                burstCounter++;
+                if(burstCounter > 24){
+                    if(spriteNum == 1){
+                        spriteNum = 2;
+                    }
+                    else if(spriteNum == 2){
+                        spriteNum = 1;
+                    }
+                    burstCounter = 0;
                 }
             }
 
-            spriteCounter++;
-            if(spriteCounter > 24){
-                if(spriteNum == 1){
-                    spriteNum = 2;
+            if(invincible){
+                invincibleCounter++;
+                if(invincibleCounter >40){
+                    invincible = false;
+                    invincibleCounter = 0;
                 }
-                else if(spriteNum == 2){
-                    spriteNum = 1;
-                }
-                spriteCounter = 0;
             }
-            burstCounter++;
-            if(burstCounter > 24){
-                if(spriteNum == 1){
-                    spriteNum = 2;
+            // Can only shoot one fireball every 30 frames
+            if(shotAvailableCounter < 30){
+                shotAvailableCounter++;
+            }
+            // Can only shoot one burst every 30 frames
+            if(burstAvailableCounter < 30){
+                burstAvailableCounter++;
+            }
+            if (offBalance) {
+                offBalanceCounter++;
+                if (offBalanceCounter > 60) {
+                    offBalance = false;
+                    offBalanceCounter = 0;
                 }
-                else if(spriteNum == 2){
-                    spriteNum = 1;
-                }
-                burstCounter = 0;
             }
         }
 
-        if(invincible){
-            invincibleCounter++;
-            if(invincibleCounter >40){
-                invincible = false;
-                invincibleCounter = 0;
-            }
-        }
-        // Can only shoot one fireball every 30 frames
-        if(shotAvailableCounter < 30){
-            shotAvailableCounter++;
-        }
-        // Can only shoot one burst every 30 frames
-        if(burstAvailableCounter < 30){
-            burstAvailableCounter++;
-        }
-        if (offBalance) {
-            offBalanceCounter++;
-            if (offBalanceCounter > 60) {
-                offBalance = false;
-                offBalanceCounter = 0;
-            }
-        }
     }
     public void getRandomDirection(int interval) {
         actionLockCounter++;

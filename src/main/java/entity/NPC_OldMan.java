@@ -32,24 +32,23 @@ public class NPC_OldMan extends Entity{
         setDialogue();
     }
     public void getOldManImage(){
-        int i = 2;
         SpriteSheet sprite = new SpriteSheet("src/resources/npc/wiseman.png", 30,42,4,4);
-        down1 = sprite.getSprite(0, 0);
-        down2 = sprite.getSprite(1,0);
-        down3 = sprite.getSprite(2, 0);
-        down4 = sprite.getSprite(3,0);
-        left1 = sprite.getSprite(0, 1);
-        left2 = sprite.getSprite(1, 1);
-        left3 = sprite.getSprite(2, 1);
-        left4 = sprite.getSprite(3, 1);
-        right1 = sprite.getSprite(0, 2);
-        right2 = sprite.getSprite(1, 2);
-        right3 = sprite.getSprite(2, 2);
-        right4 = sprite.getSprite(3, 2);
-        up1 = sprite.getSprite(0, 3);
-        up2 = sprite.getSprite(1,3);
-        up3 = sprite.getSprite(2, 3);
-        up4 = sprite.getSprite(3,3);
+        down1 = sprite.getSprite2(0,0);
+        down2 = sprite.getSprite2(1,0);
+        down3 = sprite.getSprite2(2, 0);
+        down4 = sprite.getSprite2(3,0);
+        left1 = sprite.getSprite2(0, 1);
+        left2 = sprite.getSprite2(1, 1);
+        left3 = sprite.getSprite2(2, 1);
+        left4 = sprite.getSprite2(3, 1);
+        right1 = sprite.getSprite2(0, 2);
+        right2 = sprite.getSprite2(1, 2);
+        right3 = sprite.getSprite2(2, 2);
+        right4 = sprite.getSprite2(3, 2);
+        up1 = sprite.getSprite2(0, 3);
+        up2 = sprite.getSprite2(1,3);
+        up3 = sprite.getSprite2(2, 3);
+        up4 = sprite.getSprite2(3,3);
     }
     public void setDialogue(){
         dialogues[0][0] = "Hello, there!";
