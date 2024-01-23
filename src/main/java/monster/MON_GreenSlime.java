@@ -1,6 +1,7 @@
 package monster;
 
 import entity.Entity;
+import entity.SpriteSheet;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
@@ -42,14 +43,23 @@ public class MON_GreenSlime extends Entity {
     }
     //Loading monster image
     public void getImage(){
-        up1 = setup("/monster/greenslime_down_1");
-        up2 = setup("/monster/greenslime_down_2");
-        down1 = setup("/monster/greenslime_down_1");
-        down2 = setup("/monster/greenslime_down_2");
-        left1 = setup("/monster/greenslime_down_1");
-        left2 = setup("/monster/greenslime_down_2");
-        right1 = setup("/monster/greenslime_down_1");
-        right2 = setup("/monster/greenslime_down_2");
+        SpriteSheet sprite = new SpriteSheet("src/resources/monster/greenslime.png", 32,32,4,4);
+        down1 = sprite.getSprite2(0,0);
+        down2 = sprite.getSprite2(1,0);
+        down3 = sprite.getSprite2(2, 0);
+        down4 = sprite.getSprite2(3,0);
+        left1 = sprite.getSprite2(0, 1);
+        left2 = sprite.getSprite2(1, 1);
+        left3 = sprite.getSprite2(2, 1);
+        left4 = sprite.getSprite2(3, 1);
+        right1 = sprite.getSprite2(0, 2);
+        right2 = sprite.getSprite2(1, 2);
+        right3 = sprite.getSprite2(2, 2);
+        right4 = sprite.getSprite2(3, 2);
+        up1 = sprite.getSprite2(0, 3);
+        up2 = sprite.getSprite2(1,3);
+        up3 = sprite.getSprite2(2, 3);
+        up4 = sprite.getSprite2(3,3);
 
     }
 

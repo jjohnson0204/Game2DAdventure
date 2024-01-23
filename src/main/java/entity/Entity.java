@@ -21,7 +21,7 @@ public class Entity {
 
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public BufferedImage guardUp, guardDown, guardLeft, guardRight;
-    public BufferedImage image, image2, image3;
+    public BufferedImage image, image2, image3, weaponEquipped;
     public Rectangle solidArea =  new Rectangle(0,0,48,48);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -406,7 +406,7 @@ public class Entity {
                 }
 
                 spriteCounter++;
-                if(spriteCounter > 24){
+                if(spriteCounter > 50){
                     if(spriteNum == 1){
                         spriteNum = 2;
                     }
@@ -424,6 +424,16 @@ public class Entity {
                         spriteNum = 1;
                     }
                     burstCounter = 0;
+                }
+                skillCounter++;
+                if(skillCounter > 24){
+                    if(spriteNum == 1){
+                        spriteNum = 2;
+                    }
+                    else if(spriteNum == 2){
+                        spriteNum = 1;
+                    }
+                    skillCounter = 0;
                 }
             }
 
@@ -805,4 +815,5 @@ public class Entity {
     public int getGoalRow(Entity target){
         return (int) (target.worldY + target.solidArea.y) / gp.tileSize;
     }
+
 }

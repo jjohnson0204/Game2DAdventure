@@ -8,6 +8,9 @@ import java.awt.image.BufferedImage;
 public class Lighting {
     GamePanel gp;
     BufferedImage darknessFilter;
+    BufferedImage bloom; // Declare bloom as an instance variable
+    Graphics2D g2; // Declare g2 as an instance variable
+    RadialGradientPaint paint; // Declare paint as an instance variable
     public int dayCounter;
     public float filterAlpha = 0f;
 
@@ -20,6 +23,14 @@ public class Lighting {
     public Lighting(GamePanel gp) {
         this.gp = gp;
         setLightingSource();
+        // Initialize bloom and g2 in the constructor
+        bloom = new BufferedImage(gp.screenWidth, gp.screenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D) bloom.getGraphics();
+        // Initialize paint in the constructor
+        Color[] colors = {new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0f)};
+        float[] fractions = {0f, 1f};
+        paint = new RadialGradientPaint(200, 200, 100, fractions, colors);
+        applyBloomEffect(200 , 200);
     }
     public void setLightingSource() {
         // Create a buffered image
@@ -74,6 +85,26 @@ public class Lighting {
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
         g2.dispose();
     }
+    public void applyBloomEffect(int x, int y) {
+        // Clear the existing Graphics2D object
+        g2.setComposite(AlphaComposite.Clear);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setComposite(AlphaComposite.SrcOver);
+
+        // Create a radial gradient that goes from a bright color at the center to a transparent color at the edges
+        // Increase the alpha value of the center color to make the bloom effect more noticeable
+        Color[] colors = {new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0f)};
+        float[] fractions = {0f, 1f};
+        RadialGradientPaint paint = new RadialGradientPaint(x, y, 100, fractions, colors);
+
+        // Apply the gradient to the Graphics2D object
+        g2.setPaint(paint);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // Draw the bloom effect on top of your existing graphics
+        g2.drawImage(bloom, 0, 0, null);
+    }
+
     public void resetDay() {
         dayState = day;
         filterAlpha = 0f;
@@ -83,7 +114,7 @@ public class Lighting {
             setLightingSource();
             gp.player.lightUpdated = false;
         }
-
+        applyBloomEffect(gp.player.screenX + (gp.tileSize) / 2, gp.player.screenY + (gp.tileSize) / 2);
         // Check the state of the day
         if(dayState == day){
             dayCounter++;

@@ -12,7 +12,7 @@ public class OBJ_Staff_Legendary extends Entity {
         this.element = element;
         type = type_staff;
         name = objName;
-        down1 = setup("src/resources/objects/staff_legendary.png");
+        down1 = setup("/objects/staff_legendary");
 //        elements[0] = new AirStaff();
 
     }

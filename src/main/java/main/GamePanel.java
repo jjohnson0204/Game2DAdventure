@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable{
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
-    public UI ui = new UI(this);
+
     Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
@@ -64,6 +64,8 @@ public class GamePanel extends JPanel implements Runnable{
     //Entity and Object
 //    public Player player = new Player(this,keyH, 4);
     public Player player = new Player(this,keyH);
+
+    public UI ui = new UI(this);
     PickUpObject pickUpObject = new PickUpObject(this);
     public Entity[][] obj = new Entity[maxMap][300];
     public Entity[][] npc = new Entity[maxMap][50];

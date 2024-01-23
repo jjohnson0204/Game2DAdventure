@@ -6,12 +6,11 @@ import object.OBJ_Heart;
 import object.OBJ_Key;
 import object.OBJ_ManaCrystal;
 import object.*;
-
+import object.OBJ_Equipped_Menu;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.awt.Font;
-import java.io.InputStream;
 import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -95,7 +94,7 @@ public class UI {
 
         Entity equippedMenu = new OBJ_Equipped_Menu(gp);
         equipped_menu = equippedMenu.down1;
-        weapon =
+        weapon = gp.player.currentWeapon.down1;
         ability1 = equippedMenu.image;
         ability2 = equippedMenu.image2;
         ability3 = equippedMenu.image3;
@@ -223,8 +222,9 @@ public class UI {
         int y = (int)(gp.tileSize * 9.5);
 
         g2.setFont(g2.getFont().deriveFont(24f));
-        g2.drawString("Enter", 1235, 755);
         g2.drawImage(equipped_menu, x + 10, y + 8, 64 * 2, 64 * 2,null);
+        g2.drawString("Enter", 1235, 755);
+        g2.drawImage(weapon, 1190, 670, 64, 64, null);
         g2.drawString("F", 1170, 700);
         g2.drawImage(ability1, 1142, 705, 24, 24, null);
         g2.drawString("B", 1190, 645);
@@ -1166,6 +1166,5 @@ public class UI {
         int x = tailX - length;
         return x;
     }
-
 }
 

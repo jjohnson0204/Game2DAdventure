@@ -1,13 +1,19 @@
 package object;
 
 import entity.Entity;
+import environment.Lighting;
 import main.GamePanel;
 public class OBJ_Chest extends Entity {
     GamePanel gp;
+    // Create a Lighting object
+    Lighting lighting;
+
+
     public  static final String objName = "Chest";
     public OBJ_Chest(GamePanel gp){
         super(gp);
         this.gp = gp;
+        this.lighting = new Lighting(gp);
 
         type = type_obstacle;
         name = objName;
@@ -22,6 +28,13 @@ public class OBJ_Chest extends Entity {
         solidArea.height = 32;
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+
+        // Calculate the bloom effect coordinates based on the OBJ_Chest object's position
+        int bloomX = solidArea.x + solidArea.width / 2;
+        int bloomY = solidArea.y + solidArea.height / 2;
+
+        // Call the applyBloomEffect method
+        lighting.applyBloomEffect(bloomX, bloomY);
     }
     public void setLoot(Entity loot){
 
