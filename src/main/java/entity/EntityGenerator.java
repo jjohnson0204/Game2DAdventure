@@ -23,6 +23,8 @@ public class EntityGenerator {
             case OBJ_Coin_Bronze.objName: obj = new OBJ_Coin_Bronze(gp); break;
             case OBJ_Equipped_Menu.objName: obj = new OBJ_Equipped_Menu(gp); break;
             case OBJ_Fireball.objName: obj = new OBJ_Fireball(gp); break;
+            case OBJ_FireBlast.objName: obj = new OBJ_FireBlast(gp); break;
+            case OBJ_FireAOE.objName: obj = new OBJ_FireAOE(gp); break;
             case OBJ_Door.objName: obj = new OBJ_Door(gp); break;
             case OBJ_Door_Iron.objName: obj = new OBJ_Door_Iron(gp); break;
             case OBJ_Heart.objName: obj = new OBJ_Heart(gp); break;
@@ -37,7 +39,10 @@ public class EntityGenerator {
             case OBJ_Shield_Wood.objName: obj = new OBJ_Shield_Wood(gp); break;
             case OBJ_Sword_Normal.objName: obj = new OBJ_Sword_Normal(gp); break;
             case OBJ_Tent.objName: obj = new OBJ_Tent(gp); break;
+            case OBJ_ThunderBall.objName: obj = new OBJ_ThunderBall(gp); break;
             case OBJ_ThunderBolt.objName: obj = new OBJ_ThunderBolt(gp); break;
+            case OBJ_ThunderShield.objName: obj = new OBJ_ThunderShield(gp, gp.player); break;
+            case OBJ_ThunderSlash.objName: obj = new OBJ_ThunderSlash(gp); break;
         }
         return obj;
     }

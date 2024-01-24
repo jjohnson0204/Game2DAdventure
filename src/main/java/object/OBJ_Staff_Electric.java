@@ -12,9 +12,9 @@ public class OBJ_Staff_Electric extends OBJ_Staff_Legendary{
         super(gp, element);
         this.gp = gp;
 
-        projectile1 = new OBJ_Aura(gp);
-        projectile2 = new OBJ_AuraBall(gp);
-        projectile3 = new OBJ_AuraNado(gp);
+        projectile1 = new OBJ_ThunderBall(gp);
+        projectile2 = new OBJ_ThunderSlash(gp);
+        projectile3 = new OBJ_ThunderShield(gp, gp.player);
 
         down1 = setup("/objects/staff_electric");
     }
@@ -23,13 +23,25 @@ public class OBJ_Staff_Electric extends OBJ_Staff_Legendary{
         // Implement the effect of the electric element
         System.out.println("Casting electric spell...");
 
-        // For example, you might want to increase the player's speed when the electric spell is cast:
-        this.speed += 10;
+        // Use projectile3 and set the player's invincibility to true
+        projectile3 = new OBJ_ThunderShield(gp, gp.player);
+        gp.player.invincible = true;
 
-        // Or you might want to deal damage to enemies in a certain radius:
-        // (Assuming you have a method `dealDamageToEnemiesInRadius(radius, damage)`)
-        int radius = 5;
-        int damage = 10;
+        // Create a new Thread to check when the projectile's life has expired
+        new Thread(() -> {
+            while (true) {
+                if (projectile3.hasExpired()) {
+                    gp.player.invincible = false;
+                    break;
+                }
+
+                try {
+                    Thread.sleep(100); // Check every 100 milliseconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
 }

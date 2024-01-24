@@ -123,6 +123,8 @@ public class AssetSetter {
         gp.obj[mapNum][i] = new OBJ_LegendaryChest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Staff_Air(gp, "air"));
         gp.player.obtainWeapon(new OBJ_Staff_Fire(gp, "fire"));
+        gp.player.obtainWeapon(new OBJ_Staff_Electric(gp, "electric"));
+        gp.player.obtainWeapon(new OBJ_Staff_Water(gp, "water"));
         gp.obj[mapNum][i].worldX = 25 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 8 * gp.tileSize;
         i++;

@@ -13,8 +13,8 @@ public class OBJ_Staff_Fire extends OBJ_Staff_Legendary{
         this.gp = gp;
 
         projectile1 = new OBJ_Fireball(gp);
-        projectile2 = new OBJ_Fireball(gp);
-        projectile3 = new OBJ_Fireball(gp);
+        projectile2 = new OBJ_FireBlast(gp);
+        projectile3 = new OBJ_FireAOE(gp);
 
         down1 = setup("/objects/staff_fire");
     }
@@ -24,7 +24,7 @@ public class OBJ_Staff_Fire extends OBJ_Staff_Legendary{
         System.out.println("Casting fire spell...");
 
         // For example, you might want to increase the player's speed when the fire spell is cast:
-        this.speed += 10;
+//        this.speed += 10;
 
         // Or you might want to deal damage to enemies in a certain radius:
         // (Assuming you have a method `dealDamageToEnemiesInRadius(radius, damage)`)

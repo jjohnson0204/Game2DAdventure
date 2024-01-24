@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -92,7 +91,7 @@ public class Entity {
     public Entity currentShield;
     public Entity currentLight;
 
-    public Projectile projectile;
+    public Projectile projectile1;
     public Projectile projectile2;
     public Projectile projectile3;
     public boolean boss;
@@ -406,7 +405,7 @@ public class Entity {
                 }
 
                 spriteCounter++;
-                if(spriteCounter > 50){
+                if(spriteCounter > 300){
                     if(spriteNum == 1){
                         spriteNum = 2;
                     }
@@ -499,12 +498,12 @@ public class Entity {
     }
     public void checkShootOrNot(int rate, int shotInterval) {
         int i = new Random().nextInt(rate);
-        if(i == 0 && !projectile.alive && shotAvailableCounter == shotInterval){
-            projectile.set((int) worldX, (int) worldY, direction, true, this);
+        if(i == 0 && !projectile1.alive && shotAvailableCounter == shotInterval){
+            projectile1.set((int) worldX, (int) worldY, direction, true, this);
             // Check Vacancy
             for (int ii = 0; ii < gp.projectile[1].length; ii++) {
                 if(gp.projectile[gp.currentMap][ii] == null){
-                    gp.projectile[gp.currentMap][ii] = projectile;
+                    gp.projectile[gp.currentMap][ii] = projectile1;
                     break;
                 }
             }
@@ -815,5 +814,7 @@ public class Entity {
     public int getGoalRow(Entity target){
         return (int) (target.worldY + target.solidArea.y) / gp.tileSize;
     }
+
+
 
 }

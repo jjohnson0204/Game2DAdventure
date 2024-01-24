@@ -7,56 +7,43 @@ import entity.SpriteSheet;
 import main.GamePanel;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OBJ_Aura extends Projectile {
+public class OBJ_ThunderShield extends Projectile {
     GamePanel gp;
-    Boolean fireOn = true;
-    Player user;
+    Player player;
     public List<BufferedImage> downSprites = new ArrayList<>();
     public List<BufferedImage> leftSprites = new ArrayList<>();
     public List<BufferedImage> rightSprites = new ArrayList<>();
     public List<BufferedImage> upSprites = new ArrayList<>();
-    public  static final String objName = "Aura";
-
-    public OBJ_Aura(GamePanel gp) {
+    public static final String objName = "Thunder Shield";
+    public OBJ_ThunderShield(GamePanel gp, Player player) {
         super(gp);
         this.gp = gp;
+        this.player = player;
 
         name = objName;
-        speed = 5;
-        maxLife = 80;
+        speed = 0;
+        maxLife = 320;
         life = maxLife;
-        attack = 2;
-        knockBackPower = 5;
+        attack = 5;
+        knockBackPower = 10;
         useCost = 0;
         alive = false;
         getImage();
     }
 
-
     private void getImage() {
-        SpriteSheet sprite = new SpriteSheet("src/resources/projectile/aura.png", 32, 32, 9, 4);
-//        down1 = sprite.getSprite(0, 0);
-//        down2 = sprite.getSprite(1, 0);
-//        down3 = sprite.getSprite(2, 0);
-//        down4 = sprite.getSprite(3, 0);
-//        down5 = sprite.getSprite(4, 0);
-//        down6 = sprite.getSprite(5, 0);
-//        down7 = sprite.getSprite(6, 0);
-//        down8 = sprite.getSprite(7, 0);
-//        down9 = sprite.getSprite(8, 0);
-
-        for (int i = 0; i < 9; i++) {
-                downSprites.add(sprite.getSprite(i, 0));
-                leftSprites.add(sprite.getSprite(i, 1));
-                rightSprites.add(sprite.getSprite(i, 2));
-                upSprites.add(sprite.getSprite(i, 3));
+        SpriteSheet sprite = new SpriteSheet("src/resources/projectile/thundershield.png", 64,64,4,1);
+        for (int i = 0; i < 4; i++) {
+            downSprites.add(sprite.getSprite2(i, 0));
+            leftSprites.add(sprite.getSprite2(i, 0));
+            rightSprites.add(sprite.getSprite2(i, 0));
+            upSprites.add(sprite.getSprite2(i, 0));
         }
-        down1 = leftSprites.get(0);
+        down1 = downSprites.get(0);
     }
     public void draw(Graphics2D g2) {
         switch (direction) {
@@ -80,6 +67,18 @@ public class OBJ_Aura extends Projectile {
         g2.drawImage(image, (int) screenX, (int) screenY, gp.tileSize, gp.tileSize, null);
 
     }
+    // Override the update method to move the shield with the player
+    @Override
+    public void update() {
+        this.worldX = gp.player.worldX;
+        this.worldY = gp.player.worldY;
+
+        // Set the player's isThunderShieldActive field to true
+        player.isThunderShieldActive = true;
+
+        // Call the super method to handle other updates
+        super.update();
+    }
     public boolean haveResource(Entity user){
         boolean haveResource = false;
         if(user.mana >= useCost){
@@ -91,7 +90,7 @@ public class OBJ_Aura extends Projectile {
         user.mana -= useCost;
     }
     public Color getParticleColor(){
-        Color color = new Color(137,207, 240);
+        Color color = new Color(70, 234, 144);
         return color;
     }
     public int getParticleSize(){
@@ -105,14 +104,5 @@ public class OBJ_Aura extends Projectile {
     public int getParticleMaxLife(){
         int maxLife = 20;
         return maxLife;
-    }
-    public int animate( int spriteCounter ) {
-        int numberOfFrames = 9;
-        spriteCounter++;
-        if(spriteCounter > 5){
-            spriteNum = ((spriteNum + 1) % numberOfFrames);
-            spriteCounter = 0;
-        }
-        return spriteCounter;
     }
 }

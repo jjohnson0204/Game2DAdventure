@@ -1,28 +1,23 @@
 package object;
 
 import entity.Entity;
-import entity.Player;
 import entity.Projectile;
 import entity.SpriteSheet;
 import main.GamePanel;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OBJ_Aura extends Projectile {
+public class OBJ_ThunderBall extends Projectile {
     GamePanel gp;
-    Boolean fireOn = true;
-    Player user;
     public List<BufferedImage> downSprites = new ArrayList<>();
     public List<BufferedImage> leftSprites = new ArrayList<>();
     public List<BufferedImage> rightSprites = new ArrayList<>();
     public List<BufferedImage> upSprites = new ArrayList<>();
-    public  static final String objName = "Aura";
-
-    public OBJ_Aura(GamePanel gp) {
+    public static final String objName = "Thunder Ball";
+    public OBJ_ThunderBall(GamePanel gp) {
         super(gp);
         this.gp = gp;
 
@@ -30,33 +25,22 @@ public class OBJ_Aura extends Projectile {
         speed = 5;
         maxLife = 80;
         life = maxLife;
-        attack = 2;
+        attack = 5;
         knockBackPower = 5;
         useCost = 0;
         alive = false;
         getImage();
     }
 
-
     private void getImage() {
-        SpriteSheet sprite = new SpriteSheet("src/resources/projectile/aura.png", 32, 32, 9, 4);
-//        down1 = sprite.getSprite(0, 0);
-//        down2 = sprite.getSprite(1, 0);
-//        down3 = sprite.getSprite(2, 0);
-//        down4 = sprite.getSprite(3, 0);
-//        down5 = sprite.getSprite(4, 0);
-//        down6 = sprite.getSprite(5, 0);
-//        down7 = sprite.getSprite(6, 0);
-//        down8 = sprite.getSprite(7, 0);
-//        down9 = sprite.getSprite(8, 0);
-
-        for (int i = 0; i < 9; i++) {
-                downSprites.add(sprite.getSprite(i, 0));
-                leftSprites.add(sprite.getSprite(i, 1));
-                rightSprites.add(sprite.getSprite(i, 2));
-                upSprites.add(sprite.getSprite(i, 3));
+        SpriteSheet sprite = new SpriteSheet("src/resources/projectile/thunderball.png", 48,48,4,4);
+        for (int i = 0; i < 4; i++) {
+            downSprites.add(sprite.getSprite(i, 0));
+            leftSprites.add(sprite.getSprite(i, 1));
+            rightSprites.add(sprite.getSprite(i, 2));
+            upSprites.add(sprite.getSprite(i, 3));
         }
-        down1 = leftSprites.get(0);
+        down1 = downSprites.get(0);
     }
     public void draw(Graphics2D g2) {
         switch (direction) {
@@ -91,7 +75,7 @@ public class OBJ_Aura extends Projectile {
         user.mana -= useCost;
     }
     public Color getParticleColor(){
-        Color color = new Color(137,207, 240);
+        Color color = new Color(70, 234, 144);
         return color;
     }
     public int getParticleSize(){
@@ -105,14 +89,5 @@ public class OBJ_Aura extends Projectile {
     public int getParticleMaxLife(){
         int maxLife = 20;
         return maxLife;
-    }
-    public int animate( int spriteCounter ) {
-        int numberOfFrames = 9;
-        spriteCounter++;
-        if(spriteCounter > 5){
-            spriteNum = ((spriteNum + 1) % numberOfFrames);
-            spriteCounter = 0;
-        }
-        return spriteCounter;
     }
 }

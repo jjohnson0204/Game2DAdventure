@@ -23,9 +23,17 @@ public class UI {
     DecimalFormat dFormat = new DecimalFormat("#0.00");
     public Font maruMonica;
     Font purisaB;
-    BufferedImage heart_full, heart_half, heart_blank,
-            crystal_full, crystal_blank, coin,
-            equipped_menu, weapon, ability1, ability2, ability3;
+    public BufferedImage heart_full;
+    public BufferedImage heart_half;
+    public BufferedImage heart_blank;
+    public BufferedImage crystal_full;
+    public BufferedImage crystal_blank;
+    public BufferedImage coin;
+    public BufferedImage equipped_menu;
+    public BufferedImage weapon;
+    public static BufferedImage ability1;
+    public static BufferedImage ability2;
+    public static BufferedImage ability3;
     BufferedImage keyImage;
 
     //Booleans
@@ -224,6 +232,7 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(24f));
         g2.drawImage(equipped_menu, x + 10, y + 8, 64 * 2, 64 * 2,null);
         g2.drawString("Enter", 1235, 755);
+        weapon = gp.player.currentWeapon.down1;
         g2.drawImage(weapon, 1190, 670, 64, 64, null);
         g2.drawString("F", 1170, 700);
         g2.drawImage(ability1, 1142, 705, 24, 24, null);

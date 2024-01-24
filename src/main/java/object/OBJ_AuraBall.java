@@ -43,6 +43,7 @@ public class OBJ_AuraBall extends Projectile {
             rightSprites.add(sprite.getSprite(i, 2));
             upSprites.add(sprite.getSprite(i, 3));
         }
+        down1 = leftSprites.get(3);
     }
 
     public void draw(Graphics2D g2) {

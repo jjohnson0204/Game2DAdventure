@@ -1,7 +1,6 @@
 package entity;
 
 import main.GamePanel;
-import monster.MON_GreenSlime;
 
 public class Projectile extends Entity{
     Entity user;
@@ -21,15 +20,15 @@ public class Projectile extends Entity{
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             if(monsterIndex != 999){
                 gp.player.damageMonster(monsterIndex, this, attack, knockBackPower);
-                generateParticle(user.projectile, gp.monster[gp.currentMap][monsterIndex]);
+                generateParticle(user.projectile1, gp.monster[gp.currentMap][monsterIndex]);
                 alive = false;
             }
         }
         if(user != gp.player){
             boolean contactPlayer = gp.cChecker.checkPlayer(this);
-            if(gp.player.invincible == false && contactPlayer == true){
+            if(!gp.player.invincible && contactPlayer){
                 damagePlayer(attack);
-                generateParticle(user.projectile, user.projectile);
+                generateParticle(user.projectile1, user.projectile1);
                 alive = false;
             }
         }
@@ -44,7 +43,7 @@ public class Projectile extends Entity{
             alive = false;
         }
 
-        spriteCounter = user.projectile.animate(spriteCounter);
+        spriteCounter = user.projectile1.animate(spriteCounter);
         skillCounter = user.projectile2.animate2(skillCounter);
         burstCounter = user.projectile3.animate3(burstCounter);
 
@@ -67,7 +66,7 @@ public class Projectile extends Entity{
     }
     public int animate ( int spriteCounter ) {
         spriteCounter++;
-        if(spriteCounter > 12){
+        if(spriteCounter > 50){
             if(spriteNum == 1){
                 spriteNum = 2;
             }
@@ -81,7 +80,7 @@ public class Projectile extends Entity{
     }
     public int animate2 ( int skillCounter ) {
         skillCounter++;
-        if(skillCounter > 12){
+        if(skillCounter > 50){
             if(spriteNum == 1){
                 spriteNum = 2;
             }
@@ -95,7 +94,7 @@ public class Projectile extends Entity{
     }
     public int animate3 ( int burstCounter ) {
         burstCounter++;
-        if(burstCounter > 12){
+        if(burstCounter > 50){
             if(spriteNum == 1){
                 spriteNum = 2;
             }
@@ -106,5 +105,12 @@ public class Projectile extends Entity{
         }
 
         return burstCounter;
+    }
+    public boolean hasExpired(){
+        boolean hasExpired = false;
+        if(life <= 0){
+            hasExpired = true;
+        }
+        return hasExpired;
     }
 }

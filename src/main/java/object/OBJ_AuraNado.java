@@ -43,6 +43,7 @@ public class OBJ_AuraNado extends Projectile {
             rightSprites.add(sprite.getSprite(i, 0));
             upSprites.add(sprite.getSprite(i, 0));
         }
+        down1 = downSprites.get(0);
     }
 
     public void draw(Graphics2D g2) {

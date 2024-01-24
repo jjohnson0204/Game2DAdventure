@@ -2,11 +2,13 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import main.UI;
 import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player extends Entity {
     public BufferedImage lastImage = null;
@@ -15,6 +17,9 @@ public class Player extends Entity {
     public final int screenY;
     public boolean attackCanceled = false;
     public boolean lightUpdated = false;
+    public boolean isThunderShieldActive = false;
+    // Add this list to store the active projectiles
+    private List<TargetedProjectile> activeProjectiles = new ArrayList<>();
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -35,7 +40,6 @@ public class Player extends Entity {
 
         setDefaultValues();
     }
-
     public void setDefaultValues() {
         // player position on the map
         worldX = gp.tileSize * 16;
@@ -75,19 +79,16 @@ public class Player extends Entity {
         setItems();
         setDialogue();
     }
-
     public void setDefaultPositions() {
         gp.currentMap = 0;
         worldX = gp.tileSize * 16;
         worldY = gp.tileSize * 9;
         direction = "down";
     }
-
     public void setDialogue() {
         dialogues[0][0] = "You are level " + level + " now!\n" + "You are getting stronger!";
 
     }
-
     public void restoreStatus() {
         life = maxLife;
         mana = maxMana;
@@ -100,7 +101,6 @@ public class Player extends Entity {
         lightUpdated = true;
 
     }
-
     public void setItems() {
         inventory.clear();
         inventory.add(currentWeapon);
@@ -110,18 +110,15 @@ public class Player extends Entity {
 //        inventory.add(new OBJ_Key(gp));
 //        inventory.add(new OBJ_Key(gp));
     }
-
     public int getAttack() {
         attackArea = currentWeapon.attackArea;
         motion1_duration = currentWeapon.motion1_duration;
         motion2_duration = currentWeapon.motion2_duration;
         return attack = strength * currentWeapon.attackValue;
     }
-
     public int getDefense() {
         return defense = dexterity * currentShield.defenseValue;
     }
-
     public int getCurrentWeaponSlot() {
         int currentWeaponSlot = 0;
         for (int i = 0; i < inventory.size(); i++) {
@@ -131,7 +128,6 @@ public class Player extends Entity {
         }
         return currentWeaponSlot;
     }
-
     public int getCurrentShieldSlot() {
         int currentShieldSlot = 0;
         for (int i = 0; i < inventory.size(); i++) {
@@ -141,7 +137,6 @@ public class Player extends Entity {
         }
         return currentShieldSlot;
     }
-
     public void getSleepingImage(BufferedImage image) {
         up1 = image;
         up2 = image;
@@ -156,7 +151,6 @@ public class Player extends Entity {
         right2 = image;
         right3 = image;
     }
-
     public void getAttackImage() {
         if (currentWeapon.type == type_sword) {
             attackUp1 = setup2("/player/boy_attack_up_1", gp.tileSize, gp.tileSize * 2);
@@ -190,7 +184,6 @@ public class Player extends Entity {
         }
 
     }
-
     public void getGuardImage() {
         guardUp = setup("/player/boy_guard_up");
         guardDown = setup("/player/boy_guard_down");
@@ -198,7 +191,6 @@ public class Player extends Entity {
         guardRight = setup("/player/boy_guard_right");
 
     }
-
     public void update() {
         if (knockBack) {
             collisionOn = false;
@@ -324,18 +316,18 @@ public class Player extends Entity {
         }
         if (
                 gp.keyH.shotKeyPressed
-                        && !projectile.alive
+                        && !projectile1.alive
                         && shotAvailableCounter == 30
-                        && projectile.haveResource(this)
+                        && projectile1.haveResource(this)
         ) {
             // Set default coordinates, direction and user
-            projectile.set((int) worldX, (int) worldY, direction, true, this);
+            projectile1.set((int) worldX, (int) worldY, direction, true, this);
             // Subtract the cost to use projectile
-            projectile.subtractResource(this);
+            projectile1.subtractResource(this);
             // Check Vacancy
             for (int i = 0; i < gp.projectile[1].length; i++) {
                 if (gp.projectile[gp.currentMap][i] == null) {
-                    gp.projectile[gp.currentMap][i] = projectile;
+                    gp.projectile[gp.currentMap][i] = projectile1;
                     break;
                 }
             }
@@ -416,14 +408,16 @@ public class Player extends Entity {
                 gp.playSE(12);
             }
         }
-
+        // Assign the images
+        UI.ability1 = projectile1.down1;
+        UI.ability2 = projectile2.down1;
+        UI.ability3 = projectile3.down1;
         // Check if player's location matches the location of the PickUpObject
 //        if (this.worldX == myObject.worldX && this.worldY == myObject.worldY) {
 //            // If it does, call the pickUp() method of the PickUpObject
 //            myObject.pickUp();
 //        }
     }
-
     public void damageMonster(int i, Entity attacker, int attack, int knockBackPower) {
         if (i != 999) {
             if (!gp.monster[gp.currentMap][i].invincible) {
@@ -452,7 +446,6 @@ public class Player extends Entity {
             }
         }
     }
-
     public void damageInteractiveTile(int i) {
         if (i != 999 && gp.iTile[gp.currentMap][i].destructible
                 && gp.iTile[gp.currentMap][i].isCorrectItem(this)
@@ -469,7 +462,6 @@ public class Player extends Entity {
             }
         }
     }
-
     public void damageProjectile(int i) {
         if (i != 999) {
             Entity projectile = gp.projectile[gp.currentMap][i];
@@ -487,7 +479,6 @@ public class Player extends Entity {
             generateParticle(projectile3, projectile3);
         }
     }
-
     public void checkLevelUp() {
         if (exp >= nextLevelExp) {
             level++;
@@ -504,7 +495,6 @@ public class Player extends Entity {
             startDialogue(this, 0);
         }
     }
-
     public void selectItem() {
         int itemIndex = gp.ui.getItemIndexOnSlot(gp.ui.playerSlotCol, gp.ui.playerSlotRow);
         if (itemIndex < inventory.size()) {
@@ -543,10 +533,9 @@ public class Player extends Entity {
             }
         }
     }
-
     public void contactMonster(int i) {
         if (i != 999) {
-            if (!invincible && !gp.monster[gp.currentMap][i].dying) {
+            if (!invincible && isThunderShieldActive && !gp.monster[gp.currentMap][i].dying) {
                 gp.playSE(6);
                 int damage = attack - gp.monster[gp.currentMap][i].attack - defense;
                 if (damage < 1) {
@@ -558,7 +547,6 @@ public class Player extends Entity {
             }
         }
     }
-
     public void interactNPC(int i) {
         if (i != 999) {
 
@@ -569,7 +557,6 @@ public class Player extends Entity {
             gp.npc[gp.currentMap][i].move(direction);
         }
     }
-
     public void pickUpObject(int i) {
         //you have to change them all in the future to take a layer and pick up that. pickUpObject(int i, int layer)
         if (i != 999) {
@@ -599,7 +586,6 @@ public class Player extends Entity {
             }
         }
     }
-
     public int searchItemInInventory(String itemName) {
         int intemIndex = 999;
         for (int i = 0; i < inventory.size(); i++) {
@@ -610,7 +596,6 @@ public class Player extends Entity {
         }
         return intemIndex;
     }
-
     public boolean canObtainItem(Entity item) {
         boolean canObtain = false;
         Entity newItem = gp.eGenerator.getObject(item.name);
@@ -635,7 +620,6 @@ public class Player extends Entity {
         }
         return canObtain;
     }
-
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         int tempScreenX = screenX;
@@ -766,7 +750,6 @@ public class Player extends Entity {
         g2.setColor(Color.WHITE);
         g2.drawString("Invincible: " + invincibleCounter, 10, 400);
     }
-
     public void getImage() {
         SpriteSheet sprite = new SpriteSheet("src/resources/player/npc005.png", 32, 32, 3, 5);
         down1 = sprite.getSprite(0, 0);
@@ -786,12 +769,10 @@ public class Player extends Entity {
         up3 = sprite.getSprite(2, 3);
 
     }
-
     public void interactWithPickUpObject(PickUpObject obj) {
         // Call the pickUp method of the PickUpObject
         obj.pickUp();
     }
-
     public void setCurrentWeapon(Object weapon) {
         if (!(weapon instanceof OBJ_Staff_Legendary) && !(weapon instanceof OBJ_Sword_Normal)) {
             throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of a class that extends OBJ_Staff_Legendary or OBJ_Sword_Normal.");
@@ -803,44 +784,51 @@ public class Player extends Entity {
         }
         // Add more else if statements for other types of weapons
     }
-
     public void setCurrentStaff(OBJ_Staff_Legendary weapon) {
         this.currentWeapon = weapon;
 
         if (weapon instanceof OBJ_Staff_Air) {
             OBJ_Staff_Air airStaff = (OBJ_Staff_Air) weapon;
-            this.projectile = airStaff.projectile1;
+            this.projectile1 = airStaff.projectile1;
             this.projectile2 = airStaff.projectile2;
             this.projectile3 = airStaff.projectile3;
         } else if (weapon instanceof OBJ_Staff_Fire) {
             OBJ_Staff_Fire fireStaff = (OBJ_Staff_Fire) weapon;
-            this.projectile = fireStaff.projectile1;
+            this.projectile1 = fireStaff.projectile1;
             this.projectile2 = fireStaff.projectile2;
             this.projectile3 = fireStaff.projectile3;
         } else if (weapon instanceof OBJ_Staff_Water) {
             OBJ_Staff_Water waterStaff = (OBJ_Staff_Water) weapon;
-            this.projectile = waterStaff.projectile1;
+            this.projectile1 = waterStaff.projectile1;
             this.projectile2 = waterStaff.projectile2;
             this.projectile3 = waterStaff.projectile3;
         } else if (weapon instanceof OBJ_Staff_Electric) {
             OBJ_Staff_Electric electricStaff = (OBJ_Staff_Electric) weapon;
-            this.projectile = electricStaff.projectile1;
+            this.projectile1 = electricStaff.projectile1;
             this.projectile2 = electricStaff.projectile2;
             this.projectile3 = electricStaff.projectile3;
         }
         // Add more else if statements for other types of staffs
     }
-
     public void setCurrentSword(OBJ_Sword_Normal weapon) {
         this.currentWeapon = weapon;
-        this.projectile = null;
+        this.projectile1 = null;
         this.projectile2 = null;
         this.projectile3 = null;
     }
-
     public void obtainWeapon(Object weapon) {
         if (weapon instanceof OBJ_Staff_Legendary || weapon instanceof OBJ_Sword_Normal) {
             inventory.add((Entity) weapon);
         }
+    }
+    public void fireProjectile() {
+        // Create a new projectile
+        TargetedProjectile projectile = new TargetedProjectile(this.gp);
+
+        // Set the projectile's properties
+        projectile.set((int) worldY, (int) worldY, direction, true, this); // Set alive to true
+
+        // Add the projectile to the list of active projectiles
+        activeProjectiles.add(projectile);
     }
 }

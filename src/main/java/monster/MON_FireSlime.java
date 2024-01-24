@@ -23,7 +23,7 @@ public class MON_FireSlime extends Entity {
         attack = 5;
         defense = 0;
         exp = 2;
-        projectile = new OBJ_Fireball(gp);
+        projectile1 = new OBJ_Fireball(gp);
         projectile2 = new OBJ_Fireball(gp);
         projectile3 = new OBJ_Fireball(gp);
 
