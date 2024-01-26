@@ -60,18 +60,6 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
-//        String Monica = "../../../../resources/font/x12y16pxMaruMonica.ttf";
-//        String Purisa = "src/resources/font/Purisa Bold.ttf";
-//        try {
-//            InputStream is;
-//            is = getClass().getResourceAsStream(Monica);
-//            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
-//            is = getClass().getClassLoader().getResourceAsStream(Purisa);
-//            purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
-//        } catch (FontFormatException | IOException e) {
-//            e.printStackTrace();
-//        }
-
         try{
             // load a custom font in your project folder
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, new File("src/resources/font/x12y16pxMaruMonica.ttf")).deriveFont(30f);
@@ -116,8 +104,6 @@ public class UI {
         this.g2 = g2;
 
         g2.setFont(maruMonica);
-//        g2.setFont(purisaB);
-//      g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.WHITE);
 
         //Title State
@@ -292,26 +278,25 @@ public class UI {
         int messageY = gp.tileSize * 4;
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
 
-//        for (int i = 0; i < message.size(); i++) {
-//            if (message.get(i) != null) {
-//                // Black shadow border
-//                g2.setColor(Color.BLACK);
-//                g2.drawString(message.get(i), messageX + 2, messageY + 2);
-//                // Text
-//                g2.setColor(Color.WHITE);
-//                g2.drawString(message.get(i), messageX, messageY);
-//
-//                int counter = messageCounter.get(i) + 1; // messageCounter++ for arraylist
-//                messageCounter.set(i, counter); // set the counter to the array
-//                messageY += 50;
-//
-//                if(messageCounter.get(i) > 180){
-//                    message.remove(i);
-//                    messageCounter.remove(i);
-//                }
-//            }
-//        }
+        for (int i = 0; i < message.size(); i++) {
+            if (message.get(i) != null) {
+                // Black shadow border
+                g2.setColor(Color.BLACK);
+                g2.drawString(message.get(i), messageX + 2, messageY + 2);
+                // Text
+                g2.setColor(Color.WHITE);
+                g2.drawString(message.get(i), messageX, messageY);
 
+                int counter = messageCounter.get(i) + 1; // messageCounter++ for arraylist
+                messageCounter.set(i, counter); // set the counter to the array
+                messageY += 50;
+
+                if(messageCounter.get(i) > 180){
+                    message.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+        }
     }
     public void drawGameTimer(){
         g2.setFont(maruMonica);

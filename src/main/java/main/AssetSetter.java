@@ -89,6 +89,7 @@ public class AssetSetter {
         gp.obj[mapNum][i] = new OBJ_Teleporter(gp);
         gp.obj[mapNum][i].worldX = 29 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 48 * gp.tileSize;
+        ((OBJ_Teleporter) gp.obj[mapNum][i]).setDestination(0, 26, 42, 0);
         i++;
 
         mapNum = 2;

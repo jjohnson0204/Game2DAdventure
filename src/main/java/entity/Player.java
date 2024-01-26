@@ -20,6 +20,7 @@ public class Player extends Entity {
     public boolean isThunderShieldActive = false;
     // Add this list to store the active projectiles
     private List<TargetedProjectile> activeProjectiles = new ArrayList<>();
+    private List<OBJ_Teleporter> teleporters = new ArrayList<>();
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -417,6 +418,12 @@ public class Player extends Entity {
 //            // If it does, call the pickUp() method of the PickUpObject
 //            myObject.pickUp();
 //        }
+        // Check for teleporter collision
+        for (OBJ_Teleporter teleporter : teleporters) {
+            if (gp.cChecker.checkPlayerTeleporterCollision(this, teleporter)) {
+                teleporter.interact("any"); // Assuming "down" is the direction the player is moving
+            }
+        }
     }
     public void damageMonster(int i, Entity attacker, int attack, int knockBackPower) {
         if (i != 999) {

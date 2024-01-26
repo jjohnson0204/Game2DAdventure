@@ -3,6 +3,7 @@ package entity;
 // Stores the variables that will be used
 import main.GamePanel;
 import main.UtilityTool;
+import object.OBJ_Teleporter;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -462,7 +463,14 @@ public class Entity {
                 }
             }
         }
-
+        for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
+            if (gp.obj[gp.currentMap][i] instanceof OBJ_Teleporter) {
+                OBJ_Teleporter teleporter = (OBJ_Teleporter) gp.obj[gp.currentMap][i];
+                if (teleporter.inCamera() && gp.cChecker.checkPlayerTeleporterCollision(gp.player, teleporter)) {
+                    teleporter.interact("down"); // Assuming "down" is the direction the player is moving
+                }
+            }
+        }
     }
     public void getRandomDirection(int interval) {
         actionLockCounter++;

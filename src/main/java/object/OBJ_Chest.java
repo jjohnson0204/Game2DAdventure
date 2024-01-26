@@ -46,7 +46,7 @@ public class OBJ_Chest extends Entity {
         int bloomY = solidArea.y + solidArea.height / 2;
 
         // Call the applyBloomEffect method
-        lighting.applyBloomEffect(bloomX, bloomY);
+//        lighting.applyBloomEffect(bloomX, bloomY);
     }
     public void setLoot(Entity loot){
 
