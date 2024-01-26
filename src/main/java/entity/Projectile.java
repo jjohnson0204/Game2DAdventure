@@ -64,13 +64,16 @@ public class Projectile extends Entity{
     }
     public void subtractResource(Entity user){
     }
-    public int animate ( int spriteCounter ) {
+    public int animate(int spriteCounter) {
         spriteCounter++;
         if(spriteCounter > 50){
             if(spriteNum == 1){
                 spriteNum = 2;
-            }
-            else if(spriteNum == 2){
+            } else if(spriteNum == 2){
+                spriteNum = 3;
+            } else if(spriteNum == 3){
+                spriteNum = 4;
+            } else if(spriteNum == 4){
                 spriteNum = 1;
             }
             spriteCounter = 0;
@@ -83,8 +86,11 @@ public class Projectile extends Entity{
         if(skillCounter > 50){
             if(spriteNum == 1){
                 spriteNum = 2;
-            }
-            else if(spriteNum == 2){
+            } else if(spriteNum == 2){
+                spriteNum = 3;
+            } else if(spriteNum == 3){
+                spriteNum = 4;
+            } else if(spriteNum == 4){
                 spriteNum = 1;
             }
             skillCounter = 0;
@@ -97,8 +103,11 @@ public class Projectile extends Entity{
         if(burstCounter > 50){
             if(spriteNum == 1){
                 spriteNum = 2;
-            }
-            else if(spriteNum == 2){
+            } else if(spriteNum == 2){
+                spriteNum = 3;
+            } else if(spriteNum == 3){
+                spriteNum = 4;
+            } else if(spriteNum == 4){
                 spriteNum = 1;
             }
             burstCounter = 0;

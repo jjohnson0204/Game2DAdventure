@@ -40,10 +40,10 @@ public class Particle extends Entity{
         }
     }
     public void draw(Graphics2D g2){
-        int screenX = (int) (worldX - gp.player.worldX + gp.player.screenX);
-        int screenY = (int) (worldY - gp.player.worldY + gp.player.screenY);
+        double screenX = worldX - gp.player.worldX + gp.player.screenX;
+        double screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         g2.setColor(color);
-        g2.fillRect(screenX, screenY, size, size);
+        g2.fillRect((int)Math.round(screenX), (int)Math.round(screenY), size, size);
     }
 }

@@ -4,6 +4,7 @@ import data.Progress;
 import entity.NPC_BigRock;
 import entity.NPC_Merchant;
 import entity.NPC_OldMan;
+import environment.Lighting;
 import monster.*;
 import object.*;
 import tile.tile_interactive.IT_DestructibleWall;
@@ -35,16 +36,19 @@ public class AssetSetter {
         gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = 7 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 23 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = 45 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 9 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = 17 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 44 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Boots(gp);
         gp.obj[mapNum][i].worldX = 37 * gp.tileSize;
@@ -82,6 +86,10 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = 20 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 8 * gp.tileSize;
         i++;
+        gp.obj[mapNum][i] = new OBJ_Teleporter(gp);
+        gp.obj[mapNum][i].worldX = 29 * gp.tileSize;
+        gp.obj[mapNum][i].worldY = 48 * gp.tileSize;
+        i++;
 
         mapNum = 2;
         i = 0;
@@ -89,21 +97,25 @@ public class AssetSetter {
         gp.obj[mapNum][i].setLoot(new OBJ_Pickaxe(gp));
         gp.obj[mapNum][i].worldX = 40 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 41 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Potion_Red(gp));
         gp.obj[mapNum][i].worldX = 13 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 16 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Potion_Red(gp));
         gp.obj[mapNum][i].worldX = 26 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 34 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Potion_Red(gp));
         gp.obj[mapNum][i].worldX = 27 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 15 * gp.tileSize;
+
         i++;
         gp.obj[mapNum][i] = new OBJ_Door_Iron(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Potion_Red(gp));

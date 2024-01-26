@@ -2,6 +2,9 @@ package main;
 
 import entity.Entity;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class CollisionChecker {
     GamePanel gp;
 
@@ -173,5 +176,24 @@ public class CollisionChecker {
         gp.player.solidArea.y = gp.player.solidAreaDefaultY;
 
         return contactPlayer;
+    }
+    public boolean checkPlayerTeleporterCollision(Entity player, Entity teleporter) {
+        // get player's solid area position
+        player.solidArea.x = (int) (player.worldX + player.solidArea.x);
+        player.solidArea.y = (int) (player.worldY + player.solidArea.y);
+        // get teleporter's solid area position
+        teleporter.solidArea.x = (int) (teleporter.worldX + teleporter.solidArea.x);
+        teleporter.solidArea.y = (int) (teleporter.worldY + teleporter.solidArea.y);
+
+        // check if player's solid area intersects with teleporter's solid area
+        boolean collision = player.solidArea.intersects(teleporter.solidArea);
+
+        // reset solid area positions
+        player.solidArea.x = player.solidAreaDefaultX;
+        player.solidArea.y = player.solidAreaDefaultY;
+        teleporter.solidArea.x = teleporter.solidAreaDefaultX;
+        teleporter.solidArea.y = teleporter.solidAreaDefaultY;
+
+        return collision;
     }
 }

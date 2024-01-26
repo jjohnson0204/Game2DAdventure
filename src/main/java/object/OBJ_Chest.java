@@ -3,18 +3,30 @@ package object;
 import entity.Entity;
 import environment.Lighting;
 import main.GamePanel;
+
+import java.awt.*;
+
 public class OBJ_Chest extends Entity {
     GamePanel gp;
     // Create a Lighting object
     Lighting lighting;
-
+    private int x; // x-coordinate of the chest
+    private int y; // y-coordinate of the chest
+    private int width; // width of the chest
+    private int height; // height of the chest
 
     public  static final String objName = "Chest";
+
+    public GamePanel getGp() {
+        return gp;
+    }
+
     public OBJ_Chest(GamePanel gp){
         super(gp);
         this.gp = gp;
         this.lighting = new Lighting(gp);
 
+        gp.chests.add(this);
         type = type_obstacle;
         name = objName;
         image = setup("/objects/chest");
@@ -63,4 +75,16 @@ public class OBJ_Chest extends Entity {
             startDialogue(this, 2);
         }
     }
+    public boolean inCamera() {
+        boolean inCamera = false;
+
+        if(worldX + gp.tileSize * 5 > gp.player.worldX - gp.player.screenX
+                && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+                && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
+                && worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+            inCamera = true;
+        }
+        return inCamera;
+    }
+
 }

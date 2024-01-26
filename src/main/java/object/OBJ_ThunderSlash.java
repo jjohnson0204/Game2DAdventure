@@ -43,18 +43,19 @@ public class OBJ_ThunderSlash extends Projectile {
             down1 = downSprites.get(0);
     }
     public void draw(Graphics2D g2) {
+        int spriteSize = downSprites.size(); // assuming all lists are the same size
         switch (direction) {
             case "up":
-                image = upSprites.get(spriteNum);
+                image = upSprites.get(spriteNum % spriteSize);
                 break;
             case "down":
-                image = downSprites.get(spriteNum);
+                image = downSprites.get(spriteNum % spriteSize);
                 break;
             case "left":
-                image = leftSprites.get(spriteNum);
+                image = leftSprites.get(spriteNum % spriteSize);
                 break;
             case "right":
-                image = rightSprites.get(spriteNum);
+                image = rightSprites.get(spriteNum % spriteSize);
                 break;
         }
 
@@ -62,7 +63,6 @@ public class OBJ_ThunderSlash extends Projectile {
         double screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         g2.drawImage(image, (int) screenX, (int) screenY, gp.tileSize, gp.tileSize, null);
-
     }
     public boolean haveResource(Entity user){
         boolean haveResource = false;

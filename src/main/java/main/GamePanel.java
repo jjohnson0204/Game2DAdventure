@@ -7,6 +7,7 @@ import entity.EntityGenerator;
 import entity.PickUpObject;
 import entity.Player;
 import environment.EnvironmentManager;
+import object.OBJ_Chest;
 import tile.Map;
 import tile.TileManager;
 import tile.tile_interactive.InteractiveTile;
@@ -70,6 +71,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[][] obj = new Entity[maxMap][300];
     public Entity[][] npc = new Entity[maxMap][50];
     public Entity[][] monster = new Entity[maxMap][50];
+    public ArrayList<OBJ_Chest> chests = new ArrayList<>();
     public InteractiveTile[][] iTile = new InteractiveTile[maxMap][50];
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
@@ -128,6 +130,8 @@ public class GamePanel extends JPanel implements Runnable{
 
         player.worldX = newPlayerWorldX;
         player.worldY = newPlayerWorldY;
+
+        adjustObjectPositions(multiplier);
     }
     public void setupGame(){
 
@@ -459,5 +463,63 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
         }
+    }
+    public ArrayList<OBJ_Chest> getChests() {
+        return chests;
+    }
+    public void adjustObjectPositions(double multiplier) {
+        for (int mapNum = 0; mapNum < maxMap; mapNum++) {
+            for (int i = 0; i < obj[mapNum].length; i++) {
+                if (obj[mapNum][i] != null) {
+                    obj[mapNum][i].worldX *= multiplier;
+                    obj[mapNum][i].worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < npc[mapNum].length; i++) {
+                if (npc[mapNum][i] != null) {
+                    npc[mapNum][i].worldX *= multiplier;
+                    npc[mapNum][i].worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < monster[mapNum].length; i++) {
+                if (monster[mapNum][i] != null) {
+                    monster[mapNum][i].worldX *= multiplier;
+                    monster[mapNum][i].worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < projectile[mapNum].length; i++) {
+                if (projectile[mapNum][i] != null) {
+                    projectile[mapNum][i].worldX *= multiplier;
+                    projectile[mapNum][i].worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < projectile2[mapNum].length; i++) {
+                if (projectile2[mapNum][i] != null) {
+                    projectile2[mapNum][i].worldX *= multiplier;
+                    projectile2[mapNum][i].worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < projectile3[mapNum].length; i++) {
+                if (projectile3[mapNum][i] != null) {
+                    projectile3[mapNum][i].worldX *= multiplier;
+                    projectile3[mapNum][i].worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < particleList.size(); i++) {
+                if (particleList.get(i) != null) {
+                    particleList.get(i).worldX *= multiplier;
+                    particleList.get(i).worldY *= multiplier;
+                }
+            }
+            for (int i = 0; i < iTile[mapNum].length; i++) {
+                if (iTile[mapNum][i] != null) {
+                    iTile[mapNum][i].worldX *= multiplier;
+                    iTile[mapNum][i].worldY *= multiplier;
+                }
+            }
+
+            // Add similar code for any other types of objects in your game
+        }
+
     }
 }

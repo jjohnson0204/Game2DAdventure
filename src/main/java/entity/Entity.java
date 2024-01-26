@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Random;
 public class Entity {
     GamePanel gp;
+    public BufferedImage abilityIcon;
     public BufferedImage up1, up2, up3,up4,
             down1, down2, down3, down4,
             left1, left2, left3,left4,
@@ -20,7 +21,7 @@ public class Entity {
 
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public BufferedImage guardUp, guardDown, guardLeft, guardRight;
-    public BufferedImage image, image2, image3, weaponEquipped;
+    public BufferedImage image, image2, image3;
     public Rectangle solidArea =  new Rectangle(0,0,48,48);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -110,6 +111,7 @@ public class Entity {
     public int knockBackPower = 0;
     public int amount = 1;
     public int lightRadius;
+    protected int x, y, width, height;
 
 
     // Type
@@ -126,6 +128,7 @@ public class Entity {
     public final int type_light = 9;
     public final int type_pickaxe = 10;
     public final int type_staff = 11;
+    public final int type_teleporter = 12;
 
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -814,7 +817,4 @@ public class Entity {
     public int getGoalRow(Entity target){
         return (int) (target.worldY + target.solidArea.y) / gp.tileSize;
     }
-
-
-
 }

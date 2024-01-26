@@ -1,18 +1,23 @@
 package environment;
 
 import main.GamePanel;
+import object.OBJ_Chest;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class Lighting {
+    private int worldX; // x-coordinate of the chest in the world
+    private int worldY; // y-coordinate of the chest in the world
     GamePanel gp;
-    BufferedImage darknessFilter;
-    BufferedImage bloom; // Declare bloom as an instance variable
+    public BufferedImage darknessFilter;
+    public BufferedImage bloom; // Declare bloom as an instance variable
     Graphics2D g2; // Declare g2 as an instance variable
     RadialGradientPaint paint; // Declare paint as an instance variable
     public int dayCounter;
     public float filterAlpha = 0f;
+    List<OBJ_Chest> chests; // Declare the chests list
 
     public final int day =  0;
     public final int dusk = 1;
@@ -22,6 +27,7 @@ public class Lighting {
 
     public Lighting(GamePanel gp) {
         this.gp = gp;
+        this.chests = gp.chests; // Initialize the chests list
         setLightingSource();
         // Initialize bloom and g2 in the constructor
         bloom = new BufferedImage(gp.screenWidth, gp.screenHeight, BufferedImage.TYPE_INT_ARGB);
@@ -86,20 +92,25 @@ public class Lighting {
         g2.dispose();
     }
     public void applyBloomEffect(int x, int y) {
+        // Reduce the resolution of the bloom effect
+        int bloomWidth = gp.screenWidth / 2;
+        int bloomHeight = gp.screenHeight / 2;
+
         // Clear the existing Graphics2D object
         g2.setComposite(AlphaComposite.Clear);
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.fillRect(0, 0, bloomWidth, bloomHeight);
         g2.setComposite(AlphaComposite.SrcOver);
 
         // Create a radial gradient that goes from a bright color at the center to a transparent color at the edges
-        // Increase the alpha value of the center color to make the bloom effect more noticeable
-        Color[] colors = {new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0f)};
+        // Adjust the alpha value of the center color to change the brightness of the bloom effect
+        float brightness = 1.0f; // Ensure this value is between 0.0f and 1.0f
+        Color[] colors = {new Color(1f, 1f, 1f, brightness), new Color(1f, 1f, 1f, 0f)};
         float[] fractions = {0f, 1f};
-        RadialGradientPaint paint = new RadialGradientPaint(x, y, 100, fractions, colors);
+        RadialGradientPaint paint = new RadialGradientPaint(x / 2, y / 2, 100, fractions, colors);
 
         // Apply the gradient to the Graphics2D object
         g2.setPaint(paint);
-        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.fillRect(0, 0, bloomWidth, bloomHeight);
 
         // Draw the bloom effect on top of your existing graphics
         g2.drawImage(bloom, 0, 0, null);
@@ -114,8 +125,13 @@ public class Lighting {
             setLightingSource();
             gp.player.lightUpdated = false;
         }
-        applyBloomEffect(gp.player.screenX + (gp.tileSize) / 2, gp.player.screenY + (gp.tileSize) / 2);
-        // Check the state of the day
+        // Assuming chests is a List of OBJ_Chest instances
+        for (OBJ_Chest chest : chests) {
+            // Only apply the bloom effect if the chest is in the camera's view
+            if (chest.inCamera()) {
+                applyBloomEffect(chest.getScreenX() + (gp.tileSize) / 2, chest.getScreenY() + (gp.tileSize) / 2);
+            }
+        }      // Check the state of the day
         if(dayState == day){
             dayCounter++;
             if(dayCounter > 600) {
@@ -168,5 +184,7 @@ public class Lighting {
         g2.setFont(g2.getFont().deriveFont(40f));
         g2.drawString(situation, 1025, 700);
     }
+
+
 }
 
