@@ -2,8 +2,6 @@ package main;
 
 import entity.Entity;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class CollisionChecker {
     GamePanel gp;
@@ -169,8 +167,8 @@ public class CollisionChecker {
         entity.solidArea.x = (int) (entity.worldX + entity.solidArea.x);
         entity.solidArea.y = (int) (entity.worldY + entity.solidArea.y);
         // get the objects solid area position
-        gp.player.solidArea.x = (int) (gp.player.worldX + gp.player.solidArea.x);
-        gp.player.solidArea.y = (int) (gp.player.worldY + gp.player.solidArea.y);
+        gp.players[gp.selectedPlayerIndex].solidArea.x = (int) (gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].solidArea.x);
+        gp.players[gp.selectedPlayerIndex].solidArea.y = (int) (gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].solidArea.y);
 
         switch (entity.direction){
             case "up": entity.solidArea.y -= entity.speed; break;
@@ -178,14 +176,14 @@ public class CollisionChecker {
             case "left": entity.solidArea.x -= entity.speed; break;
             case "right": entity.solidArea.x += entity.speed; break;
         }
-        if(entity.solidArea.intersects(gp.player.solidArea)){
+        if(entity.solidArea.intersects(gp.players[gp.selectedPlayerIndex].solidArea)){
             entity.collisionOn = true;
             contactPlayer = true;
         }
         entity.solidArea.x = entity.solidAreaDefaultX;
         entity.solidArea.y = entity.solidAreaDefaultY;
-        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+        gp.players[gp.selectedPlayerIndex].solidArea.x = gp.players[gp.selectedPlayerIndex].solidAreaDefaultX;
+        gp.players[gp.selectedPlayerIndex].solidArea.y = gp.players[gp.selectedPlayerIndex].solidAreaDefaultY;
 
         return contactPlayer;
     }

@@ -2,6 +2,23 @@ package entity;
 
 import main.GamePanel;
 import object.*;
+import object.abilities.hunter.OBJ_CommonArrows;
+import object.abilities.mage.*;
+import object.consumables.OBJ_ManaCrystal;
+import object.consumables.OBJ_Potion_Red;
+import object.util.OBJ_Door;
+import object.util.OBJ_Door_Iron;
+import object.util.OBJ_Equipped_Menu;
+import object.weapons.OBJ_Axe;
+import object.weapons.OBJ_Pickaxe;
+import object.weapons.assassin.OBJ_Legendary_Dagger;
+import object.weapons.fighter.OBJ_Legendary_Glove;
+import object.weapons.hunter.*;
+import object.weapons.mage.*;
+import object.weapons.warrior.OBJ_Legendary_Sword;
+import object.weapons.warrior.OBJ_Sword_Normal;
+import object.weapons.warrior.OBJ_Shield_Blue;
+import object.weapons.warrior.OBJ_Shield_Wood;
 
 public class EntityGenerator {
     GamePanel gp;
@@ -19,8 +36,18 @@ public class EntityGenerator {
             case OBJ_Axe.objName: obj = new OBJ_Axe(gp); break;
             case OBJ_BlueHeart.objName: obj = new OBJ_BlueHeart(gp);
             case OBJ_Boots.objName: obj = new OBJ_Boots(gp); break;
+            case OBJ_Bow_Air.objName: obj = new OBJ_Bow_Air(gp, "air"); break;
+            case OBJ_Bow_Electric.objName: obj = new OBJ_Bow_Electric(gp, "electric"); break;
+            case OBJ_Bow_Fire.objName: obj = new OBJ_Bow_Fire(gp, "fire"); break;
+            case OBJ_Bow_Water.objName: obj = new OBJ_Bow_Water(gp, "water"); break;
             case OBJ_Chest.objName: obj = new OBJ_Chest(gp); break;
             case OBJ_Coin_Bronze.objName: obj = new OBJ_Coin_Bronze(gp); break;
+            case OBJ_CommonArrows.objName: obj = new OBJ_CommonArrows(gp); break;
+            case OBJ_Legendary_Bow.objName: obj = new OBJ_Legendary_Bow(gp, ""); break;
+            case OBJ_Legendary_Dagger.objName: obj = new OBJ_Legendary_Dagger(gp, ""); break;
+            case OBJ_Legendary_Glove.objName: obj = new OBJ_Legendary_Glove(gp, ""); break;
+            case OBJ_Legendary_Staff.objName: obj = new OBJ_Legendary_Staff(gp, ""); break;
+            case OBJ_Legendary_Sword.objName: obj = new OBJ_Legendary_Sword(gp); break;
             case OBJ_Equipped_Menu.objName: obj = new OBJ_Equipped_Menu(gp); break;
             case OBJ_Fireball.objName: obj = new OBJ_Fireball(gp); break;
             case OBJ_FireBlast.objName: obj = new OBJ_FireBlast(gp); break;
@@ -37,11 +64,15 @@ public class EntityGenerator {
             case OBJ_Rock.objName: obj = new OBJ_Rock(gp); break;
             case OBJ_Shield_Blue.objName: obj = new OBJ_Shield_Blue(gp); break;
             case OBJ_Shield_Wood.objName: obj = new OBJ_Shield_Wood(gp); break;
+            case OBJ_Staff_Air.objName: obj = new OBJ_Staff_Air(gp, "air"); break;
+            case OBJ_Staff_Electric.objName: obj = new OBJ_Staff_Electric(gp, "electric"); break;
+            case OBJ_Staff_Fire.objName: obj = new OBJ_Staff_Fire(gp, "fire"); break;
+            case OBJ_Staff_Water.objName: obj = new OBJ_Staff_Water(gp, "water"); break;
             case OBJ_Sword_Normal.objName: obj = new OBJ_Sword_Normal(gp); break;
             case OBJ_Tent.objName: obj = new OBJ_Tent(gp); break;
             case OBJ_ThunderBall.objName: obj = new OBJ_ThunderBall(gp); break;
             case OBJ_ThunderBolt.objName: obj = new OBJ_ThunderBolt(gp); break;
-            case OBJ_ThunderShield.objName: obj = new OBJ_ThunderShield(gp, gp.player); break;
+            case OBJ_ThunderShield.objName: obj = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]); break;
             case OBJ_ThunderSlash.objName: obj = new OBJ_ThunderSlash(gp); break;
         }
         return obj;

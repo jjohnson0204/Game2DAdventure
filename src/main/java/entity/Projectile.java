@@ -16,17 +16,17 @@ public class Projectile extends Entity{
         this.life = this.maxLife;
     }
     public void update(){
-        if(user == gp.player){
+        if(user == gp.players[gp.selectedPlayerIndex]){
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
             if(monsterIndex != 999){
-                gp.player.damageMonster(monsterIndex, this, attack, knockBackPower);
+                gp.players[gp.selectedPlayerIndex].damageMonster(monsterIndex, this, attack, knockBackPower);
                 generateParticle(user.projectile1, gp.monster[gp.currentMap][monsterIndex]);
                 alive = false;
             }
         }
-        if(user != gp.player){
+        if(user != gp.players[gp.selectedPlayerIndex]){
             boolean contactPlayer = gp.cChecker.checkPlayer(this);
-            if(!gp.player.invincible && contactPlayer){
+            if(!gp.players[gp.selectedPlayerIndex].invincible && contactPlayer){
                 damagePlayer(attack);
                 generateParticle(user.projectile1, user.projectile1);
                 alive = false;

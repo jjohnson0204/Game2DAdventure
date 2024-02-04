@@ -4,17 +4,10 @@ import entity.Entity;
 import environment.Lighting;
 import main.GamePanel;
 
-import java.awt.*;
-
 public class OBJ_Chest extends Entity {
     GamePanel gp;
     // Create a Lighting object
     Lighting lighting;
-    private int x; // x-coordinate of the chest
-    private int y; // y-coordinate of the chest
-    private int width; // width of the chest
-    private int height; // height of the chest
-
     public  static final String objName = "Chest";
 
     public GamePanel getGp() {
@@ -62,7 +55,7 @@ public class OBJ_Chest extends Entity {
         if(!opened) {
             gp.playSE(3);
 
-            if(!gp.player.canObtainItem(loot)) {
+            if(!gp.players[gp.selectedPlayerIndex].canObtainItem(loot)) {
                 startDialogue(this, 0);
             }
             else {
@@ -78,10 +71,10 @@ public class OBJ_Chest extends Entity {
     public boolean inCamera() {
         boolean inCamera = false;
 
-        if(worldX + gp.tileSize * 5 > gp.player.worldX - gp.player.screenX
-                && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
-                && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
-                && worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
+        if(worldX + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldX - gp.players[gp.selectedPlayerIndex].screenX
+                && worldX - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX
+                && worldY + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldY - gp.players[gp.selectedPlayerIndex].screenY
+                && worldY - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY) {
             inCamera = true;
         }
         return inCamera;

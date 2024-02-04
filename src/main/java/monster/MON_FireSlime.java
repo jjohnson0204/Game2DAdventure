@@ -4,6 +4,8 @@ import entity.Entity;
 import entity.SpriteSheet;
 import main.GamePanel;
 import object.*;
+import object.abilities.mage.OBJ_Fireball;
+import object.consumables.OBJ_ManaCrystal;
 
 import java.util.Random;
 
@@ -64,17 +66,17 @@ public class MON_FireSlime extends Entity {
     public void setAction(){
         if(onPath){
             //Check if it stops chasing
-            checkStopChasingOrNot(gp.player, 15, 100);
+            checkStopChasingOrNot(gp.players[gp.selectedPlayerIndex], 15, 100);
 
             //Search the direction to go
-            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
+            searchPath(getGoalCol(gp.players[gp.selectedPlayerIndex]), getGoalRow(gp.players[gp.selectedPlayerIndex]));
 
             //Check if it shoots a projectile
             checkShootOrNot(200, 30);
         }
         else {
             //Check if it starts chasing
-            checkStartChasingOrNot(gp.player, 5, 100);
+            checkStartChasingOrNot(gp.players[gp.selectedPlayerIndex], 5, 100);
 
             //Get a random direction
             getRandomDirection(120);

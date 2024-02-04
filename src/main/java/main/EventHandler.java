@@ -51,8 +51,8 @@ public class EventHandler {
     }
     public void checkEvent(){
         //Check if player is one tile away from event
-        int xDistance = (int) Math.abs(gp.player.worldX - previousEventX);
-        int yDistance = (int) Math.abs(gp.player.worldY - previousEventY);
+        int xDistance = (int) Math.abs(gp.players[gp.selectedPlayerIndex].worldX - previousEventX);
+        int yDistance = (int) Math.abs(gp.players[gp.selectedPlayerIndex].worldY - previousEventY);
         int distance = Math.max(xDistance, yDistance);
         if(distance > gp.tileSize){
             canTouchEvent = true;
@@ -97,17 +97,17 @@ public class EventHandler {
         gp.gameState = gameState;
         gp.playSE(6);
         eventMaster.startDialogue(eventMaster, 0);
-        gp.player.life -= 1;
+        gp.players[gp.selectedPlayerIndex].life -= 1;
         canTouchEvent = false;
     }
     public void healingPool(int gameState){
         if(gp.keyH.enterPressed){
             gp.gameState = gameState;
-            gp.player.attackCanceled = true;
+            gp.players[gp.selectedPlayerIndex].attackCanceled = true;
             gp.playSE(2);
             eventMaster.startDialogue(eventMaster, 1);
-            gp.player.life = gp.player.maxLife;
-            gp.player.mana = gp.player.maxMana;
+            gp.players[gp.selectedPlayerIndex].life = gp.players[gp.selectedPlayerIndex].maxLife;
+            gp.players[gp.selectedPlayerIndex].mana = gp.players[gp.selectedPlayerIndex].maxMana;
             gp.aSetter.setMonster();
             gp.saveLoad.save();
         }
@@ -138,22 +138,22 @@ public class EventHandler {
 
         //Get players solidArea and add to event
         if(map == gp.currentMap){
-            gp.player.solidArea.x = (int) (gp.player.worldX + gp.player.solidArea.x);
-            gp.player.solidArea.y = (int) (gp.player.worldY + gp.player.solidArea.y);
+            gp.players[gp.selectedPlayerIndex].solidArea.x = (int) (gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].solidArea.x);
+            gp.players[gp.selectedPlayerIndex].solidArea.y = (int) (gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].solidArea.y);
             eventRect[map][col][row].x = col * gp.tileSize + eventRect[map][col][row].x;
             eventRect[map][col][row].y = row * gp.tileSize + eventRect[map][col][row].y;
 
             //If players body touches' event it's a hit
-            if(gp.player.solidArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone){
-                if(gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")){
+            if(gp.players[gp.selectedPlayerIndex].solidArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone){
+                if(gp.players[gp.selectedPlayerIndex].direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")){
                     hit = true;
 
-                    previousEventX = (int) gp.player.worldX;
-                    previousEventY = (int) gp.player.worldY;
+                    previousEventX = (int) gp.players[gp.selectedPlayerIndex].worldX;
+                    previousEventY = (int) gp.players[gp.selectedPlayerIndex].worldY;
                 }
             }
-            gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-            gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+            gp.players[gp.selectedPlayerIndex].solidArea.x = gp.players[gp.selectedPlayerIndex].solidAreaDefaultX;
+            gp.players[gp.selectedPlayerIndex].solidArea.y = gp.players[gp.selectedPlayerIndex].solidAreaDefaultY;
             eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
             eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
         }
@@ -162,7 +162,7 @@ public class EventHandler {
     public void speak(Entity entity){
         if(gp.keyH.enterPressed){
             gp.gameState = gp.dialogueState;
-            gp.player.attackCanceled = true;
+            gp.players[gp.selectedPlayerIndex].attackCanceled = true;
             entity.speak();
         }
     }

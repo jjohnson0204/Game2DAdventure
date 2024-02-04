@@ -58,10 +58,10 @@ public class Map extends TileManager{
 
         // Draw player
         double scale = (double) (gp.tileSize * gp.maxWorldCol) / width;
-        int playerX = (int)(x + gp.player.worldX / scale);
-        int playerY = (int)(y + gp.player.worldY / scale);
+        int playerX = (int)(x + gp.players[gp.selectedPlayerIndex].worldX / scale);
+        int playerY = (int)(y + gp.players[gp.selectedPlayerIndex].worldY / scale);
         int playerSize = (int) (gp.tileSize / scale);
-        g2.drawImage(gp.player.down1, playerX, playerY, playerSize * 2, playerSize * 2, null);
+        g2.drawImage(gp.players[gp.selectedPlayerIndex].down1, playerX, playerY, playerSize * 2, playerSize * 2, null);
 
         // Hint
         Font Monica = gp.ui.maruMonica;
@@ -81,10 +81,10 @@ public class Map extends TileManager{
 
             // Draw player
             double scale = (double) (gp.tileSize * gp.maxWorldCol) / width;
-            int playerX = (int)(x + gp.player.worldX / scale);
-            int playerY = (int)(y + gp.player.worldY / scale);
+            int playerX = (int)(x + gp.players[gp.selectedPlayerIndex].worldX / scale);
+            int playerY = (int)(y + gp.players[gp.selectedPlayerIndex].worldY / scale);
             int playerSize = (int) (gp.tileSize / 3);
-            g2.drawImage(gp.player.down1, playerX - 9, playerY - 9, playerSize, playerSize, null);
+            g2.drawImage(gp.players[gp.selectedPlayerIndex].down1, playerX - 9, playerY - 9, playerSize, playerSize, null);
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }

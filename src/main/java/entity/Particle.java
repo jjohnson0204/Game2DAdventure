@@ -10,6 +10,10 @@ public class Particle extends Entity{
     int xd;
     int yd;
 
+    public int x, y;
+    public int vx, vy;
+    public int life;
+
     public Particle(GamePanel gp,
                     Entity generator, Color color,
                     int size, int speed, int maxLife,
@@ -28,22 +32,32 @@ public class Particle extends Entity{
         worldX = generator.worldX + offset;
         worldY = generator.worldY + offset;
     }
+    public Particle(GamePanel gp,int x, int y, int vx, int vy, Color color, int size, int life) {
+        super(gp);
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.color = color;
+        this.size = size;
+        this.life = life;
+    }
     public void update(){
         life--;
         if(life < maxLife / 3){
-            yd++;
+            vy++;
         }
-        worldX += xd * speed;
-        worldY += yd * speed;
+        x += vx;
+        y += vy;
         if(life == 0){
             alive = false;
         }
     }
     public void draw(Graphics2D g2){
-        double screenX = worldX - gp.player.worldX + gp.player.screenX;
-        double screenY = worldY - gp.player.worldY + gp.player.screenY;
+//        double screenX = worldX - gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX;
+//        double screenY = worldY - gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY;
 
         g2.setColor(color);
-        g2.fillRect((int)Math.round(screenX), (int)Math.round(screenY), size, size);
+        g2.fillRect(x, y, size, size);
     }
 }

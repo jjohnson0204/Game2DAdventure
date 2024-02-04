@@ -7,6 +7,7 @@ import entity.EntityGenerator;
 import entity.PickUpObject;
 import entity.Player;
 import environment.EnvironmentManager;
+import environment.Rain;
 import object.OBJ_Chest;
 import tile.Map;
 import tile.TileManager;
@@ -33,12 +34,13 @@ public class GamePanel extends JPanel implements Runnable{
     public final int maxMap = 10;
     public int currentMap = 0;
 
-//    //For Full screen
+   //For Full screen
     int screenWidth2 = screenWidth;
     int screenHeight2 = screenHeight;
     BufferedImage tempScreen;
     Graphics2D g2;
     public boolean fullScreenOn = false;
+    public boolean gameOverSoundPlayed = false;
 
     //FPS
     int FPS = 90;
@@ -60,11 +62,12 @@ public class GamePanel extends JPanel implements Runnable{
     public EntityGenerator eGenerator = new EntityGenerator(this);
     public CutsceneManager csManager = new CutsceneManager(this);
     Thread gameThread;
-
+    Rain rain = new Rain(this);
 
     //Entity and Object
 //    public Player player = new Player(this,keyH, 4);
-    public Player player = new Player(this,keyH);
+    public Player[] players = new Player[5];
+    public int selectedPlayerIndex = 0;
 
     public UI ui = new UI(this);
     PickUpObject pickUpObject = new PickUpObject(this);
@@ -77,9 +80,9 @@ public class GamePanel extends JPanel implements Runnable{
     ArrayList<Entity> entityList = new ArrayList<>();
 //    public ArrayList<Entity> projectileList = new ArrayList<>();
 
-    public Entity[][] projectile = new Entity[maxMap][20];
-    public Entity[][] projectile2 = new Entity[maxMap][20];
-    public Entity[][] projectile3 = new Entity[maxMap][20];
+    public Entity[][] projectile = new Entity[maxMap][50];
+    public Entity[][] projectile2 = new Entity[maxMap][50];
+    public Entity[][] projectile3 = new Entity[maxMap][50];
     // Game State
     public int gameState;
     public final int titleState = 0;
@@ -111,32 +114,42 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+
+        // Set up the players
+        for (int i = 0; i < players.length; i++) {
+            players[i] = new Player(this, keyH, i);
+        }
     }
 
     public void zoomInOut(int i) {
-        int oldWorldWidth = tileSize * maxWorldCol;
-        tileSize += i;
-        int newWorldWidth = tileSize * maxWorldCol;
+        for (Player player : players) {
+            int oldWorldWidth = tileSize * maxWorldCol;
+            tileSize += i;
+            int newWorldWidth = tileSize * maxWorldCol;
 
-        player.speed = (double)newWorldWidth/812.50;
-        double multiplier = (double)newWorldWidth/oldWorldWidth;
+            player.speed = (double) newWorldWidth / 812.50;
+            double multiplier = (double) newWorldWidth / oldWorldWidth;
 
-        System.out.println("Tile Size: " + tileSize);
-        System.out.println("World Width: " + newWorldWidth);
-        System.out.println("Player World X: " + player.worldX);
+            System.out.println("Tile Size: " + tileSize);
+            System.out.println("World Width: " + newWorldWidth);
+            System.out.println("Player World X: " + player.worldX);
 
-        double newPlayerWorldX = player.worldX * multiplier;
-        double newPlayerWorldY = player.worldY * multiplier;
+            double newPlayerWorldX = player.worldX * multiplier;
+            double newPlayerWorldY = player.worldY * multiplier;
 
-        player.worldX = newPlayerWorldX;
-        player.worldY = newPlayerWorldY;
+            player.worldX = newPlayerWorldX;
+            player.worldY = newPlayerWorldY;
 
-        adjustObjectPositions(multiplier);
+            adjustObjectPositions(multiplier);
+        }
     }
     public void setupGame(){
 
         // Set Entities and Objects in world
-        player.setDefaultPositions();
+
+        for (Player player : players) {
+            player.setDefaultPositions();
+        }
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
@@ -150,24 +163,29 @@ public class GamePanel extends JPanel implements Runnable{
                 screenHeight,
                 BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
-
+        rain.generateParticles(100);
         if(fullScreenOn){
             setFullScreen();
         }
+
     }
     public void resetGame(boolean restart){
         stopMusic();
         currentArea = outside;
         removeTempEntity();
         bossBattleOn = false;
-        player.setDefaultPositions();
-        player.restoreStatus();
-        player.resetCounter();
+        for (Player player : players) {
+            player.setDefaultPositions();
+            player.restoreStatus();
+            player.resetCounter();
+        }
         aSetter.setNPC();
         aSetter.setMonster();
 
         if(restart) {
-            player.setDefaultValues();
+            for (Player player : players) {
+                player.setDefaultValues();
+            }
             aSetter.setObject();
             aSetter.setInteractiveTile();
             eManager.lighting.resetDay();
@@ -223,7 +241,9 @@ public class GamePanel extends JPanel implements Runnable{
     public void update() {
         if(gameState == playState){
             //Player
-            player.update();
+            for (Player player : players) {
+                player.update();
+            }
             pickUpObject.update();
 
             //NPC
@@ -288,6 +308,8 @@ public class GamePanel extends JPanel implements Runnable{
                     iTile[currentMap][i].update();
                 }
             }
+            //Environment
+            rain.updateParticles();
         }
         if(gameState == pauseState){
 
@@ -324,10 +346,13 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
             // Update Player and pickUpObject
-            player.update();
+            for (Player player : players) {
+                player.update();
+                //Add Entities to the List
+                entityList.add(player);
+            }
 
-            //Add Entities to the List
-            entityList.add(player);
+
 
             for (int i = 0; i < npc[1].length; i++) {
                 if (npc[currentMap][i] != null) {
@@ -381,6 +406,7 @@ public class GamePanel extends JPanel implements Runnable{
 
             //Environment
             eManager.draw(g2);
+            rain.drawParticles(g2);
 
             //Mini Map
             map.drawMiniMap(g2);
@@ -389,6 +415,8 @@ public class GamePanel extends JPanel implements Runnable{
             csManager.draw(g2);
             // UI
             ui.draw(g2);
+            //Rain
+            rain.drawParticles(g2);
         }
         //Debug
         if (keyH.showDebugText) {
@@ -400,21 +428,23 @@ public class GamePanel extends JPanel implements Runnable{
             int y = 400;
             int lineHeight = 20;
 
-            g2.drawString("WorldX " + player.worldX, x, y);
-            y += lineHeight;
-            g2.drawString("WorldY " + player.worldY, x, y);
-            y += lineHeight;
-            g2.drawString("Col " + (player.worldX + player.solidArea.x) / tileSize, x, y += lineHeight);
-            g2.drawString("Row " + (player.worldY + player.solidArea.y) / tileSize, x, y+= lineHeight);
+            for (Player player : players) {
+                g2.drawString("WorldX " + player.worldX, x, y);
+                y += lineHeight;
+                g2.drawString("WorldY " + player.worldY, x, y);
+                y += lineHeight;
+                g2.drawString("Col " + (player.worldX + player.solidArea.x) / tileSize, x, y += lineHeight);
+                g2.drawString("Row " + (player.worldY + player.solidArea.y) / tileSize, x, y += lineHeight);
 
-            g2.drawString("Draw Time: " + passed, 10, y += lineHeight);
+                g2.drawString("Draw Time: " + passed, 10, y += lineHeight);
 //            System.out.println("Draw Time: " + passed);
 
-            g2.drawString("God Mode:" + keyH.godModeOn, x, y += lineHeight);
+                g2.drawString("God Mode:" + keyH.godModeOn, x, y += lineHeight);
 
-            //Get the tile location info
-            int playerTileNum = tileM.mapTileNum[currentMap][player.getCol()][player.getRow()];
-            g2.drawString("Player is on " + playerTileNum + " tile", x, y += lineHeight);
+                //Get the tile location info
+                int playerTileNum = tileM.mapTileNum[currentMap][player.getCol()][player.getRow()];
+                g2.drawString("Player is on " + playerTileNum + " tile", x, y += lineHeight);
+            }
         }
     }
 
@@ -521,5 +551,13 @@ public class GamePanel extends JPanel implements Runnable{
             // Add similar code for any other types of objects in your game
         }
 
+    }
+    // Method to update the selected player index
+    public void updateSelectedPlayerIndex(int newIndex) {
+        if (newIndex >= 0 && newIndex < players.length) {
+            selectedPlayerIndex = newIndex;
+        } else {
+            System.out.println("Invalid player index. Please provide an index between 0 and " + (players.length - 1));
+        }
     }
 }

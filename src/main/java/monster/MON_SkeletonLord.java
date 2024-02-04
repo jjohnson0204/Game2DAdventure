@@ -4,8 +4,9 @@ import data.Progress;
 import entity.Entity;
 import main.GamePanel;
 import object.*;
+import object.consumables.OBJ_ManaCrystal;
+import object.util.OBJ_Door_Iron;
 
-import java.awt.*;
 import java.util.Random;
 
 public class MON_SkeletonLord extends Entity {
@@ -121,7 +122,7 @@ public class MON_SkeletonLord extends Entity {
             speed = defaultSpeed;
             attack *= 2;
         }
-        if(getTileDistance(gp.player) < 10){
+        if(getTileDistance(gp.players[gp.selectedPlayerIndex]) < 10){
             moveTowardPlayer(60);
         }
         else {

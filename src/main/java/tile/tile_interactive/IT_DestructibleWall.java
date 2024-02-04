@@ -4,7 +4,7 @@ import entity.Entity;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
-import object.OBJ_ManaCrystal;
+import object.consumables.OBJ_ManaCrystal;
 
 import java.awt.*;
 import java.util.Random;

@@ -4,8 +4,7 @@ import entity.Entity;
 import main.GamePanel;
 import object.OBJ_Coin_Bronze;
 import object.OBJ_Heart;
-import object.OBJ_ManaCrystal;
-import object.OBJ_Rock;
+import object.consumables.OBJ_ManaCrystal;
 
 import java.util.Random;
 
@@ -69,15 +68,15 @@ public class MON_Orc extends Entity {
     public void setAction(){
         if(onPath){
             //Check if it stops chasing
-            checkStopChasingOrNot(gp.player, 15, 100);
+            checkStopChasingOrNot(gp.players[gp.selectedPlayerIndex], 15, 100);
 
             //Search the direction to go
-            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
+            searchPath(getGoalCol(gp.players[gp.selectedPlayerIndex]), getGoalRow(gp.players[gp.selectedPlayerIndex]));
 
         }
         else {
             //Check if it starts chasing
-            checkStartChasingOrNot(gp.player, 5, 100);
+            checkStartChasingOrNot(gp.players[gp.selectedPlayerIndex], 5, 100);
 
             //Get a random direction
             getRandomDirection(120);

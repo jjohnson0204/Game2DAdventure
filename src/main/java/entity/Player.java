@@ -4,6 +4,19 @@ import main.GamePanel;
 import main.KeyHandler;
 import main.UI;
 import object.*;
+import object.abilities.hunter.OBJ_CommonArrows;
+import object.abilities.mage.OBJ_Aura;
+import object.abilities.mage.OBJ_AuraBall;
+import object.abilities.mage.OBJ_AuraNado;
+import object.util.OBJ_Teleporter;
+import object.weapons.*;
+import object.weapons.assassin.*;
+import object.weapons.fighter.*;
+import object.weapons.hunter.*;
+import object.weapons.mage.*;
+import object.weapons.warrior.OBJ_Legendary_Sword;
+import object.weapons.warrior.OBJ_Shield_Wood;
+import object.weapons.warrior.OBJ_Sword_Normal;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -18,11 +31,21 @@ public class Player extends Entity {
     public boolean attackCanceled = false;
     public boolean lightUpdated = false;
     public boolean isThunderShieldActive = false;
+    public String playerType;
+    protected boolean isPoisoned;
+    protected boolean isStunned;
+    protected boolean isBleeding;
+    protected boolean isBuffed;
+    protected boolean isDebuffed;
+    protected boolean isHealing;
+    protected List<String> quests;
+    protected List<String> achievements;
+
     // Add this list to store the active projectiles
     private List<TargetedProjectile> activeProjectiles = new ArrayList<>();
-    private List<OBJ_Teleporter> teleporters = new ArrayList<>();
+    private List<OBJ_Teleporter> teleports = new ArrayList<>();
 
-    public Player(GamePanel gp, KeyHandler keyH) {
+    public Player(GamePanel gp, KeyHandler keyH, int i) {
         super(gp);
         this.gp = gp;
         this.keyH = keyH;
@@ -39,7 +62,29 @@ public class Player extends Entity {
         solidArea.width = 32;
         solidArea.height = 32;
 
+        setPlayerType(i);
         setDefaultValues();
+    }
+    public void setPlayerType(int selectedPlayerIndex) {
+        switch (selectedPlayerIndex) {
+            case 0:
+                this.playerType = "Fighter";
+                break;
+            case 1:
+                this.playerType = "Warrior";
+                break;
+            case 2:
+                this.playerType = "Hunter";
+                break;
+            case 3:
+                this.playerType = "Assassin";
+                break;
+            case 4:
+                this.playerType = "Mage";
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid player index: " + selectedPlayerIndex);
+        }
     }
     public void setDefaultValues() {
         // player position on the map
@@ -63,22 +108,20 @@ public class Player extends Entity {
         exp = 0;
         nextLevelExp = 5;
         coin = 500;
-        setCurrentWeapon(new OBJ_Sword_Normal(gp));
-        setCurrentSword(new OBJ_Sword_Normal(gp));
-        setCurrentStaff(new OBJ_Staff_Air(gp, "air"));
-        currentShield = new OBJ_Shield_Wood(gp);
         currentLight = null;
-//        projectile = new OBJ_Aura(gp);
-//        projectile2 = new OBJ_AuraBall(gp);
-//        projectile3 = new OBJ_AuraNado(gp);
+        setCharacterEquipment(playerType);
+        this.currentShield = new OBJ_Shield_Wood(gp);
+        this.projectile1 = new Projectile(gp);
+        this.projectile2 = new Projectile(gp);
+        this.projectile3 = new Projectile(gp);
         attack = getAttack();
         defense = getDefense();
-
         getImage();
         getAttackImage();
         getGuardImage();
         setItems();
         setDialogue();
+
     }
     public void setDefaultPositions() {
         gp.currentMap = 0;
@@ -123,7 +166,7 @@ public class Player extends Entity {
     public int getCurrentWeaponSlot() {
         int currentWeaponSlot = 0;
         for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i) == currentWeapon) {
+            if (inventory.get(i) == gp.players[gp.selectedPlayerIndex].currentWeapon) {
                 currentWeaponSlot = i;
             }
         }
@@ -132,7 +175,7 @@ public class Player extends Entity {
     public int getCurrentShieldSlot() {
         int currentShieldSlot = 0;
         for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i) == currentShield) {
+            if (inventory.get(i) == gp.players[gp.selectedPlayerIndex].currentShield) {
                 currentShieldSlot = i;
             }
         }
@@ -183,7 +226,17 @@ public class Player extends Entity {
             attackRight1 = setup2("/player/boy_pick_right_1", gp.tileSize * 2, gp.tileSize);
             attackRight2 = setup2("/player/boy_pick_right_2", gp.tileSize * 2, gp.tileSize);
         }
-
+        if (currentWeapon.type == type_bow) {
+            SpriteSheet sprite = new SpriteSheet("src/resources/player/femalehunterattack.png",64,64,4,1);
+            attackUp1 = sprite.getSprite(2, 0);
+            attackUp2 = sprite.getSprite(3, 0);
+            attackDown1 = sprite.getSprite(2, 0);
+            attackDown2 = sprite.getSprite(3, 0);
+            attackLeft1 = sprite.getSprite(2, 0);
+            attackLeft2 = sprite.getSprite(3, 0);
+            attackRight1 = sprite.getSprite(2, 0);
+            attackRight2 = sprite.getSprite(3, 0);
+        }
     }
     public void getGuardImage() {
         guardUp = setup("/player/boy_guard_up");
@@ -245,23 +298,34 @@ public class Player extends Entity {
                 direction = "";
             }
             spriteCounter++;
-            if (spriteCounter > 20) {
-                if (spriteNum == 1) {
+            if (spriteCounter > 24) {
+                if(spriteNum == 1){
                     spriteNum = 2;
-                } else if (spriteNum == 2) {
+                } else if(spriteNum == 2){
+                    spriteNum = 3;
+                } else if(spriteNum == 3){
+                    spriteNum = 4;
+                } else if(spriteNum == 4){
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
             }
-            burstCounter++;
-            if (burstCounter > 10) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 1;
-                }
-                burstCounter = 0;
-            }
+//            burstCounter++;
+//            if (burstCounter > 50) {
+//                spriteNum++;
+//                if (spriteNum > 9) {
+//                    spriteNum = 1;
+//                }
+//                burstCounter = 0;
+//            }
+//            skillCounter++;
+//            if (skillCounter > 50) {
+//                spriteNum++;
+//                if (spriteNum > 9) {
+//                    spriteNum = 1;
+//                }
+//                skillCounter = 0;
+//            }
             //Check tile collision
             collisionOn = false;
             gp.cChecker.checkTile(this);
@@ -321,6 +385,10 @@ public class Player extends Entity {
                         && shotAvailableCounter == 30
                         && projectile1.haveResource(this)
         ) {
+            // If playerType is Hunter, get the attack image for the bow
+//            if (playerType.equals("Hunter") && currentWeapon instanceof OBJ_Common_Bow) {
+//                getAttackImage();
+//            }
             // Set default coordinates, direction and user
             projectile1.set((int) worldX, (int) worldY, direction, true, this);
             // Subtract the cost to use projectile
@@ -339,7 +407,7 @@ public class Player extends Entity {
         if (
                 gp.keyH.skillKeyPressed
                         && !projectile2.alive
-                        && burstAvailableCounter == 30
+                        && skillAvailableCounter == 30
                         && projectile2.haveResource(this)
         ) {
             // Set default coordinates, direction and user
@@ -353,7 +421,7 @@ public class Player extends Entity {
                     break;
                 }
             }
-            burstAvailableCounter = 0;
+            skillAvailableCounter = 0;
             // SE for fireball
             gp.playSE(10);
         }
@@ -392,6 +460,10 @@ public class Player extends Entity {
             shotAvailableCounter++;
         }
         // Can only shoot one burst every 30 frames
+        if (skillAvailableCounter < 30) {
+            skillAvailableCounter++;
+        }
+        // Can only shoot one burst every 30 frames
         if (burstAvailableCounter < 30) {
             burstAvailableCounter++;
         }
@@ -405,21 +477,24 @@ public class Player extends Entity {
             if (life <= 0) {
                 gp.gameState = gp.gameOverState;
                 gp.ui.commandNum = -1;
-                gp.playSE(12);
+                if (!gp.gameOverSoundPlayed) {
+                    gp.playSE(12);
+                    gp.gameOverSoundPlayed = true;
+                }
                 gp.stopMusic();
             }
         }
-        // Assign the images
-        UI.ability1 = projectile1.down1;
-        UI.ability2 = projectile2.down1;
-        UI.ability3 = projectile3.down1;
+//        // Assign the images
+        UI.ability1 = gp.players[gp.selectedPlayerIndex].projectile1.down1;
+        UI.ability2 = gp.players[gp.selectedPlayerIndex].projectile2.down1;
+        UI.ability3 = gp.players[gp.selectedPlayerIndex].projectile3.down1;
         // Check if player's location matches the location of the PickUpObject
 //        if (this.worldX == myObject.worldX && this.worldY == myObject.worldY) {
 //            // If it does, call the pickUp() method of the PickUpObject
 //            myObject.pickUp();
 //        }
         // Check for teleporter collision
-        for (OBJ_Teleporter teleporter : teleporters) {
+        for (OBJ_Teleporter teleporter : teleports) {
             if (gp.cChecker.checkPlayerTeleporterCollision(this, teleporter)) {
                 teleporter.interact("any"); // Assuming "down" is the direction the player is moving
             }
@@ -474,16 +549,19 @@ public class Player extends Entity {
             Entity projectile = gp.projectile[gp.currentMap][i];
             projectile.alive = false;
             generateParticle(projectile, projectile);
+            explode(projectile.x, projectile.y);
         }
         if (i != 999) {
             Entity projectile2 = gp.projectile2[gp.currentMap][i];
             projectile2.alive = false;
             generateParticle(projectile2, projectile2);
+            explode(projectile2.x, projectile2.y);
         }
         if (i != 999) {
             Entity projectile3 = gp.projectile3[gp.currentMap][i];
             projectile3.alive = false;
             generateParticle(projectile3, projectile3);
+            explode(projectile3.x, projectile3.y);
         }
     }
     public void checkLevelUp() {
@@ -509,12 +587,29 @@ public class Player extends Entity {
 
             if (selectedItem.type == type_sword
                     || selectedItem.type == type_axe
-                    || selectedItem.type == type_pickaxe) {
+                    || selectedItem.type == type_pickaxe
+                    || selectedItem.type == type_staff
+                    || selectedItem.type == type_bow
+                    || selectedItem.type == type_dagger
+                    || selectedItem.type == type_glove
+            ) {
                 currentWeapon = selectedItem;
                 attack = getAttack();
                 getAttackImage();
             }
-            if (selectedItem instanceof OBJ_Staff_Legendary) {
+            if (selectedItem instanceof OBJ_Legendary_Staff) {
+                setCurrentWeapon(selectedItem);
+            }
+            if (selectedItem instanceof OBJ_Legendary_Bow) {
+                setCurrentWeapon(selectedItem);
+            }
+            if (selectedItem instanceof OBJ_Legendary_Sword) {
+                setCurrentWeapon(selectedItem);
+            }
+            if (selectedItem instanceof OBJ_Legendary_Dagger) {
+                setCurrentWeapon(selectedItem);
+            }
+            if (selectedItem instanceof OBJ_Legendary_Glove) {
                 setCurrentWeapon(selectedItem);
             }
             if (selectedItem.type == type_shield) {
@@ -644,7 +739,7 @@ public class Player extends Entity {
                     if (spriteNum == 3) {
                         image = up3;
                     }
-//                    if(spriteNum == 4) { image = up4;}
+                    if(spriteNum == 4) { image = up4;}
                 }
                 if (attacking) {
 //                    tempScreenY = screenY - gp.tileSize;
@@ -670,7 +765,7 @@ public class Player extends Entity {
                     if (spriteNum == 3) {
                         image = down3;
                     }
-//                    if(spriteNum == 4) { image = down4;}
+                    if(spriteNum == 4) { image = down4;}
                 }
                 if (attacking) {
                     if (spriteNum == 1) {
@@ -695,7 +790,7 @@ public class Player extends Entity {
                     if (spriteNum == 3) {
                         image = right3;
                     }
-//                    if(spriteNum == 4) { image = right4;}
+                    if(spriteNum == 4) { image = right4;}
                 }
                 if (attacking) {
                     if (spriteNum == 1) {
@@ -720,7 +815,7 @@ public class Player extends Entity {
                     if (spriteNum == 3) {
                         image = left3;
                     }
-//                    if(spriteNum == 4) { image = left4;}
+                    if(spriteNum == 4) { image = left4;}
                 }
                 if (attacking) {
 //                    tempScreenX = screenX - gp.tileSize;
@@ -758,40 +853,129 @@ public class Player extends Entity {
         g2.drawString("Invincible: " + invincibleCounter, 10, 400);
     }
     public void getImage() {
-        SpriteSheet sprite = new SpriteSheet("src/resources/player/npc005.png", 32, 32, 3, 5);
-        down1 = sprite.getSprite(0, 0);
-        down2 = sprite.getSprite(1, 0);
-        down3 = sprite.getSprite(2, 0);
-
-        left1 = sprite.getSprite(0, 1);
-        left2 = sprite.getSprite(1, 1);
-        left3 = sprite.getSprite(2, 1);
-
-        right1 = sprite.getSprite(0, 2);
-        right2 = sprite.getSprite(1, 2);
-        right3 = sprite.getSprite(2, 2);
-
-        up1 = sprite.getSprite(0, 3);
-        up2 = sprite.getSprite(1, 3);
-        up3 = sprite.getSprite(2, 3);
+//        SpriteSheet sprite = new SpriteSheet("src/resources/player/npc005.png", 32, 32, 3, 5);
+//        down1 = sprite.getSprite(0, 0);
+//        down2 = sprite.getSprite(1, 0);
+//        down3 = sprite.getSprite(2, 0);
+//
+//        left1 = sprite.getSprite(0, 1);
+//        left2 = sprite.getSprite(1, 1);
+//        left3 = sprite.getSprite(2, 1);
+//
+//        right1 = sprite.getSprite(0, 2);
+//        right2 = sprite.getSprite(1, 2);
+//        right3 = sprite.getSprite(2, 2);
+//
+//        up1 = sprite.getSprite(0, 3);
+//        up2 = sprite.getSprite(1, 3);
+//        up3 = sprite.getSprite(2, 3);
 
     }
     public void interactWithPickUpObject(PickUpObject obj) {
         // Call the pickUp method of the PickUpObject
         obj.pickUp();
     }
-    public void setCurrentWeapon(Object weapon) {
-        if (!(weapon instanceof OBJ_Staff_Legendary) && !(weapon instanceof OBJ_Sword_Normal)) {
-            throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of a class that extends OBJ_Staff_Legendary or OBJ_Sword_Normal.");
+    public void setCharacterEquipment(String characterType) {
+        switch (characterType) {
+            case "Warrior":
+                OBJ_Sword_Normal warriorWeapon = new OBJ_Sword_Normal(gp);
+                setCurrentWeapon(warriorWeapon);
+                setCurrentSword(warriorWeapon);
+                currentWeapon = warriorWeapon;
+                currentShield = new OBJ_Shield_Wood(gp);
+                projectile1 = warriorWeapon.projectile1;
+                projectile2 = warriorWeapon.projectile2;
+                projectile3 = warriorWeapon.projectile3;
+                break;
+            case "Mage":
+                OBJ_Staff_Air mageWeapon = new OBJ_Staff_Air(gp, "air");
+                if (this.projectile1 == null) {
+                    mageWeapon.projectile1 = new OBJ_Aura(gp);
+                    this.projectile1 = mageWeapon.projectile1;
+                }
+                if (this.projectile2 == null) {
+                    mageWeapon.projectile2 = new OBJ_AuraBall(gp);
+                    this.projectile2 = mageWeapon.projectile2;
+                }
+                if (this.projectile3 == null) {
+                    mageWeapon.projectile3 = new OBJ_AuraNado(gp);
+                    this.projectile3 = mageWeapon.projectile3;
+                }
+                setCurrentWeapon(mageWeapon);
+                setCurrentStaff(mageWeapon);
+
+                break;
+            case "Hunter":
+                OBJ_Bow_Common hunterWeapon = new OBJ_Bow_Common(gp, "common");
+                if (this.projectile1 == null) {
+                    hunterWeapon.projectile1 = new OBJ_CommonArrows(gp);
+                    this.projectile1 = hunterWeapon.projectile1;
+                }
+                if (this.projectile2 == null) {
+                    hunterWeapon.projectile2 = new OBJ_CommonArrows(gp);
+                    this.projectile2 = hunterWeapon.projectile2;
+                }
+                if (this.projectile3 == null) {
+                    hunterWeapon.projectile3 = new OBJ_CommonArrows(gp);
+                    this.projectile3 = hunterWeapon.projectile3;
+                }
+                setCurrentWeapon(hunterWeapon);
+                setCurrentBow(hunterWeapon);
+                currentWeapon = hunterWeapon;
+                break;
+            case "Assassin":
+                OBJ_Dagger_Air assassinWeapon = new OBJ_Dagger_Air(gp, "air");
+                setCurrentWeapon(assassinWeapon);
+                setCurrentDagger(assassinWeapon);
+                projectile1 = assassinWeapon.projectile1;
+                projectile2 = assassinWeapon.projectile2;
+                projectile3 = assassinWeapon.projectile3;
+                break;
+            case "Fighter":
+                OBJ_Glove_Air fighterWeapon = new OBJ_Glove_Air(gp, "air");
+                setCurrentWeapon(fighterWeapon);
+                setCurrentGlove(fighterWeapon);
+                projectile1 = fighterWeapon.projectile1;
+                projectile2 = fighterWeapon.projectile2;
+                projectile3 = fighterWeapon.projectile3;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid character type: " + characterType);
         }
-        if (weapon instanceof OBJ_Staff_Legendary) {
-            setCurrentStaff((OBJ_Staff_Legendary) weapon);
-        } else if (weapon instanceof OBJ_Sword_Normal) {
-            setCurrentSword((OBJ_Sword_Normal) weapon);
-        }
-        // Add more else if statements for other types of weapons
     }
-    public void setCurrentStaff(OBJ_Staff_Legendary weapon) {
+    public void setCurrentWeapon(Object weapon) {
+        if (playerType.equals("Warrior")) {
+            if (!(weapon instanceof OBJ_Sword_Normal)) {
+                throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of OBJ_Sword_Normal.");
+            }
+            setCurrentSword((OBJ_Sword_Normal) weapon);
+        } else if (playerType.equals("Mage")) {
+            if (!(weapon instanceof OBJ_Legendary_Staff)) {
+                throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of OBJ_Staff_Legendary.");
+            }
+            setCurrentStaff((OBJ_Legendary_Staff) weapon);
+        }
+        else if (playerType.equals("Hunter")) {
+            if (!(weapon instanceof OBJ_Legendary_Bow)) {
+                throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of OBJ_Staff_Legendary.");
+            }
+            setCurrentBow((OBJ_Legendary_Bow) weapon);
+        }
+        else if (playerType.equals("Assassin")) {
+            if (!(weapon instanceof OBJ_Legendary_Dagger)) {
+                throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of OBJ_Staff_Legendary.");
+            }
+            setCurrentDagger((OBJ_Legendary_Dagger) weapon);
+        }
+        else if (playerType.equals("Fighter")) {
+            if (!(weapon instanceof OBJ_Legendary_Glove)) {
+                throw new IllegalArgumentException("Invalid weapon type. Weapon must be an instance of OBJ_Staff_Legendary.");
+            }
+            setCurrentGlove((OBJ_Legendary_Glove) weapon);
+        }
+            // Add more else if statements for other types of players
+    }
+    public void setCurrentStaff(OBJ_Legendary_Staff weapon) {
         this.currentWeapon = weapon;
 
         if (weapon instanceof OBJ_Staff_Air) {
@@ -817,6 +1001,62 @@ public class Player extends Entity {
         }
         // Add more else if statements for other types of staffs
     }
+    public void setCurrentBow(OBJ_Legendary_Bow weapon) {
+        this.currentWeapon = weapon;
+
+        if (weapon instanceof OBJ_Bow_Common) {
+            OBJ_Bow_Common commonBow = (OBJ_Bow_Common) weapon;
+            this.projectile1 = commonBow.projectile1;
+            this.projectile2 = commonBow.projectile2;
+            this.projectile3 = commonBow.projectile3;
+        }else if (weapon instanceof OBJ_Bow_Air) {
+            OBJ_Bow_Air airBow = (OBJ_Bow_Air) weapon;
+//            this.projectile1 = airBow.projectile1;
+//            this.projectile2 = airBow.projectile2;
+//            this.projectile3 = airBow.projectile3;
+        } else if (weapon instanceof OBJ_Bow_Fire) {
+            OBJ_Bow_Fire fireBow = (OBJ_Bow_Fire) weapon;
+//            this.projectile1 = fireBow.projectile1;
+//            this.projectile2 = fireBow.projectile2;
+//            this.projectile3 = fireBow.projectile3;
+        } else if (weapon instanceof OBJ_Bow_Water) {
+            OBJ_Bow_Water waterBow = (OBJ_Bow_Water) weapon;
+//            this.projectile1 = waterBow.projectile1;
+//            this.projectile2 = waterBow.projectile2;
+//            this.projectile3 = waterBow.projectile3;
+        } else if (weapon instanceof OBJ_Bow_Electric) {
+            OBJ_Bow_Electric electricBow = (OBJ_Bow_Electric) weapon;
+//            this.projectile1 = electricBow.projectile1;
+//            this.projectile2 = electricBow.projectile2;
+//            this.projectile3 = electricBow.projectile3;
+        }
+    }
+    public void setCurrentDagger(OBJ_Legendary_Dagger weapon) {
+        this.currentWeapon = weapon;
+
+        if (weapon instanceof OBJ_Dagger_Air) {
+            OBJ_Dagger_Air airDagger = (OBJ_Dagger_Air) weapon;
+        } else if (weapon instanceof OBJ_Dagger_Fire) {
+            OBJ_Dagger_Fire fireDagger = (OBJ_Dagger_Fire) weapon;
+        } else if (weapon instanceof OBJ_Dagger_Water) {
+            OBJ_Dagger_Water waterDagger = (OBJ_Dagger_Water) weapon;
+        } else if (weapon instanceof OBJ_Dagger_Electric) {
+            OBJ_Dagger_Electric electricDagger = (OBJ_Dagger_Electric) weapon;
+        }
+    }
+    public void setCurrentGlove(OBJ_Legendary_Glove weapon) {
+        this.currentWeapon = weapon;
+
+        if (weapon instanceof OBJ_Glove_Air) {
+            OBJ_Glove_Air airGlove = (OBJ_Glove_Air) weapon;
+        } else if (weapon instanceof OBJ_Glove_Fire) {
+            OBJ_Glove_Fire fireGlove = (OBJ_Glove_Fire) weapon;
+        } else if (weapon instanceof OBJ_Glove_Water) {
+            OBJ_Glove_Water waterGlove = (OBJ_Glove_Water) weapon;
+        } else if (weapon instanceof OBJ_Glove_Electric) {
+            OBJ_Glove_Electric electricGlove = (OBJ_Glove_Electric) weapon;
+        }
+    }
     public void setCurrentSword(OBJ_Sword_Normal weapon) {
         this.currentWeapon = weapon;
         this.projectile1 = null;
@@ -824,18 +1064,91 @@ public class Player extends Entity {
         this.projectile3 = null;
     }
     public void obtainWeapon(Object weapon) {
-        if (weapon instanceof OBJ_Staff_Legendary || weapon instanceof OBJ_Sword_Normal) {
+        if (weapon instanceof OBJ_Legendary_Staff
+                || weapon instanceof OBJ_Legendary_Sword
+                || weapon instanceof OBJ_Legendary_Bow
+                || weapon instanceof OBJ_Legendary_Dagger
+                || weapon instanceof OBJ_Legendary_Glove
+        ) {
             inventory.add((Entity) weapon);
         }
     }
     public void fireProjectile() {
-        // Create a new projectile
-        TargetedProjectile projectile = new TargetedProjectile(this.gp);
+        if (currentWeapon instanceof OBJ_Bow_Common) {
+            getAttackImage();
+        }
+//        // Create a new projectile
+//        TargetedProjectile projectile = new TargetedProjectile(this.gp);
+//
+//        // Set the projectile's properties
+//        projectile.set((int) worldY, (int) worldY, direction, true, this); // Set alive to true
+//
+//        // Add the projectile to the list of active projectiles
+//        activeProjectiles.add(projectile);
+    }
 
-        // Set the projectile's properties
-        projectile.set((int) worldY, (int) worldY, direction, true, this); // Set alive to true
-
-        // Add the projectile to the list of active projectiles
-        activeProjectiles.add(projectile);
+    // status effects
+    public void applyPoison() {
+        // Apply poison effect
+        isPoisoned = true;
+    }
+    public void applyStun() {
+        // Apply stun effect
+        isStunned = true;
+    }
+    public void applyBleed() {
+        // Apply bleed effect
+        isBleeding = true;
+    }
+    public void applyBuff() {
+        // Apply buff effect
+        isBuffed = true;
+    }
+    public void applyDebuff() {
+        // Apply debuff effect
+        isDebuffed = true;
+    }
+    public void applyHealing() {
+        // Apply healing effect
+        isHealing = true;
+    }
+    public void updateStatusEffects() {
+        // Update the effects of the status conditions
+        if (isPoisoned) {
+            // Reduce health
+        }
+        if (isStunned) {
+            // Skip turn
+        }
+        if (isBleeding) {
+            // Reduce health
+        }
+        if (isBuffed) {
+            // Increase stats
+        }
+        if (isDebuffed) {
+            // Decrease stats
+        }
+        if (isHealing) {
+            // Increase health
+        }
+    }
+    // Quests
+    public void addQuest(String quest) {
+        // Add a new quest
+        quests.add(quest);
+    }
+    public void completeQuest(String quest) {
+        // Complete a quest
+        quests.remove(quest);
+        achievements.add("Completed quest: " + quest);
+    }
+    public void addAchievement(String achievement) {
+        // Add a new achievement
+        achievements.add(achievement);
+    }
+    // In the Player class
+    public void setImage(BufferedImage image) {
+        this.image = image;
     }
 }

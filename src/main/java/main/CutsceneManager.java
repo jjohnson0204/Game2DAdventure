@@ -2,7 +2,7 @@ package main;
 
 import entity.PlayerDummy;
 import monster.MON_SkeletonLord;
-import object.OBJ_Door_Iron;
+import object.util.OBJ_Door_Iron;
 
 import java.awt.*;
 
@@ -45,18 +45,18 @@ public class CutsceneManager {
             for (int i = 0; i < gp.npc[1].length; i++) {
                 if (gp.npc[gp.currentMap][i] == null) {
                     gp.npc[gp.currentMap][i] = new PlayerDummy(gp);
-                    gp.npc[gp.currentMap][i].worldX = gp.player.worldX;
-                    gp.npc[gp.currentMap][i].worldY = gp.player.worldY;
-                    gp.npc[gp.currentMap][i].direction = gp.player.direction;
+                    gp.npc[gp.currentMap][i].worldX = gp.players[gp.selectedPlayerIndex].worldX;
+                    gp.npc[gp.currentMap][i].worldY = gp.players[gp.selectedPlayerIndex].worldY;
+                    gp.npc[gp.currentMap][i].direction = gp.players[gp.selectedPlayerIndex].direction;
                     break;
                 }
             }
-            gp.player.drawing = false;
+            gp.players[gp.selectedPlayerIndex].drawing = false;
             scenePhase++;
         }
         if (scenePhase == 1) {
-            gp.player.worldY -= 2;
-            if (gp.player.worldY < gp.tileSize * 16) {
+            gp.players[gp.selectedPlayerIndex].worldY -= 2;
+            if (gp.players[gp.selectedPlayerIndex].worldY < gp.tileSize * 16) {
                 scenePhase++;
             }
         }
@@ -83,15 +83,15 @@ public class CutsceneManager {
                 if (gp.npc[gp.currentMap][i] != null
                 && gp.npc[gp.currentMap][i].name.equals(PlayerDummy.npcName)) {
                     //Restore the player position
-                    gp.player.worldX = gp.npc[gp.currentMap][i].worldX;
-                    gp.player.worldY = gp.npc[gp.currentMap][i].worldY;
+                    gp.players[gp.selectedPlayerIndex].worldX = gp.npc[gp.currentMap][i].worldX;
+                    gp.players[gp.selectedPlayerIndex].worldY = gp.npc[gp.currentMap][i].worldY;
                     //Delete the dummy
                     gp.npc[gp.currentMap][i] = null;
                     break;
                 }
             }
             //Start drawing the player
-            gp.player.drawing = true;
+            gp.players[gp.selectedPlayerIndex].drawing = true;
 
             //Reset
             sceneNum = NA;

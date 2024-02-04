@@ -20,9 +20,9 @@ public class OBJ_Tent extends Entity {
     public boolean use(Entity entity){
         gp.gameState = gp.sleepState;
         gp.playSE(14);
-        gp.player.life = gp.player.maxLife;
-        gp.player.mana = gp.player.maxMana;
-        gp.player.getSleepingImage(down1);
+        gp.players[gp.selectedPlayerIndex].life = gp.players[gp.selectedPlayerIndex].maxLife;
+        gp.players[gp.selectedPlayerIndex].mana = gp.players[gp.selectedPlayerIndex].maxMana;
+        gp.players[gp.selectedPlayerIndex].getSleepingImage(down1);
         return false; // false reusable // true one time use
     }
 }

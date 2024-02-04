@@ -2,6 +2,11 @@ package entity;
 
 import main.GamePanel;
 import object.*;
+import object.consumables.OBJ_Potion_Red;
+import object.weapons.OBJ_Axe;
+import object.weapons.warrior.OBJ_Sword_Normal;
+import object.weapons.warrior.OBJ_Shield_Blue;
+import object.weapons.warrior.OBJ_Shield_Wood;
 
 import java.awt.*;
 

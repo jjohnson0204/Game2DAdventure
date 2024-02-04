@@ -36,20 +36,20 @@ public class Lighting {
         Color[] colors = {new Color(1f, 1f, 1f, 1f), new Color(1f, 1f, 1f, 0f)};
         float[] fractions = {0f, 1f};
         paint = new RadialGradientPaint(200, 200, 100, fractions, colors);
-        applyBloomEffect(200 , 200);
+//        applyBloomEffect(200 , 200);
     }
     public void setLightingSource() {
         // Create a buffered image
         darknessFilter = new BufferedImage(gp.screenWidth, gp.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D) darknessFilter.getGraphics();
 
-        if(gp.player.currentLight == null){
+        if(gp.players[gp.selectedPlayerIndex].currentLight == null){
             g2.setColor(new Color(0,0,0.1f,0.97f));
         }
         else {
             // Get the center x and y of the light circle
-            int centerX = gp.player.screenX + (gp.tileSize) / 2;
-            int centerY = gp.player.screenY + (gp.tileSize) / 2;
+            int centerX = gp.players[gp.selectedPlayerIndex].screenX + (gp.tileSize) / 2;
+            int centerY = gp.players[gp.selectedPlayerIndex].screenY + (gp.tileSize) / 2;
 
             // Create a gradation effect within the light circle
             Color[] color = new Color[12];
@@ -82,7 +82,7 @@ public class Lighting {
             fraction[11] = 1f;
 
             // Create a gradation paint settings for the light circle
-            RadialGradientPaint gPaint = new RadialGradientPaint(centerX, centerY, (gp.player.currentLight.lightRadius / 2), fraction, color);
+            RadialGradientPaint gPaint = new RadialGradientPaint(centerX, centerY, (gp.players[gp.selectedPlayerIndex].currentLight.lightRadius / 2), fraction, color);
 
             // Set the gradient data on g2
             g2.setPaint(gPaint);
@@ -121,15 +121,15 @@ public class Lighting {
         filterAlpha = 0f;
     }
     public void update() {
-        if(gp.player.lightUpdated){
+        if(gp.players[gp.selectedPlayerIndex].lightUpdated){
             setLightingSource();
-            gp.player.lightUpdated = false;
+            gp.players[gp.selectedPlayerIndex].lightUpdated = false;
         }
         // Assuming chests is a List of OBJ_Chest instances
         for (OBJ_Chest chest : chests) {
             // Only apply the bloom effect if the chest is in the camera's view
             if (chest.inCamera()) {
-                applyBloomEffect(chest.getScreenX() + (gp.tileSize) / 2, chest.getScreenY() + (gp.tileSize) / 2);
+//                applyBloomEffect(chest.getScreenX() + (gp.tileSize) / 2, chest.getScreenY() + (gp.tileSize) / 2);
             }
         }      // Check the state of the day
         if(dayState == day){

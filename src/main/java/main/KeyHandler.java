@@ -1,5 +1,7 @@
 package main;
 
+import entity.players.*;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
@@ -203,22 +205,37 @@ public class KeyHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER) {
                 if(gp.ui.commandNum == 0){
                     gp.gameState = gp.playState;
+                    gp.players[gp.selectedPlayerIndex] = new Fighter(gp, this);
+//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
+//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 1){
                     gp.gameState = gp.playState;
+                    gp.players[gp.selectedPlayerIndex] = new Warrior(gp, this);
+//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
+//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 2){
                     gp.gameState = gp.playState;
+                    gp.players[gp.selectedPlayerIndex] = new Hunter(gp, this);
+//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
+//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 3){
                     gp.gameState = gp.playState;
+                    gp.players[gp.selectedPlayerIndex] = new Assassin(gp, this);
+//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
+//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 4){
                     gp.gameState = gp.playState;
+                    gp.players[gp.selectedPlayerIndex] = new Mage(gp, this);
+//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
+//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 5){
@@ -313,7 +330,7 @@ public class KeyHandler implements KeyListener {
             gp.gameState = gp.playState;
         }
         if(code == KeyEvent.VK_ENTER){
-            gp.player.selectItem();
+            gp.players[gp.selectedPlayerIndex].selectItem();
         }
         playerInventory(code);
     }
