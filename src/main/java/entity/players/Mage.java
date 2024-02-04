@@ -27,6 +27,7 @@ public class Mage extends Player {
         maxLife = 5; // Mages have less life
         strength = 1; // Mages have less strength
         dexterity = 2; // Mages have average dexterity
+        maxMana = 10; // Mages have more mana
         attack = getAttack();
         defense = getDefense();
     }

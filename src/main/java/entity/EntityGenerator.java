@@ -11,8 +11,8 @@ import object.util.OBJ_Door_Iron;
 import object.util.OBJ_Equipped_Menu;
 import object.weapons.OBJ_Axe;
 import object.weapons.OBJ_Pickaxe;
-import object.weapons.assassin.OBJ_Legendary_Dagger;
-import object.weapons.fighter.OBJ_Legendary_Glove;
+import object.weapons.assassin.*;
+import object.weapons.fighter.*;
 import object.weapons.hunter.*;
 import object.weapons.mage.*;
 import object.weapons.warrior.OBJ_Legendary_Sword;
@@ -43,6 +43,14 @@ public class EntityGenerator {
             case OBJ_Chest.objName: obj = new OBJ_Chest(gp); break;
             case OBJ_Coin_Bronze.objName: obj = new OBJ_Coin_Bronze(gp); break;
             case OBJ_CommonArrows.objName: obj = new OBJ_CommonArrows(gp); break;
+            case OBJ_Dagger_Air.objName: obj = new OBJ_Dagger_Air(gp, "air"); break;
+            case OBJ_Dagger_Electric.objName: obj = new OBJ_Dagger_Electric(gp, "electric"); break;
+            case OBJ_Dagger_Fire.objName: obj = new OBJ_Dagger_Fire(gp, "fire"); break;
+            case OBJ_Dagger_Water.objName: obj = new OBJ_Dagger_Water(gp, "water"); break;
+            case OBJ_Glove_Air.objName: obj = new OBJ_Glove_Air(gp, "air"); break;
+            case OBJ_Glove_Electric.objName: obj = new OBJ_Glove_Electric(gp, "electric"); break;
+            case OBJ_Glove_Fire.objName: obj = new OBJ_Glove_Fire(gp, "fire"); break;
+            case OBJ_Glove_Water.objName: obj = new OBJ_Glove_Water(gp, "water"); break;
             case OBJ_Legendary_Bow.objName: obj = new OBJ_Legendary_Bow(gp, ""); break;
             case OBJ_Legendary_Dagger.objName: obj = new OBJ_Legendary_Dagger(gp, ""); break;
             case OBJ_Legendary_Glove.objName: obj = new OBJ_Legendary_Glove(gp, ""); break;
@@ -74,6 +82,8 @@ public class EntityGenerator {
             case OBJ_ThunderBolt.objName: obj = new OBJ_ThunderBolt(gp); break;
             case OBJ_ThunderShield.objName: obj = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]); break;
             case OBJ_ThunderSlash.objName: obj = new OBJ_ThunderSlash(gp); break;
+            default:
+                throw new IllegalArgumentException("Unrecognized item name: " + itemName);
         }
         return obj;
     }

@@ -11,6 +11,7 @@ public class OBJ_Dagger_Air extends OBJ_Legendary_Dagger {
     public Projectile projectile1;
     public Projectile projectile2;
     public Projectile projectile3;
+    public static final String objName = "Dagger Air";
     public OBJ_Dagger_Air(GamePanel gp, String element) {
         super(gp, element);
         this.gp = gp;
@@ -19,6 +20,8 @@ public class OBJ_Dagger_Air extends OBJ_Legendary_Dagger {
         projectile2 = new OBJ_AuraBall(gp);
         projectile3 = new OBJ_AuraNado(gp);
 
+        type = type_dagger;
+        name = objName;
         down1 = setup("/objects/dagger_air");
 
     }

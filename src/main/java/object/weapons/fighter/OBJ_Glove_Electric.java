@@ -11,6 +11,7 @@ public class OBJ_Glove_Electric extends OBJ_Legendary_Glove {
     public Projectile projectile1;
     public Projectile projectile2;
     public Projectile projectile3;
+    public static final String objName = "Glove Electric";
     public OBJ_Glove_Electric(GamePanel gp, String element) {
         super(gp, element);
         this.gp = gp;
@@ -19,6 +20,8 @@ public class OBJ_Glove_Electric extends OBJ_Legendary_Glove {
         projectile2 = new OBJ_ThunderSlash(gp);
         projectile3 = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]);
 
+        type = type_glove;
+        name = objName;
         down1 = setup("/objects/staff_electric");
     }
     @Override

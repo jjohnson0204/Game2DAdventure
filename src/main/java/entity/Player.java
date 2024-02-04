@@ -109,13 +109,13 @@ public class Player extends Entity {
         nextLevelExp = 5;
         coin = 500;
         currentLight = null;
-        setCharacterEquipment(playerType);
+        this.setCharacterEquipment(playerType);
         this.currentShield = new OBJ_Shield_Wood(gp);
         this.projectile1 = new Projectile(gp);
         this.projectile2 = new Projectile(gp);
         this.projectile3 = new Projectile(gp);
-        attack = getAttack();
-        defense = getDefense();
+        this.attack = getAttack();
+        this.defense = getDefense();
         getImage();
         getAttackImage();
         getGuardImage();

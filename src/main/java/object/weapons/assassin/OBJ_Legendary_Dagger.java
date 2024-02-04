@@ -59,7 +59,7 @@ public class OBJ_Legendary_Dagger extends Entity {
     public void setElementAttributes(String element) {
         switch (element) {
             case "air":
-                name = "Legendary Dagger (Air)";
+                name = OBJ_Dagger_Air.objName;
                 defaultSpeed = 10;
                 speed = 10.0;
                 maxLife = 100;
@@ -81,7 +81,7 @@ public class OBJ_Legendary_Dagger extends Entity {
                 break;
             case "fire":
                 // Set the values for the fire element
-                name = "Legendary Dagger (Fire)";
+                name = OBJ_Dagger_Fire.objName;
                 defaultSpeed = 10;
                 speed = 10.0;
                 maxLife = 100;
@@ -103,7 +103,7 @@ public class OBJ_Legendary_Dagger extends Entity {
                 break;
             case "water":
                 // Set the values for the water element
-                name = "Legendary Dagger (Water)";
+                name = OBJ_Dagger_Water.objName;
                 defaultSpeed = 10;
                 speed = 10.0;
                 maxLife = 100;
@@ -125,7 +125,7 @@ public class OBJ_Legendary_Dagger extends Entity {
                 break;
             case "electric":
                 // Set the values for the electric element
-                name = "Legendary Dagger (Electric)";
+                name = OBJ_Dagger_Electric.objName;
                 defaultSpeed = 10;
                 speed = 10.0;
                 maxLife = 100;

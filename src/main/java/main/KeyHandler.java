@@ -203,6 +203,7 @@ public class KeyHandler implements KeyListener {
                 }
             }
             if (code == KeyEvent.VK_ENTER) {
+//                gp.selectedPlayerIndex = gp.ui.commandNum;
                 if(gp.ui.commandNum == 0){
                     gp.gameState = gp.playState;
                     gp.players[gp.selectedPlayerIndex] = new Fighter(gp, this);

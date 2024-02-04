@@ -11,6 +11,7 @@ public class OBJ_Dagger_Electric extends OBJ_Legendary_Dagger {
     public Projectile projectile1;
     public Projectile projectile2;
     public Projectile projectile3;
+    public static final String objName = "Dagger Electric";
     public OBJ_Dagger_Electric(GamePanel gp, String element) {
         super(gp, element);
         this.gp = gp;
@@ -19,6 +20,8 @@ public class OBJ_Dagger_Electric extends OBJ_Legendary_Dagger {
         projectile2 = new OBJ_ThunderSlash(gp);
         projectile3 = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]);
 
+        type = type_dagger;
+        name = objName;
         down1 = setup("/objects/staff_electric");
     }
     @Override

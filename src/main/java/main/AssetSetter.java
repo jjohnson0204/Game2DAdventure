@@ -12,10 +12,14 @@ import object.util.OBJ_Door;
 import object.util.OBJ_Door_Iron;
 import object.util.OBJ_Teleporter;
 import object.weapons.*;
+import object.weapons.assassin.OBJ_Dagger_Fire;
+import object.weapons.fighter.OBJ_Glove_Fire;
+import object.weapons.hunter.OBJ_Bow_Fire;
 import object.weapons.mage.OBJ_Staff_Air;
 import object.weapons.mage.OBJ_Staff_Electric;
 import object.weapons.mage.OBJ_Staff_Fire;
 import object.weapons.mage.OBJ_Staff_Water;
+import object.weapons.warrior.OBJ_Legendary_Sword;
 import tile.tile_interactive.IT_DestructibleWall;
 import tile.tile_interactive.IT_DryTree;
 import tile.tile_interactive.IT_MetalPlate;
@@ -41,27 +45,51 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = 17 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 24 * gp.tileSize;
         i++;
+
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = 7 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 23 * gp.tileSize;
-
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = 45 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 9 * gp.tileSize;
-
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = 17 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 44 * gp.tileSize;
-
         i++;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        if (gp.selectedPlayerIndex == 0) {
+            gp.obj[mapNum][i].setLoot(new OBJ_Glove_Fire(gp, "fire"));
+            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+        }
+        else if (gp.selectedPlayerIndex == 1) {
+            gp.obj[mapNum][i].setLoot(new OBJ_Legendary_Sword(gp));
+            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+        }
+        else if (gp.selectedPlayerIndex == 2) {
+            gp.obj[mapNum][i].setLoot(new OBJ_Bow_Fire(gp, "fire"));
+            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+        }
+        else if (gp.selectedPlayerIndex == 3) {
+            gp.obj[mapNum][i].setLoot(new OBJ_Dagger_Fire(gp, "fire"));
+            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+        }
+        else if (gp.selectedPlayerIndex == 4) {
+            gp.obj[mapNum][i].setLoot(new OBJ_Staff_Fire(gp, "fire"));
+            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+        }
+
+        gp.obj[mapNum][i].worldX = 35 * gp.tileSize;
+        gp.obj[mapNum][i].worldY = 25 * gp.tileSize;
+        i++;
+
         gp.obj[mapNum][i] = new OBJ_Boots(gp);
         gp.obj[mapNum][i].worldX = 37 * gp.tileSize;
-        gp.obj[mapNum][i].worldY = 42 * gp.tileSize;
+        gp.obj[mapNum][i].worldY = 43 * gp.tileSize;
         i++;
         gp.obj[mapNum][i] = new OBJ_ManaCrystal(gp);
         gp.obj[mapNum][i].worldX = 22 * gp.tileSize;

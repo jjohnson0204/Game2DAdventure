@@ -4,12 +4,15 @@ import entity.Entity;
 import environment.Lighting;
 import main.GamePanel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OBJ_Chest extends Entity {
     GamePanel gp;
     // Create a Lighting object
     Lighting lighting;
     public  static final String objName = "Chest";
-
+    private List<Entity> loot;
     public GamePanel getGp() {
         return gp;
     }
@@ -18,6 +21,7 @@ public class OBJ_Chest extends Entity {
         super(gp);
         this.gp = gp;
         this.lighting = new Lighting(gp);
+        this.loot = new ArrayList<>();
 
         gp.chests.add(this);
         type = type_obstacle;
@@ -43,28 +47,42 @@ public class OBJ_Chest extends Entity {
     }
     public void setLoot(Entity loot){
 
-        this.loot = loot;
+        this.loot.add(loot);
         setDialogue();
     }
     public void setDialogue() {
-        dialogues[0][0] = "You open the chest and find a " + loot.name + "!\n....But you cannot carry any more!";
-        dialogues[1][0] = "You open the chest and find a " + loot.name + "!\nYou obtain the " + loot.name + "!";
-        dialogues[2][0] = "It's empty.";
+        if (loot.size() > 1) {
+            dialogues[0][0] = "You open the chest and find a " + loot.get(0).name + "!\n....But you cannot carry any more!";
+            dialogues[0][1] = "You open the chest and find a " + loot.get(1).name + "!\n....But you cannot carry any more!";
+            dialogues[1][0] = "You open the chest and find a " + loot.get(0).name + "!\nYou obtain the " + loot.get(0).name + "!";
+            dialogues[1][1] = "You open the chest and find a " + loot.get(1).name + "!\nYou obtain the " + loot.get(1).name + "!";
+        } else if (loot.size() == 1) {
+            dialogues[0][0] = "You open the chest and find a " + loot.get(0).name + "!\n....But you cannot carry any more!";
+            dialogues[1][0] = "You open the chest and find a " + loot.get(0).name + "!\nYou obtain the " + loot.get(0).name + "!";
+        } else {
+            dialogues[2][0] = "It's empty.";
+        }
     }
     public void interact() {
         if(!opened) {
             gp.playSE(3);
 
-            if(!gp.players[gp.selectedPlayerIndex].canObtainItem(loot)) {
-                startDialogue(this, 0);
+            boolean canObtainAnyItem = false;
+            for (Entity item : loot) {
+                if (gp.players[gp.selectedPlayerIndex].canObtainItem(item)) {
+                    canObtainAnyItem = true;
+                    break;
+                }
             }
-            else {
-               startDialogue(this, 1);
+
+            if (!canObtainAnyItem) {
+                startDialogue(this, 0);
+            } else {
+                startDialogue(this, 1);
                 down1 = image2;
                 opened = true;
             }
-        }
-        else {
+        } else {
             startDialogue(this, 2);
         }
     }
@@ -78,6 +96,9 @@ public class OBJ_Chest extends Entity {
             inCamera = true;
         }
         return inCamera;
+    }
+    public List<Entity> getLoot() {
+        return this.loot;
     }
 
 }
