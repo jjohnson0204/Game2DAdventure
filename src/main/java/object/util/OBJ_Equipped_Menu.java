@@ -18,10 +18,8 @@ public class OBJ_Equipped_Menu extends Entity {
     public OBJ_Equipped_Menu(GamePanel gp) {
         super(gp);
         this.gp = gp;
-        // Check if a player is selected, the player is not null, and has a weapon before assigning it to weapon
-        if (gp.selectedPlayerIndex >= 0 && gp.selectedPlayerIndex < gp.players.length && gp.players[gp.selectedPlayerIndex] != null && gp.players[gp.selectedPlayerIndex].currentWeapon != null) {
-            weapon = gp.players[gp.selectedPlayerIndex].currentWeapon.down1;
-        }
+
+        weapon = gp.player.currentWeapon.down1;
 
         name = objName;
         down1 = setup("/ui/equipmenu");

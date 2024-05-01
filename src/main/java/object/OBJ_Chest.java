@@ -46,8 +46,13 @@ public class OBJ_Chest extends Entity {
 //        lighting.applyBloomEffect(bloomX, bloomY);
     }
     public void setLoot(Entity loot){
-
         this.loot.add(loot);
+        setDialogue();
+    }
+    public void setLoot(Entity... loots){
+        for (Entity loot : loots) {
+            this.loot.add(loot);
+        }
         setDialogue();
     }
     public void setDialogue() {
@@ -69,7 +74,7 @@ public class OBJ_Chest extends Entity {
 
             boolean canObtainAnyItem = false;
             for (Entity item : loot) {
-                if (gp.players[gp.selectedPlayerIndex].canObtainItem(item)) {
+                if (gp.player.canObtainItem(item)) {
                     canObtainAnyItem = true;
                     break;
                 }
@@ -89,10 +94,10 @@ public class OBJ_Chest extends Entity {
     public boolean inCamera() {
         boolean inCamera = false;
 
-        if(worldX + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldX - gp.players[gp.selectedPlayerIndex].screenX
-                && worldX - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX
-                && worldY + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldY - gp.players[gp.selectedPlayerIndex].screenY
-                && worldY - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY) {
+        if(worldX + gp.tileSize * 5 > gp.player.worldX - gp.player.screenX
+                && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+                && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
+                && worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
             inCamera = true;
         }
         return inCamera;

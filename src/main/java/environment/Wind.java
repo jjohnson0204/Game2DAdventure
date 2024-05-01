@@ -9,25 +9,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class Rain {
+public class Wind {
     private List<Particle> particles = new ArrayList<>();
     private Random random = new Random();
     private GamePanel gp;
 
-    public Rain(GamePanel gp) {
+    public Wind(GamePanel gp) {
         this.gp = gp;
     }
 
     public void generateParticles(int count) {
         for (int i = 0; i < count; i++) {
-            int x = random.nextInt(gp.screenWidth);
-            int y = random.nextInt(gp.screenHeight);
-            int vx = 0;
-            int vy = random.nextInt(5) + 1;
-            Color color = Color.WHITE;
-            int size = 2;
-            int life = random.nextInt(100) + 50;
-            particles.add(new Particle(gp, x, y, vx, vy, color, size, life));
+            particles.add(generateParticle());
         }
     }
 
@@ -37,6 +30,7 @@ public class Rain {
         while (iterator.hasNext()) {
             Particle particle = iterator.next();
             particle.update();
+            particle.x += random.nextInt(3) - 1; // This line simulates the wind effect
             if (!particle.alive) {
                 iterator.remove();
                 newParticles.add(generateParticle());
@@ -49,9 +43,9 @@ public class Rain {
         int x = random.nextInt(gp.screenWidth);
         int y = random.nextInt(gp.screenHeight);
         int vx = 0;
-        int vy = random.nextInt(5) + 1;
+        int vy = random.nextInt(3) + 1;
         Color color = Color.WHITE;
-        int size = 1;
+        int size = random.nextInt(3) + 2;
         int life = random.nextInt(100) + 50;
         return new Particle(gp, x, y, vx, vy, color, size, life);
     }

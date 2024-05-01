@@ -70,8 +70,8 @@ public class NPC_OldMan extends Entity{
         if(onPath == true){
 //            int goalCol = 12;
 //            int goalRow = 9;
-            int goalCol = (int) (gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].solidArea.x) / gp.tileSize;
-            int goalRow = (int) (gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].solidArea.y) / gp.tileSize;
+            int goalCol = (int) (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
+            int goalRow = (int) (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
 
             searchPath(goalCol, goalRow);
         }
@@ -109,7 +109,7 @@ public class NPC_OldMan extends Entity{
         }
 
         //Example Set - if the player health is at a 3rd NPC will speak this dialogue
-//        if (gp.players[gp.selectedPlayerIndex].life < gp.players[gp.selectedPlayerIndex].maxLife/3) {
+//        if (gp.player.life < gp.player.maxLife/3) {
 //            dialogueSet = 1;
 //        }
 

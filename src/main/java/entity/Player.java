@@ -44,8 +44,9 @@ public class Player extends Entity {
     // Add this list to store the active projectiles
     private List<TargetedProjectile> activeProjectiles = new ArrayList<>();
     private List<OBJ_Teleporter> teleports = new ArrayList<>();
+    public int selectedItemIndex = -1;
 
-    public Player(GamePanel gp, KeyHandler keyH, int i) {
+    public Player(GamePanel gp, KeyHandler keyH, int playerTypeIndex) {
         super(gp);
         this.gp = gp;
         this.keyH = keyH;
@@ -62,7 +63,7 @@ public class Player extends Entity {
         solidArea.width = 32;
         solidArea.height = 32;
 
-        setPlayerType(i);
+        setPlayerType(playerTypeIndex);
         setDefaultValues();
     }
     public void setPlayerType(int selectedPlayerIndex) {
@@ -109,6 +110,7 @@ public class Player extends Entity {
         nextLevelExp = 5;
         coin = 500;
         currentLight = null;
+
         this.setCharacterEquipment(playerType);
         this.currentShield = new OBJ_Shield_Wood(gp);
         this.projectile1 = new Projectile(gp);
@@ -166,7 +168,7 @@ public class Player extends Entity {
     public int getCurrentWeaponSlot() {
         int currentWeaponSlot = 0;
         for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i) == gp.players[gp.selectedPlayerIndex].currentWeapon) {
+            if (inventory.get(i) == gp.player.currentWeapon) {
                 currentWeaponSlot = i;
             }
         }
@@ -175,7 +177,7 @@ public class Player extends Entity {
     public int getCurrentShieldSlot() {
         int currentShieldSlot = 0;
         for (int i = 0; i < inventory.size(); i++) {
-            if (inventory.get(i) == gp.players[gp.selectedPlayerIndex].currentShield) {
+            if (inventory.get(i) == gp.player.currentShield) {
                 currentShieldSlot = i;
             }
         }
@@ -485,9 +487,9 @@ public class Player extends Entity {
             }
         }
 //        // Assign the images
-        UI.ability1 = gp.players[gp.selectedPlayerIndex].projectile1.down1;
-        UI.ability2 = gp.players[gp.selectedPlayerIndex].projectile2.down1;
-        UI.ability3 = gp.players[gp.selectedPlayerIndex].projectile3.down1;
+        UI.ability1 = gp.player.projectile1.down1;
+        UI.ability2 = gp.player.projectile2.down1;
+        UI.ability3 = gp.player.projectile3.down1;
         // Check if player's location matches the location of the PickUpObject
 //        if (this.worldX == myObject.worldX && this.worldY == myObject.worldY) {
 //            // If it does, call the pickUp() method of the PickUpObject
@@ -598,19 +600,33 @@ public class Player extends Entity {
                 getAttackImage();
             }
             if (selectedItem instanceof OBJ_Legendary_Staff) {
-                setCurrentWeapon(selectedItem);
+                if (playerType.equals("Mage")) {
+                    setCurrentWeapon(selectedItem);
+                    setCurrentStaff(new OBJ_Legendary_Staff(gp, "any"));
+                }
             }
-            if (selectedItem instanceof OBJ_Legendary_Bow) {
-                setCurrentWeapon(selectedItem);
+            else if (selectedItem instanceof OBJ_Legendary_Bow) {
+                if (playerType.equals("Hunter")) {
+                    setCurrentWeapon(selectedItem);
+                    setCurrentBow(new OBJ_Legendary_Bow(gp, "any"));
+                }
             }
-            if (selectedItem instanceof OBJ_Legendary_Sword) {
-                setCurrentWeapon(selectedItem);
+            else if (selectedItem instanceof OBJ_Legendary_Sword) {
+                if (playerType.equals("Warrior")) {
+                    setCurrentWeapon(selectedItem);
+                }
             }
             if (selectedItem instanceof OBJ_Legendary_Dagger) {
-                setCurrentWeapon(selectedItem);
+                if (playerType.equals("Assassin")) {
+                    setCurrentWeapon(selectedItem);
+                    setCurrentDagger(new OBJ_Legendary_Dagger(gp, "any"));
+                }
             }
             if (selectedItem instanceof OBJ_Legendary_Glove) {
-                setCurrentWeapon(selectedItem);
+                if (playerType.equals("Fighter")) {
+                    setCurrentWeapon(selectedItem);
+                    setCurrentGlove(new OBJ_Legendary_Glove(gp, "any"));
+                }
             }
             if (selectedItem.type == type_shield) {
                 currentShield = selectedItem;
@@ -633,6 +649,7 @@ public class Player extends Entity {
                     }
                 }
             }
+            selectedItemIndex = itemIndex;
         }
     }
     public void contactMonster(int i) {

@@ -1,6 +1,13 @@
 package main;
 
 import entity.players.*;
+import object.OBJ_Chest;
+import object.OBJ_Key;
+import object.weapons.assassin.OBJ_Dagger_Fire;
+import object.weapons.fighter.OBJ_Glove_Fire;
+import object.weapons.hunter.OBJ_Bow_Fire;
+import object.weapons.mage.OBJ_Staff_Fire;
+import object.weapons.warrior.OBJ_Legendary_Sword;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -203,40 +210,105 @@ public class KeyHandler implements KeyListener {
                 }
             }
             if (code == KeyEvent.VK_ENTER) {
-//                gp.selectedPlayerIndex = gp.ui.commandNum;
+                gp.selectedPlayerIndex = gp.ui.commandNum;
+
                 if(gp.ui.commandNum == 0){
                     gp.gameState = gp.playState;
-                    gp.players[gp.selectedPlayerIndex] = new Fighter(gp, this);
-//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
-//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
+                    gp.player = new Fighter(gp, this);
+                    gp.player.setPlayerType(gp.ui.commandNum);
+                    // Find the chest at the location (35, 25)
+                    for (int mapNum = 0; mapNum < gp.obj.length; mapNum++) {
+                        for (int i = 0; i < gp.obj[mapNum].length; i++) {
+                            if (gp.obj[mapNum][i] instanceof OBJ_Chest &&
+                                    gp.obj[mapNum][i].worldX == 35 * gp.tileSize &&
+                                    gp.obj[mapNum][i].worldY == 25 * gp.tileSize) {
+
+                                // Set loot for the chest after player selection
+                                ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Glove_Fire(gp, "fire"), new OBJ_Key(gp));
+                                break;
+                            }
+                        }
+                    }
                     gp.playMusic(0);
                 }
-                if(gp.ui.commandNum == 1){
+                else if(gp.ui.commandNum == 1){
                     gp.gameState = gp.playState;
-                    gp.players[gp.selectedPlayerIndex] = new Warrior(gp, this);
-//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
-//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
+                    gp.player = new Warrior(gp, this);
+                    gp.player.setPlayerType(gp.ui.commandNum);
+
+                    // Find the chest at the location (35, 25)
+                    for (int mapNum = 0; mapNum < gp.obj.length; mapNum++) {
+                        for (int i = 0; i < gp.obj[mapNum].length; i++) {
+                            if (gp.obj[mapNum][i] instanceof OBJ_Chest &&
+                                    gp.obj[mapNum][i].worldX == 35 * gp.tileSize &&
+                                    gp.obj[mapNum][i].worldY == 25 * gp.tileSize) {
+
+                                // Set loot for the chest after player selection
+                                ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Legendary_Sword(gp), new OBJ_Key(gp));
+                                break;
+                            }
+                        }
+                    }
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 2){
                     gp.gameState = gp.playState;
-                    gp.players[gp.selectedPlayerIndex] = new Hunter(gp, this);
-//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
-//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
+                    gp.player = new Hunter(gp, this);
+                    gp.player.setPlayerType(gp.ui.commandNum);
+
+                    // Find the chest at the location (35, 25)
+                    for (int mapNum = 0; mapNum < gp.obj.length; mapNum++) {
+                        for (int i = 0; i < gp.obj[mapNum].length; i++) {
+                            if (gp.obj[mapNum][i] instanceof OBJ_Chest &&
+                                    gp.obj[mapNum][i].worldX == 35 * gp.tileSize &&
+                                    gp.obj[mapNum][i].worldY == 25 * gp.tileSize) {
+
+                                // Set loot for the chest after player selection
+                                ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Bow_Fire(gp, "fire"), new OBJ_Key(gp));
+                                break;
+                            }
+                        }
+                    }
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 3){
                     gp.gameState = gp.playState;
-                    gp.players[gp.selectedPlayerIndex] = new Assassin(gp, this);
-//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
-//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
+                    gp.player = new Assassin(gp, this);
+                    gp.player.setPlayerType(gp.ui.commandNum);
+
+                    // Find the chest at the location (35, 25)
+                    for (int mapNum = 0; mapNum < gp.obj.length; mapNum++) {
+                        for (int i = 0; i < gp.obj[mapNum].length; i++) {
+                            if (gp.obj[mapNum][i] instanceof OBJ_Chest &&
+                                    gp.obj[mapNum][i].worldX == 35 * gp.tileSize &&
+                                    gp.obj[mapNum][i].worldY == 25 * gp.tileSize) {
+
+                                // Set loot for the chest after player selection
+                                ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Dagger_Fire(gp, "fire"), new OBJ_Key(gp));
+                                break;
+                            }
+                        }
+                    }
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 4){
                     gp.gameState = gp.playState;
-                    gp.players[gp.selectedPlayerIndex] = new Mage(gp, this);
-//                    gp.players[gp.selectedPlayerIndex].setPlayerType(gp.ui.commandNum);
-//                    gp.players[gp.selectedPlayerIndex].setCharacterEquipment(gp.players[gp.selectedPlayerIndex].playerType);
+                    gp.player = new Mage(gp, this);
+                    gp.player.setPlayerType(gp.ui.commandNum);
+
+                // Find the chest at the location (35, 25)
+                for (int mapNum = 0; mapNum < gp.obj.length; mapNum++) {
+                        for (int i = 0; i < gp.obj[mapNum].length; i++) {
+                            if (gp.obj[mapNum][i] instanceof OBJ_Chest &&
+                                    gp.obj[mapNum][i].worldX == 35 * gp.tileSize &&
+                                    gp.obj[mapNum][i].worldY == 25 * gp.tileSize) {
+
+                                // Set loot for the chest after player selection
+                                ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Staff_Fire(gp, "fire"), new OBJ_Key(gp));
+                                break;
+                            }
+                        }
+                    }
                     gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 5){
@@ -331,7 +403,7 @@ public class KeyHandler implements KeyListener {
             gp.gameState = gp.playState;
         }
         if(code == KeyEvent.VK_ENTER){
-            gp.players[gp.selectedPlayerIndex].selectItem();
+            gp.player.selectItem();
         }
         playerInventory(code);
     }

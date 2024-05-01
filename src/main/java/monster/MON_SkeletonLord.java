@@ -122,7 +122,7 @@ public class MON_SkeletonLord extends Entity {
             speed = defaultSpeed;
             attack *= 2;
         }
-        if(getTileDistance(gp.players[gp.selectedPlayerIndex]) < 10){
+        if(getTileDistance(gp.player) < 10){
             moveTowardPlayer(60);
         }
         else {

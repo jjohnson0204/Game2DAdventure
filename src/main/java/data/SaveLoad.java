@@ -19,25 +19,25 @@ public class SaveLoad {
 
             DataStorage ds = new DataStorage();
 
-            ds.level = gp.players[gp.selectedPlayerIndex].level;
-            ds.maxLife = gp.players[gp.selectedPlayerIndex].maxLife;
-            ds.life = gp.players[gp.selectedPlayerIndex].life;
-            ds.maxMana = gp.players[gp.selectedPlayerIndex].maxMana;
-            ds.mana = gp.players[gp.selectedPlayerIndex].mana;
-            ds.strength = gp.players[gp.selectedPlayerIndex].strength;
-            ds.dexterity = gp.players[gp.selectedPlayerIndex].dexterity;
-            ds.exp = gp.players[gp.selectedPlayerIndex].exp;
-            ds.nextLevelExp = gp.players[gp.selectedPlayerIndex].nextLevelExp;
-            ds.coin = gp.players[gp.selectedPlayerIndex].coin;
+            ds.level = gp.player.level;
+            ds.maxLife = gp.player.maxLife;
+            ds.life = gp.player.life;
+            ds.maxMana = gp.player.maxMana;
+            ds.mana = gp.player.mana;
+            ds.strength = gp.player.strength;
+            ds.dexterity = gp.player.dexterity;
+            ds.exp = gp.player.exp;
+            ds.nextLevelExp = gp.player.nextLevelExp;
+            ds.coin = gp.player.coin;
 
             //players[gp.selectedPlayerIndex] Inventory
-            for (int i = 0; i < gp.players[gp.selectedPlayerIndex].inventory.size(); i++) {
-                ds.itemNames.add(gp.players[gp.selectedPlayerIndex].inventory.get(i).name);
-                ds.itemAmounts.add(gp.players[gp.selectedPlayerIndex].inventory.get(i).amount);
+            for (int i = 0; i < gp.player.inventory.size(); i++) {
+                ds.itemNames.add(gp.player.inventory.get(i).name);
+                ds.itemAmounts.add(gp.player.inventory.get(i).amount);
             }
             //players[gp.selectedPlayerIndex] Equipment
-            ds.currentWeaponSlot = gp.players[gp.selectedPlayerIndex].getCurrentWeaponSlot();
-            ds.currentShieldSlot = gp.players[gp.selectedPlayerIndex].getCurrentShieldSlot();
+            ds.currentWeaponSlot = gp.player.getCurrentWeaponSlot();
+            ds.currentShieldSlot = gp.player.getCurrentShieldSlot();
             //Objects on Map
             ds.mapObjectNames = new String[gp.maxMap][gp.obj[1].length];
             ds.mapObjectLootNames = new String[gp.maxMap][gp.obj[1].length];
@@ -77,29 +77,29 @@ public class SaveLoad {
             DataStorage ds = (DataStorage)ois.readObject();
 
             //players[gp.selectedPlayerIndex] Stats
-            gp.players[gp.selectedPlayerIndex].level = ds.level;
-            gp.players[gp.selectedPlayerIndex].maxLife = ds.maxLife;
-            gp.players[gp.selectedPlayerIndex].life = ds.life;
-            gp.players[gp.selectedPlayerIndex].maxMana = ds.maxMana;
-            gp.players[gp.selectedPlayerIndex].mana = ds.mana;
-            gp.players[gp.selectedPlayerIndex].strength = ds.strength;
-            gp.players[gp.selectedPlayerIndex].dexterity = ds.dexterity;
-            gp.players[gp.selectedPlayerIndex].exp = ds.exp;
-            gp.players[gp.selectedPlayerIndex].nextLevelExp = ds.nextLevelExp;
-            gp.players[gp.selectedPlayerIndex].coin = ds.coin;
+            gp.player.level = ds.level;
+            gp.player.maxLife = ds.maxLife;
+            gp.player.life = ds.life;
+            gp.player.maxMana = ds.maxMana;
+            gp.player.mana = ds.mana;
+            gp.player.strength = ds.strength;
+            gp.player.dexterity = ds.dexterity;
+            gp.player.exp = ds.exp;
+            gp.player.nextLevelExp = ds.nextLevelExp;
+            gp.player.coin = ds.coin;
 
             //players[gp.selectedPlayerIndex] Inventory
-            gp.players[gp.selectedPlayerIndex].inventory.clear();
+            gp.player.inventory.clear();
             for (int i = 0; i < ds.itemNames.size(); i++) {
-                gp.players[gp.selectedPlayerIndex].inventory.add(gp.eGenerator.getObject(ds.itemNames.get(i)));
-                gp.players[gp.selectedPlayerIndex].inventory.get(i).amount = ds.itemAmounts.get(i);
+                gp.player.inventory.add(gp.eGenerator.getObject(ds.itemNames.get(i)));
+                gp.player.inventory.get(i).amount = ds.itemAmounts.get(i);
             }
             //players[gp.selectedPlayerIndex] Equipment
-            gp.players[gp.selectedPlayerIndex].currentWeapon =  gp.players[gp.selectedPlayerIndex].inventory.get(ds.currentWeaponSlot);
-            gp.players[gp.selectedPlayerIndex].currentShield =  gp.players[gp.selectedPlayerIndex].inventory.get(ds.currentShieldSlot);
-            gp.players[gp.selectedPlayerIndex].getAttack();
-            gp.players[gp.selectedPlayerIndex].getDefense();
-            gp.players[gp.selectedPlayerIndex].getAttackImage();
+            gp.player.currentWeapon =  gp.player.inventory.get(ds.currentWeaponSlot);
+            gp.player.currentShield =  gp.player.inventory.get(ds.currentShieldSlot);
+            gp.player.getAttack();
+            gp.player.getDefense();
+            gp.player.getAttackImage();
             //Objects on Map
             for (int mapNum = 0; mapNum < gp.maxMap; mapNum++) {
                 for (int i = 0; i < gp.obj[1].length; i++) {

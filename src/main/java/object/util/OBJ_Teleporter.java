@@ -102,10 +102,10 @@ public class OBJ_Teleporter extends Entity {
     public boolean inCamera() {
         boolean inCamera = false;
 
-        if(worldX + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldX - gp.players[gp.selectedPlayerIndex].screenX
-                && worldX - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX
-                && worldY + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldY - gp.players[gp.selectedPlayerIndex].screenY
-                && worldY - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY) {
+        if(worldX + gp.tileSize * 5 > gp.player.worldX - gp.player.screenX
+                && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+                && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
+                && worldY - gp.tileSize < gp.player.worldY + gp.player.screenY) {
             inCamera = true;
         }
         return inCamera;

@@ -43,13 +43,13 @@ public class Lighting {
         darknessFilter = new BufferedImage(gp.screenWidth, gp.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D) darknessFilter.getGraphics();
 
-        if(gp.players[gp.selectedPlayerIndex].currentLight == null){
+        if(gp.player.currentLight == null){
             g2.setColor(new Color(0,0,0.1f,0.97f));
         }
         else {
             // Get the center x and y of the light circle
-            int centerX = gp.players[gp.selectedPlayerIndex].screenX + (gp.tileSize) / 2;
-            int centerY = gp.players[gp.selectedPlayerIndex].screenY + (gp.tileSize) / 2;
+            int centerX = gp.player.screenX + (gp.tileSize) / 2;
+            int centerY = gp.player.screenY + (gp.tileSize) / 2;
 
             // Create a gradation effect within the light circle
             Color[] color = new Color[12];
@@ -82,7 +82,7 @@ public class Lighting {
             fraction[11] = 1f;
 
             // Create a gradation paint settings for the light circle
-            RadialGradientPaint gPaint = new RadialGradientPaint(centerX, centerY, (gp.players[gp.selectedPlayerIndex].currentLight.lightRadius / 2), fraction, color);
+            RadialGradientPaint gPaint = new RadialGradientPaint(centerX, centerY, (gp.player.currentLight.lightRadius / 2), fraction, color);
 
             // Set the gradient data on g2
             g2.setPaint(gPaint);
@@ -121,9 +121,9 @@ public class Lighting {
         filterAlpha = 0f;
     }
     public void update() {
-        if(gp.players[gp.selectedPlayerIndex].lightUpdated){
+        if(gp.player.lightUpdated){
             setLightingSource();
-            gp.players[gp.selectedPlayerIndex].lightUpdated = false;
+            gp.player.lightUpdated = false;
         }
         // Assuming chests is a List of OBJ_Chest instances
         for (OBJ_Chest chest : chests) {

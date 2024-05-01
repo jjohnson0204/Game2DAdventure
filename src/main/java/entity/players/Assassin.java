@@ -12,7 +12,6 @@ public class Assassin extends Player {
         this.gp = gp;
         this.keyH = keyH;
 
-        this.setPlayerType(3);
     }
 
     @Override

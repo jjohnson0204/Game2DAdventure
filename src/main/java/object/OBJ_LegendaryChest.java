@@ -38,7 +38,7 @@ public class OBJ_LegendaryChest extends Entity {
         if(!opened) {
             gp.playSE(3);
 
-            if(!gp.players[gp.selectedPlayerIndex].canObtainItem(loot)) {
+            if(!gp.player.canObtainItem(loot)) {
                 startDialogue(this, 0);
             }
             else {

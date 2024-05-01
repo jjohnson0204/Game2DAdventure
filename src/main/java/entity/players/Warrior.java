@@ -12,7 +12,6 @@ public class Warrior extends Player {
         this.gp = gp;
         this.keyH = keyH;
 
-        this.setPlayerType(1);
     }
 
     @Override

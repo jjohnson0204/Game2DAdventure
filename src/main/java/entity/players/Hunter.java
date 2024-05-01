@@ -14,12 +14,7 @@ public class Hunter extends Player {
         this.gp = gp;
         this.keyH = keyH;
 
-        this.setPlayerType(2);
 
-
-
-        setDefaultValues();
-        setCharacterEquipment("Hunter");
 
     }
 

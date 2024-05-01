@@ -18,7 +18,7 @@ public class OBJ_Bow_Electric extends OBJ_Legendary_Bow {
 
         projectile1 = new OBJ_ThunderBall(gp);
         projectile2 = new OBJ_ThunderSlash(gp);
-        projectile3 = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]);
+        projectile3 = new OBJ_ThunderShield(gp, gp.player);
 
         type = type_bow;
         name = objName;
@@ -30,14 +30,14 @@ public class OBJ_Bow_Electric extends OBJ_Legendary_Bow {
         System.out.println("Casting electric spell...");
 
         // Use projectile3 and set the player's invincibility to true
-        projectile3 = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]);
-        gp.players[gp.selectedPlayerIndex].invincible = true;
+        projectile3 = new OBJ_ThunderShield(gp, gp.player);
+        gp.player.invincible = true;
 
         // Create a new Thread to check when the projectile's life has expired
         new Thread(() -> {
             while (true) {
                 if (projectile3.hasExpired()) {
-                    gp.players[gp.selectedPlayerIndex].invincible = false;
+                    gp.player.invincible = false;
                     break;
                 }
 

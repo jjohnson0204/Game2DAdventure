@@ -162,11 +162,11 @@ public class Entity {
     }
     public void facePlayer() {
 
-            switch (gp.players[gp.selectedPlayerIndex].direction){
-                case "up": gp.players[gp.selectedPlayerIndex].direction = "down"; break;
-                case "down": gp.players[gp.selectedPlayerIndex].direction = "up"; break;
-                case "left": gp.players[gp.selectedPlayerIndex].direction = "right"; break;
-                case "right": gp.players[gp.selectedPlayerIndex].direction = "left"; break;
+            switch (gp.player.direction){
+                case "up": gp.player.direction = "down"; break;
+                case "down": gp.player.direction = "up"; break;
+                case "left": gp.player.direction = "right"; break;
+                case "right": gp.player.direction = "left"; break;
             }
 
     }
@@ -193,12 +193,12 @@ public class Entity {
         if (actionLockCounter > interval) {
             //Which is longer distance
             //If x distance longer move left or right
-            if (getXdistance(gp.players[gp.selectedPlayerIndex]) > getYdistance(gp.players[gp.selectedPlayerIndex])) {
-                direction = gp.players[gp.selectedPlayerIndex].getCenterX() < getCenterX() ? "left" : "right";
+            if (getXdistance(gp.player) > getYdistance(gp.player)) {
+                direction = gp.player.getCenterX() < getCenterX() ? "left" : "right";
             }
             //If y distance longer move up or down
-            else if (getXdistance(gp.players[gp.selectedPlayerIndex]) < getYdistance(gp.players[gp.selectedPlayerIndex])) {
-                direction = gp.players[gp.selectedPlayerIndex].getCenterY() < getCenterY() ? "up" : "down";
+            else if (getXdistance(gp.player) < getYdistance(gp.player)) {
+                direction = gp.player.getCenterY() < getCenterY() ? "up" : "down";
             }
             actionLockCounter = 0;
         }
@@ -251,19 +251,19 @@ public class Entity {
             else { // Player
                 //Check monster collision
                 int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-                gp.players[gp.selectedPlayerIndex].damageMonster(monsterIndex, this, attack, currentWeapon.knockBackPower);
+                gp.player.damageMonster(monsterIndex, this, attack, currentWeapon.knockBackPower);
 
                 int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
-                gp.players[gp.selectedPlayerIndex].damageProjectile(projectileIndex);
+                gp.player.damageProjectile(projectileIndex);
 
                 int projectile2Index = gp.cChecker.checkEntity(this, gp.projectile2);
-                gp.players[gp.selectedPlayerIndex].damageProjectile(projectile2Index);
+                gp.player.damageProjectile(projectile2Index);
 
                 int projectile3Index = gp.cChecker.checkEntity(this, gp.projectile3);
-                gp.players[gp.selectedPlayerIndex].damageProjectile(projectile3Index);
+                gp.player.damageProjectile(projectile3Index);
 
                 int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
-                gp.players[gp.selectedPlayerIndex].damageInteractiveTile(iTileIndex);
+                gp.player.damageInteractiveTile(iTileIndex);
             }
 
             //After checking collision, restore the original data
@@ -289,18 +289,18 @@ public class Entity {
         }
     }
     public void damagePlayer(int attack){
-        if(!gp.players[gp.selectedPlayerIndex].invincible){
-            int damage = attack - gp.players[gp.selectedPlayerIndex].defense;
+        if(!gp.player.invincible){
+            int damage = attack - gp.player.defense;
 
             //Get an opposite direction of this attacker
             String canGuardDirection = getOppositeDirection(direction);
 
-            if (gp.players[gp.selectedPlayerIndex].guarding && gp.players[gp.selectedPlayerIndex].direction.equals(canGuardDirection)) {
+            if (gp.player.guarding && gp.player.direction.equals(canGuardDirection)) {
                 //Parry
-                if (gp.players[gp.selectedPlayerIndex].guardCounter < 10) {
+                if (gp.player.guardCounter < 10) {
                     damage = 0;
                     gp.playSE(16);
-                    setKnockBack(this, gp.players[gp.selectedPlayerIndex], knockBackPower);
+                    setKnockBack(this, gp.player, knockBackPower);
                     offBalance = true;
                     spriteCounter =- 60; // Stun
                 }
@@ -318,11 +318,11 @@ public class Entity {
                 }
             }
             if (damage != 0) {
-                gp.players[gp.selectedPlayerIndex].transparent = true;
-                setKnockBack(gp.players[gp.selectedPlayerIndex], this, knockBackPower);
+                gp.player.transparent = true;
+                setKnockBack(gp.player, this, knockBackPower);
             }
-            gp.players[gp.selectedPlayerIndex].life -= damage;
-            gp.players[gp.selectedPlayerIndex].invincible = true;
+            gp.player.life -= damage;
+            gp.player.invincible = true;
         }
     }
     public void setKnockBack(Entity target, Entity attacker, int knockBackPower){
@@ -478,7 +478,7 @@ public class Entity {
         for (int i = 0; i < gp.obj[gp.currentMap].length; i++) {
             if (gp.obj[gp.currentMap][i] instanceof OBJ_Teleporter) {
                 OBJ_Teleporter teleporter = (OBJ_Teleporter) gp.obj[gp.currentMap][i];
-                if (teleporter.inCamera() && gp.cChecker.checkPlayerTeleporterCollision(gp.players[gp.selectedPlayerIndex], teleporter)) {
+                if (teleporter.inCamera() && gp.cChecker.checkPlayerTeleporterCollision(gp.player, teleporter)) {
                     teleporter.interact("down"); // Assuming "down" is the direction the player is moving
                 }
             }
@@ -499,14 +499,14 @@ public class Entity {
     }
     public void checkAttackOrNot(int rate, int straight, int horizontal) {
         boolean targetInRange = false;
-        int xDis = getXdistance(gp.players[gp.selectedPlayerIndex]);
-        int yDis = getYdistance(gp.players[gp.selectedPlayerIndex]);
+        int xDis = getXdistance(gp.player);
+        int yDis = getYdistance(gp.player);
 
         switch (direction){
-            case "up": if (gp.players[gp.selectedPlayerIndex].getCenterY() < getCenterY() && yDis < straight && xDis < horizontal){targetInRange = true; } break;
-            case "down": if (gp.players[gp.selectedPlayerIndex].getCenterY() > getCenterY() && yDis < straight && xDis < horizontal){targetInRange = true; } break;
-            case "left": if (gp.players[gp.selectedPlayerIndex].getCenterX() < getCenterX()  && xDis < straight && yDis < horizontal){targetInRange = true; } break;
-            case "right": if (gp.players[gp.selectedPlayerIndex].getCenterX()  > getCenterX()  && xDis < straight && yDis < horizontal){targetInRange = true; } break;
+            case "up": if (gp.player.getCenterY() < getCenterY() && yDis < straight && xDis < horizontal){targetInRange = true; } break;
+            case "down": if (gp.player.getCenterY() > getCenterY() && yDis < straight && xDis < horizontal){targetInRange = true; } break;
+            case "left": if (gp.player.getCenterX() < getCenterX()  && xDis < straight && yDis < horizontal){targetInRange = true; } break;
+            case "right": if (gp.player.getCenterX()  > getCenterX()  && xDis < straight && yDis < horizontal){targetInRange = true; } break;
         }
         if (targetInRange) {
             //Check if it initiates an attack
@@ -563,10 +563,10 @@ public class Entity {
     public boolean inCamera () {
         boolean inCamera = false;
 
-        if(worldX + gp.tileSize * 5> gp.players[gp.selectedPlayerIndex].worldX - gp.players[gp.selectedPlayerIndex].screenX
-                && worldX - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX
-                && worldY + gp.tileSize * 5 > gp.players[gp.selectedPlayerIndex].worldY - gp.players[gp.selectedPlayerIndex].screenY
-                && worldY - gp.tileSize< gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY) {
+        if(worldX + gp.tileSize * 5> gp.player.worldX - gp.player.screenX
+                && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+                && worldY + gp.tileSize * 5 > gp.player.worldY - gp.player.screenY
+                && worldY - gp.tileSize< gp.player.worldY + gp.player.screenY) {
             inCamera = true;
         }
         return inCamera;
@@ -768,10 +768,10 @@ public class Entity {
         int nextWorldX = user.getLeftX();
         int nextWorldY = user.getTopY();
         switch (user.direction) {
-            case "up": nextWorldY = (int) (user.getTopY() - gp.players[gp.selectedPlayerIndex].speed); break;
-            case "down": nextWorldY = (int) (user.getBottomY() + gp.players[gp.selectedPlayerIndex].speed); break;
-            case "left": nextWorldX = (int) (user.getLeftX() - gp.players[gp.selectedPlayerIndex].speed); break;
-            case "right": nextWorldX = (int) (user.getRightX() + gp.players[gp.selectedPlayerIndex].speed); break;
+            case "up": nextWorldY = (int) (user.getTopY() - gp.player.speed); break;
+            case "down": nextWorldY = (int) (user.getBottomY() + gp.player.speed); break;
+            case "left": nextWorldX = (int) (user.getLeftX() - gp.player.speed); break;
+            case "right": nextWorldX = (int) (user.getRightX() + gp.player.speed); break;
         }
         int col = nextWorldX / gp.tileSize;
         int row = nextWorldY / gp.tileSize;
@@ -789,11 +789,11 @@ public class Entity {
         return index;
     }
     public int getScreenX() {
-        int screenX = (int) (worldX - gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX);
+        int screenX = (int) (worldX - gp.player.worldX + gp.player.screenX);
         return screenX;
     }
     public int getScreenY() {
-        int screenY = (int) (worldY - gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY);
+        int screenY = (int) (worldY - gp.player.worldY + gp.player.screenY);
         return screenY;
     }
     public int getLeftX(){

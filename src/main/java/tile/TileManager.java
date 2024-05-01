@@ -129,14 +129,14 @@ public class TileManager {
 
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;
-            double screenX = worldX - gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX;
-            double screenY = worldY - gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY;
+            double screenX = worldX - gp.player.worldX + gp.player.screenX;
+            double screenY = worldY - gp.player.worldY + gp.player.screenY;
 
             // Boundaries
-            if(worldX + gp.tileSize > gp.players[gp.selectedPlayerIndex].worldX - gp.players[gp.selectedPlayerIndex].screenX
-                    && worldX - gp.tileSize < gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX
-                    && worldY + gp.tileSize > gp.players[gp.selectedPlayerIndex].worldY - gp.players[gp.selectedPlayerIndex].screenY
-                    && worldY - gp.tileSize< gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY) {
+            if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX
+                    && worldX - gp.tileSize < gp.player.worldX + gp.player.screenX
+                    && worldY + gp.tileSize > gp.player.worldY - gp.player.screenY
+                    && worldY - gp.tileSize< gp.player.worldY + gp.player.screenY) {
                 g2.drawImage(tile[tileNum].image, (int)screenX, (int)screenY, null);
             }
 
@@ -152,8 +152,8 @@ public class TileManager {
             for (int i = 0; i < gp.pFinder.pathList.size(); i++) {
                 int worldX = gp.pFinder.pathList.get(i).col * gp.tileSize;
                 int worldY = gp.pFinder.pathList.get(i).row * gp.tileSize;
-                int screenX = (int) (worldX - gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX);
-                int screenY = (int) (worldY - gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY);
+                int screenX = (int) (worldX - gp.player.worldX + gp.player.screenX);
+                int screenY = (int) (worldY - gp.player.worldY + gp.player.screenY);
 
                 g2.fillRect(screenX, screenY, gp.tileSize, gp.tileSize);
             }

@@ -4,6 +4,8 @@ import entity.Player;
 import entity.SpriteSheet;
 import main.GamePanel;
 import main.KeyHandler;
+import object.weapons.hunter.OBJ_Bow_Common;
+import object.weapons.mage.OBJ_Staff_Air;
 
 public class Mage extends Player {
     GamePanel gp;
@@ -13,11 +15,8 @@ public class Mage extends Player {
         this.gp = gp;
         this.keyH = keyH;
 
-        this.setPlayerType(4);
-
 //        getImage();
-        setDefaultValues();
-        setCharacterEquipment("Mage");
+        playerType = "Mage";
     }
 
     @Override
@@ -30,6 +29,7 @@ public class Mage extends Player {
         maxMana = 10; // Mages have more mana
         attack = getAttack();
         defense = getDefense();
+        setCharacterEquipment(playerType);
     }
     public void castSpell() {
         // Cast a spell

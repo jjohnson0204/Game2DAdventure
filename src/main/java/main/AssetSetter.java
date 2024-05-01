@@ -62,26 +62,23 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldY = 44 * gp.tileSize;
         i++;
         gp.obj[mapNum][i] = new OBJ_Chest(gp);
-        if (gp.selectedPlayerIndex == 0) {
-            gp.obj[mapNum][i].setLoot(new OBJ_Glove_Fire(gp, "fire"));
-            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
-        }
-        else if (gp.selectedPlayerIndex == 1) {
-            gp.obj[mapNum][i].setLoot(new OBJ_Legendary_Sword(gp));
-            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
-        }
-        else if (gp.selectedPlayerIndex == 2) {
-            gp.obj[mapNum][i].setLoot(new OBJ_Bow_Fire(gp, "fire"));
-            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
-        }
-        else if (gp.selectedPlayerIndex == 3) {
-            gp.obj[mapNum][i].setLoot(new OBJ_Dagger_Fire(gp, "fire"));
-            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
-        }
-        else if (gp.selectedPlayerIndex == 4) {
-            gp.obj[mapNum][i].setLoot(new OBJ_Staff_Fire(gp, "fire"));
-            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
-        }
+//        if (gp.player.playerType.equals("Fighter")) {
+//            ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Glove_Fire(gp, "fire"), new OBJ_Key(gp));
+//            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+//        }
+//        else if (gp.player.playerType.equals("Warrior")) {
+//            gp.obj[mapNum][i].setLoot(new OBJ_Legendary_Sword(gp));
+//            gp.obj[mapNum][i].setLoot(new OBJ_Key(gp));
+//        }
+//        else if (gp.player.playerType.equals("Hunter")) {
+//            ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Bow_Fire(gp, "fire"), new OBJ_Key(gp));
+//        }
+//        else if (gp.player.playerType.equals("Assassin")) {
+//            ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Dagger_Fire(gp, "fire"), new OBJ_Key(gp));
+//        }
+//        else if (gp.player.playerType.equals("Mage")) {
+//            ((OBJ_Chest) gp.obj[mapNum][i]).setLoot(new OBJ_Staff_Fire(gp, "fire"), new OBJ_Key(gp));
+//        }
 
         gp.obj[mapNum][i].worldX = 35 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 25 * gp.tileSize;
@@ -172,9 +169,9 @@ public class AssetSetter {
         }
         gp.obj[mapNum][i] = new OBJ_LegendaryChest(gp);
         gp.obj[mapNum][i].setLoot(new OBJ_Staff_Air(gp, "air"));
-        gp.players[gp.selectedPlayerIndex].obtainWeapon(new OBJ_Staff_Fire(gp, "fire"));
-        gp.players[gp.selectedPlayerIndex].obtainWeapon(new OBJ_Staff_Electric(gp, "electric"));
-        gp.players[gp.selectedPlayerIndex].obtainWeapon(new OBJ_Staff_Water(gp, "water"));
+        gp.player.obtainWeapon(new OBJ_Staff_Fire(gp, "fire"));
+        gp.player.obtainWeapon(new OBJ_Staff_Electric(gp, "electric"));
+        gp.player.obtainWeapon(new OBJ_Staff_Water(gp, "water"));
         gp.obj[mapNum][i].worldX = 25 * gp.tileSize;
         gp.obj[mapNum][i].worldY = 8 * gp.tileSize;
         i++;

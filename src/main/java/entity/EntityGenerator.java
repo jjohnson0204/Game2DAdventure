@@ -80,7 +80,7 @@ public class EntityGenerator {
             case OBJ_Tent.objName: obj = new OBJ_Tent(gp); break;
             case OBJ_ThunderBall.objName: obj = new OBJ_ThunderBall(gp); break;
             case OBJ_ThunderBolt.objName: obj = new OBJ_ThunderBolt(gp); break;
-            case OBJ_ThunderShield.objName: obj = new OBJ_ThunderShield(gp, gp.players[gp.selectedPlayerIndex]); break;
+            case OBJ_ThunderShield.objName: obj = new OBJ_ThunderShield(gp, gp.player); break;
             case OBJ_ThunderSlash.objName: obj = new OBJ_ThunderSlash(gp); break;
             default:
                 throw new IllegalArgumentException("Unrecognized item name: " + itemName);

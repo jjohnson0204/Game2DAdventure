@@ -59,8 +59,8 @@ public class OBJ_ThunderSlash extends Projectile {
                 break;
         }
 
-        double screenX = worldX - gp.players[gp.selectedPlayerIndex].worldX + gp.players[gp.selectedPlayerIndex].screenX;
-        double screenY = worldY - gp.players[gp.selectedPlayerIndex].worldY + gp.players[gp.selectedPlayerIndex].screenY;
+        double screenX = worldX - gp.player.worldX + gp.player.screenX;
+        double screenY = worldY - gp.player.worldY + gp.player.screenY;
 
         g2.drawImage(image, (int) screenX, (int) screenY, gp.tileSize, gp.tileSize, null);
     }
